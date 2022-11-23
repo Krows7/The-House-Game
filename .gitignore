@@ -10,6 +10,9 @@
 **/[Ll]ogs/
 **/[Uu]ser[Ss]ettings/
 
+# Sandbox scene
+/[Aa]ssets/_Scenes/Sandbox*
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
