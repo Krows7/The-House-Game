@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace BehavourTree
 {
-	public class Sequense : Node
+	public class Sequenñe : Node
 	{
-		public Sequense() :base() {} 
+		public Sequenñe() :base() {} 
 
-		public Sequense(List<Node> children) : base(children){}
+		public Sequenñe(List<Node> children) : base(children){}
 
 		public override NodeState Evaluate()
 		{
