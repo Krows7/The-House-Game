@@ -10,7 +10,7 @@ namespace BehavourTree
 		SUCCESS,
 		FAIL
 	}
-	public class Node : MonoBehaviour
+	public class Node
 	{
 
 		protected NodeState state;
