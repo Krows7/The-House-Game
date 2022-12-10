@@ -18,8 +18,14 @@ public class Cell : MonoBehaviour
         positionY = transform.position.y;
     }
 
-    public void SetId(int _id) {
+    public void SetId(int _id) 
+    {
         id = _id;
+    }
+
+    public int GetId() 
+    {
+        return id;
     }
 
     public float GetPositionX() 
