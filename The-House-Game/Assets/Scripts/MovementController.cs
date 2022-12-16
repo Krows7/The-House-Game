@@ -7,45 +7,49 @@ public class MovementController : MonoBehaviour
     private Cell currentCell;
     private Cell startCell, finishCell;
 
-    void Start()
-    {
-        startCell = null;
-        finishCell = null;
-    }
-
     void Update()
     {
         UpdateCurrentCell();
 
         if (currentCell != null && Input.GetKeyDown(KeyCode.Mouse0)) 
         {
-			Debug.LogWarning("Before If");
-			if (!currentCell.IsFree()) 
+            currentCell.onPressDebug();
+            if (!currentCell.IsFree()) 
             {
-				Debug.LogWarning("In If");
-				startCell = currentCell;
-           
+                if (startCell != null) startCell.onReleaseDebug();
+                startCell = currentCell;
+                startCell.onChosenDebug();
             }
             else if (startCell != null)
             {
                 finishCell = currentCell;
-                moveUnit();
-                startCell = null;
-                finishCell = null;
+                MoveUnit();
+                ResetAll();
             }
         } 
     }
 
-    void moveUnit() 
+    void MoveUnit() 
     {
-        Debug.LogWarning("Move");
         startCell.MoveUnitToCell(finishCell);
-/*		finishCell.SetUnit(startCell.GetUnit());
-        startCell.DellUnit();*/
-	}
+    }
+
+    void ResetAll()
+    {
+        Reset(startCell);
+        Reset(finishCell);
+        startCell = null;
+        finishCell = null;
+    }
+
+    void Reset(Cell cell)
+    {
+        cell.onReleaseDebug();
+    }
 
     void UpdateCurrentCell() 
-    {   
+    {
+        if (currentCell != null && currentCell != startCell) currentCell.onReleaseDebug();
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawLine(ray.origin, ray.GetPoint(10));
         RaycastHit rayHit;
@@ -55,5 +59,6 @@ public class MovementController : MonoBehaviour
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
             }
         }
+        if (currentCell != null) currentCell.onHoverDebug();
     }
 }
