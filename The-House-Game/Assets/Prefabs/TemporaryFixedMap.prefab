@@ -2122,6 +2122,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 4077489943479800894}
     m_Modifications:
     - target: {fileID: -848339853568251064, guid: 9b99241d446825649b814bc482cc8e52, type: 3}
+      propertyPath: CellsEps
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -848339853568251064, guid: 9b99241d446825649b814bc482cc8e52, type: 3}
       propertyPath: showGraph
       value: 1
       objectReference: {fileID: 0}

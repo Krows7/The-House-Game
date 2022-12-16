@@ -9,7 +9,8 @@ namespace Units.Settings
         Army,
         Leader
     };
-    public class Unit : ScriptableObject
+    
+    public class Unit : MonoBehaviour
     {
         public UnitType type;
         public int health = 100;
@@ -25,6 +26,5 @@ namespace Units.Settings
             strength = Strength;
             speed = Speed;
         }
-
     }
 }

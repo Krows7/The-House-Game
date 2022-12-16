@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Units.Settings;
 
 public class Cell : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Cell : MonoBehaviour
     private float positionY;
 
     [SerializeField] private int id;
+
+    [SerializeField] private Unit currentUnit = null;
 
     void Start()
     {
@@ -42,4 +45,24 @@ public class Cell : MonoBehaviour
     {
         return cellSize;
     }
-}
+    
+    public bool IsFree() 
+    {
+        return currentUnit == null;
+    }  
+
+    public Unit GetUnit()
+    {
+        return currentUnit;
+    }  
+
+    public void SetUnit(Unit unit)
+    {
+        currentUnit = unit;
+    }
+
+    public void DellUnit()
+    {
+        currentUnit = null;
+    }
+}   
