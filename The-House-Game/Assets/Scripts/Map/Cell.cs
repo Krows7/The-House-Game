@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
+using System.Linq;
 
 public class Cell : MonoBehaviour
 {
@@ -9,10 +10,13 @@ public class Cell : MonoBehaviour
 
     private float positionX;
     private float positionY;
+    
 
     [SerializeField] private int id;
 
     [SerializeField] private Unit currentUnit = null;
+
+    public Map gameMap { get; set; }
 
     void Start()
     {
@@ -59,10 +63,68 @@ public class Cell : MonoBehaviour
     public void SetUnit(Unit unit)
     {
         currentUnit = unit;
-    }
+       // unit.transform.position = 
+        unit.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
+       // Debug.LogWarning(Unit.);
+
+	}
 
     public void DellUnit()
     {
         currentUnit = null;
+    }
+
+
+    public void MoveUnitToCell(Cell finishCell)
+    {
+        Queue<Cell> queue = new Queue<Cell>();
+        List<int> visited = new List<int>();
+
+		for (int i = 0; i < gameMap.GetCells().Count; ++i)
+        {
+            visited.Add(-1);
+        }
+
+		queue.Enqueue(this);
+        
+        while (queue.Count > 0)
+        {
+            Cell cell = queue.Dequeue();
+			Debug.LogWarning(cell.id);
+			if (finishCell.id == cell.id)
+            {
+				Debug.LogWarning("OK! " + cell.id);
+				break;
+            }
+            foreach (Cell c in gameMap.GetGraph()[cell.id])
+            {
+                if (visited[c.id] == -1)
+                {
+                    visited[c.id] = cell.id;
+                    queue.Enqueue(c);
+                }
+            }
+
+        }
+
+
+		Debug.LogWarning("visited[finishCell.id] " + visited[finishCell.id]);
+		if (visited[finishCell.id] != -1)
+        {
+            int prevId = finishCell.id;
+            int nextCellId = -1;
+            while (prevId != id)
+            {
+                nextCellId = prevId;
+                prevId = visited[prevId];
+            }
+
+            gameMap.GetCells()[nextCellId].SetUnit(currentUnit);
+			DellUnit();
+			transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.cyan);
+			gameMap.GetCells()[nextCellId].MoveUnitToCell(finishCell);
+
+		}
+     
     }
 }   

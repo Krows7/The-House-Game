@@ -19,11 +19,14 @@ public class MovementController : MonoBehaviour
 
         if (currentCell != null && Input.GetKeyDown(KeyCode.Mouse0)) 
         {
-            if (!currentCell.IsFree()) 
+			Debug.LogWarning("Before If");
+			if (!currentCell.IsFree()) 
             {
-                startCell = currentCell;
+				Debug.LogWarning("In If");
+				startCell = currentCell;
+           
             }
-            else 
+            else if (startCell != null)
             {
                 finishCell = currentCell;
                 moveUnit();
@@ -35,9 +38,11 @@ public class MovementController : MonoBehaviour
 
     void moveUnit() 
     {
-        finishCell.SetUnit(startCell.GetUnit());
-        startCell.DellUnit();
-    }
+        Debug.LogWarning("Move");
+        startCell.MoveUnitToCell(finishCell);
+/*		finishCell.SetUnit(startCell.GetUnit());
+        startCell.DellUnit();*/
+	}
 
     void UpdateCurrentCell() 
     {   

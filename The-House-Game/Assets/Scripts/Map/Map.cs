@@ -42,6 +42,7 @@ public class Map : MonoBehaviour
                 if (cells[i].GetCellSize() - CellsEps <= distance && distance <= cells[i].GetCellSize() + CellsEps) 
                 {
                     mapGraph[i].Add(cells[j]);
+                    cells[j].gameMap = this;
                 }
             }
         }
