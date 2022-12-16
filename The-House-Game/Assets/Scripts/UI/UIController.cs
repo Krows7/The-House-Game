@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-    public GameObject pauseMenu;
+    [SerializeField] private GameObject pauseControllerObject;
 
     public void PauseButton()
     {
-        pauseMenu.SetActiveRecursivelyExt(true);
+        pauseControllerObject.GetComponent<PauseController>().PauseGame();
     }
 }
