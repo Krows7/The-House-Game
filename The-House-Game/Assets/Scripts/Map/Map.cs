@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
+    [SerializeField] private float CellsEps;
     [SerializeField] private List<Room> rooms;
     private List<Cell> cells;
     private List<List<Cell>> mapGraph;
@@ -37,9 +38,11 @@ public class Map : MonoBehaviour
             mapGraph.Add(new List<Cell>());
             for (int j = 0; j < cells.Count; ++j) 
             {
-                if (Mathf.Abs(cells[i].GetPositionX() - cells[j].GetPositionX()) + Mathf.Abs(cells[i].GetPositionY() - cells[j].GetPositionY()) == cells[i].GetCellSize()) 
+                float distance = Mathf.Abs(cells[i].GetPositionX() - cells[j].GetPositionX()) + Mathf.Abs(cells[i].GetPositionY() - cells[j].GetPositionY());
+                if (cells[i].GetCellSize() - CellsEps <= distance && distance <= cells[i].GetCellSize() + CellsEps) 
                 {
                     mapGraph[i].Add(cells[j]);
+                    cells[j].gameMap = this;
                 }
             }
         }
