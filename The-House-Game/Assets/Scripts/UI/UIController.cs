@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-    public GameObject pauseControllerObject;
+    [SerializeField] private GameObject pauseControllerObject;
 
     public void PauseButton()
     {
