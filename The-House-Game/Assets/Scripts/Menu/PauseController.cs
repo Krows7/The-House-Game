@@ -19,7 +19,13 @@ public class PauseController : MonoBehaviour
 
     public void ReturnButton()
     {
-        Debug.Log("HELLO");
-        pauseMenu.SetActive(false);
+        pauseMenu.SetActiveRecursivelyExt(false);
+        Time.timeScale = 1f;
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        pauseMenu.SetActiveRecursivelyExt(true);
     }
 }
