@@ -63,38 +63,33 @@ public class Cell : MonoBehaviour
     public void SetUnit(Unit unit)
     {
         currentUnit = unit;
-       // unit.transform.position = 
-        unit.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
-       // Debug.LogWarning(Unit.);
-
-	}
+    }
 
     public void DellUnit()
     {
         currentUnit = null;
     }
 
-
     public void MoveUnitToCell(Cell finishCell)
     {
         Queue<Cell> queue = new Queue<Cell>();
         List<int> visited = new List<int>();
 
-		for (int i = 0; i < gameMap.GetCells().Count; ++i)
+        for (int i = 0; i < gameMap.GetCells().Count; ++i)
         {
             visited.Add(-1);
         }
 
-		queue.Enqueue(this);
-        
+        queue.Enqueue(this);
+
         while (queue.Count > 0)
         {
             Cell cell = queue.Dequeue();
-			Debug.LogWarning(cell.id);
-			if (finishCell.id == cell.id)
+            Debug.LogWarning(cell.id);
+            if (finishCell.id == cell.id)
             {
-				Debug.LogWarning("OK! " + cell.id);
-				break;
+                Debug.LogWarning("OK! " + cell.id);
+                break;
             }
             foreach (Cell c in gameMap.GetGraph()[cell.id])
             {
@@ -107,9 +102,8 @@ public class Cell : MonoBehaviour
 
         }
 
-
-		Debug.LogWarning("visited[finishCell.id] " + visited[finishCell.id]);
-		if (visited[finishCell.id] != -1)
+        Debug.LogWarning("visited[finishCell.id] " + visited[finishCell.id]);
+        if (visited[finishCell.id] != -1)
         {
             int prevId = finishCell.id;
             int nextCellId = -1;
@@ -118,13 +112,36 @@ public class Cell : MonoBehaviour
                 nextCellId = prevId;
                 prevId = visited[prevId];
             }
+            var fromCell = gameMap.GetCells()[nextCellId];
+            fromCell.SetUnit(currentUnit);
+            DellUnit();
+            GameObject.Find("MasterController").GetComponent<MovementAnimation>().Add(fromCell, finishCell);
+            //transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.cyan);
+            //gameMap.GetCells()[nextCellId].MoveUnitToCell(finishCell);
 
-            gameMap.GetCells()[nextCellId].SetUnit(currentUnit);
-			DellUnit();
-			transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.cyan);
-			gameMap.GetCells()[nextCellId].MoveUnitToCell(finishCell);
+        }
+    }
+    private Color darker(Color color)
+    {
+        return new Color(color.r - 0.1F, color.g - 0.1F, color.g - 0.1F);
+    }
 
-		}
-     
+    public void onHoverDebug()
+    {
+        transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.gray);
+    }
+
+    public void onPressDebug()
+    {
+        transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", darker(Color.gray));
+    }
+
+    public void onReleaseDebug()
+    {
+        transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+    }
+    public void onChosenDebug()
+    {
+        transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", darker(Color.green));
     }
 }   
