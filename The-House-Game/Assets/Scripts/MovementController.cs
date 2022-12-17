@@ -14,7 +14,9 @@ public class MovementController : MonoBehaviour
         if (currentCell != null && Input.GetKeyDown(KeyCode.Mouse0)) 
         {
             currentCell.onPressDebug();
-            if (!currentCell.IsFree()) 
+            Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
+            Debug.Log(startCell != null ? startCell.GetUnit().fraction : null);
+            if (!currentCell.IsFree() && (startCell == null || currentCell.GetUnit().fraction == startCell.GetUnit().fraction))
             {
                 if (startCell != null) startCell.onReleaseDebug();
                 startCell = currentCell;

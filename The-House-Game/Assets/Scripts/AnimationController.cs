@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementAnimation : MonoBehaviour
+public class AnimationController : MonoBehaviour
 {
     public Dictionary<Cell, Cell> queue;
     public Dictionary<Cell, Cell> animations;
@@ -19,21 +19,20 @@ public class MovementAnimation : MonoBehaviour
 
     void Update()
     {
-        float speed = 4;
         foreach (var animation in animations)
         {
             var from = animation.Key;
             var to = animation.Value;
             var unit = from.GetUnit();
             var dt = from.transform.position - unit.transform.position;
-            if (dt.magnitude <= speed / 60)
+            if (dt.magnitude <= unit.speed / 60)
             {
                 unit.transform.SetPositionAndRotation(from.transform.position, from.transform.rotation);
                 from.MoveUnitToCell(to);
             }
             else
             {
-                unit.transform.SetPositionAndRotation(unit.transform.position + dt.normalized * speed / 60, unit.transform.rotation);
+                unit.transform.SetPositionAndRotation(unit.transform.position + dt.normalized * unit.speed / 60, unit.transform.rotation);
                 queue.TryAdd(from, to);
             }
         }

@@ -13,11 +13,12 @@ namespace Units.Settings
     public class Unit : MonoBehaviour
     {
         public UnitType type;
-        public int health = 100;
-        public int strength = 0;
-        public int speed = 0;
+        public float health = 100;
+        public float strength = 0;
+        // Cells per second
+        public float speed = 0;
         public float buff_c = 0;
-        public GameObject unitPrefab;
+        public Fraction fraction;
 
         public Unit(UnitType Type, int Health, int Strength, int Speed, float Buff_c)
         {
@@ -25,6 +26,28 @@ namespace Units.Settings
             health = Health;
             strength = Strength;
             speed = Speed;
+            buff_c = Buff_c;
+        }
+
+        public float CalculateTrueDamage()
+        {
+            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log(Mathf.Max(fraction.Influence, Mathf.Exp(1)));
+        }
+
+        public bool WillSurvive(float Damage)
+        {
+            return health > Damage;
+        }
+
+        public void GiveDamage(float Damage)
+        {
+            health -= Damage;
+            if (health <= 0) Die();
+        }
+
+        private void Die()
+        {
+            Destroy(transform.gameObject);
         }
     }
 }

@@ -96,7 +96,9 @@ public class Cell : MonoBehaviour
                 if (visited[c.id] == -1)
                 {
                     visited[c.id] = cell.id;
-                    queue.Enqueue(c);
+                    if (c.IsFree()) {
+                        queue.Enqueue(c);
+                    }
                 }
             }
 
@@ -112,13 +114,39 @@ public class Cell : MonoBehaviour
                 nextCellId = prevId;
                 prevId = visited[prevId];
             }
-            var fromCell = gameMap.GetCells()[nextCellId];
-            fromCell.SetUnit(currentUnit);
-            DellUnit();
-            GameObject.Find("MasterController").GetComponent<MovementAnimation>().Add(fromCell, finishCell);
-            //transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.cyan);
-            //gameMap.GetCells()[nextCellId].MoveUnitToCell(finishCell);
-
+            var nextCell = gameMap.GetCells()[nextCellId];
+            if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
+            {
+                var thisUnit = currentUnit;
+                var other = nextCell.GetUnit();
+                var trueDamage = thisUnit.CalculateTrueDamage();
+                var otherTrueDamage = other.CalculateTrueDamage();
+                if (trueDamage >= otherTrueDamage || !other.WillSurvive(trueDamage))
+                {
+                    DellUnit();
+                    finishCell.DellUnit();
+                    if (thisUnit.WillSurvive(otherTrueDamage))
+                    {
+                        finishCell.SetUnit(thisUnit);
+                        GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
+                    }
+                    if (other.WillSurvive(trueDamage))
+                    {
+                        SetUnit(other);
+                        GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
+                    }
+                    //Fix Influence
+                    thisUnit.fraction.Influence += 100;
+                }
+                other.GiveDamage(trueDamage);
+                thisUnit.GiveDamage(otherTrueDamage);
+            }
+            else
+            {
+                nextCell.SetUnit(currentUnit);
+                DellUnit();
+                GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+            }
         }
     }
     private Color darker(Color color)
