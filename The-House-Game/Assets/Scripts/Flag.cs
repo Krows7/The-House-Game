@@ -16,12 +16,15 @@ public class Flag : MonoBehaviour
 
     public void StartCapture()
     {
-        captureDelay = flags.captureDelay;
+        InterruptCapture();
+		captureDelay = flags.captureDelay;
+        Debug.Log(captureDelay);
     }
 
     public void InterruptCapture()
     {
         captureDelay = 0;
+        time = 0;
     }
 
     void Update()

@@ -116,6 +116,7 @@ public class Cell : MonoBehaviour
     public void TryMoveTo(Cell nextCell, Cell finishCell)
     {
 		Cell interruptedCell = null;
+        // flag capture
 		if (nextCell.IsFree() && nextCell.currentFlag != null)
 		{
 			interruptedCell = this;
@@ -124,6 +125,7 @@ public class Cell : MonoBehaviour
 			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
 		}
+        // group union
 		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == currentUnit.fraction)
 		{
 			Debug.Log(nextCell.GetUnit() is Group);
@@ -132,6 +134,7 @@ public class Cell : MonoBehaviour
 			else if (currentUnit is Group) CombineTo(currentUnit as Group, nextCell.GetUnit(), nextCell, true);
 			else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);
 		}
+        // fight
 		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
 		{
 			var thisUnit = currentUnit;
@@ -144,21 +147,28 @@ public class Cell : MonoBehaviour
 				finishCell.DellUnit();
 				if (thisUnit.WillSurvive(otherTrueDamage))
 				{
-					finishCell.SetUnit(thisUnit);
+					finishCell.SetUnit(thisUnit);        
 					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
+					if (nextCell.currentFlag != null)
+                    {
+                        interruptedCell = this;
+                        finishCell.currentFlag.GetComponent<Flag>().InterruptCapture();
+						finishCell.currentFlag.GetComponent<Flag>().StartCapture();
+					}
 				}
 				if (other.WillSurvive(trueDamage))
 				{
 					SetUnit(other);
 					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
 				}
-				interruptedCell = finishCell;
+				//interruptedCell = finishCell;
 				//Fix Influence
 				thisUnit.fraction.Influence += 100;
 			}
 			other.GiveDamage(trueDamage);
 			thisUnit.GiveDamage(otherTrueDamage);
 		}
+        // just move
 		else
 		{
 			interruptedCell = this;
@@ -166,6 +176,7 @@ public class Cell : MonoBehaviour
 			DellUnit();
 			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 		}
+        // interrupt flag capture
 		if (interruptedCell != null && interruptedCell.currentFlag != null)
 			interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
 	}
