@@ -16,6 +16,8 @@ public class Cell : MonoBehaviour
 
     [SerializeField] private Unit currentUnit = null;
 
+    public GameObject currentFlag = null;
+
     public Map gameMap { get; set; }
 
     void Start()
@@ -85,10 +87,8 @@ public class Cell : MonoBehaviour
         while (queue.Count > 0)
         {
             Cell cell = queue.Dequeue();
-            Debug.LogWarning(cell.id);
             if (finishCell.id == cell.id)
             {
-                Debug.LogWarning("OK! " + cell.id);
                 break;
             }
             foreach (Cell c in gameMap.GetGraph()[cell.id])
@@ -104,9 +104,9 @@ public class Cell : MonoBehaviour
 
         }
 
-        Debug.LogWarning("visited[finishCell.id] " + visited[finishCell.id]);
         if (visited[finishCell.id] != -1)
         {
+            Cell interruptedCell = null;
             int prevId = finishCell.id;
             int nextCellId = -1;
             while (prevId != id)
@@ -115,7 +115,15 @@ public class Cell : MonoBehaviour
                 prevId = visited[prevId];
             }
             var nextCell = gameMap.GetCells()[nextCellId];
-            if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
+            if(nextCell.IsFree() && nextCell.currentFlag != null)
+            {
+                interruptedCell = this;
+                nextCell.SetUnit(currentUnit);
+                DellUnit();
+                GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+                nextCell.currentFlag.GetComponent<Flag>().StartCapture();
+            }
+            else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
             {
                 var thisUnit = currentUnit;
                 var other = nextCell.GetUnit();
@@ -135,6 +143,7 @@ public class Cell : MonoBehaviour
                         SetUnit(other);
                         GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
                     }
+                    interruptedCell = finishCell;
                     //Fix Influence
                     thisUnit.fraction.Influence += 100;
                 }
@@ -143,10 +152,12 @@ public class Cell : MonoBehaviour
             }
             else
             {
+                interruptedCell = this;
                 nextCell.SetUnit(currentUnit);
                 DellUnit();
                 GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
             }
+            if (interruptedCell != null && interruptedCell.currentFlag != null) interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
         }
     }
     private Color darker(Color color)

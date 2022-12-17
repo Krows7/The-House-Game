@@ -31,7 +31,7 @@ namespace Units.Settings
 
         public float CalculateTrueDamage()
         {
-            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log(Mathf.Max(fraction.Influence, Mathf.Exp(1)));
+            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log10(Mathf.Max(fraction.Influence, 10));
         }
 
         public bool WillSurvive(float Damage)

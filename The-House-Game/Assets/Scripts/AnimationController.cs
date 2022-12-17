@@ -21,19 +21,19 @@ public class AnimationController : MonoBehaviour
     {
         foreach (var animation in animations)
         {
-            var from = animation.Key;
-            var to = animation.Value;
-            var unit = from.GetUnit();
-            var dt = from.transform.position - unit.transform.position;
+            var nextCell = animation.Key;
+            var finishCell = animation.Value;
+            var unit = nextCell.GetUnit();
+            var dt = nextCell.transform.position - unit.transform.position;
             if (dt.magnitude <= unit.speed / 60)
             {
-                unit.transform.SetPositionAndRotation(from.transform.position, from.transform.rotation);
-                from.MoveUnitToCell(to);
+                unit.transform.SetPositionAndRotation(nextCell.transform.position, nextCell.transform.rotation);
+                nextCell.MoveUnitToCell(finishCell);
             }
             else
             {
                 unit.transform.SetPositionAndRotation(unit.transform.position + dt.normalized * unit.speed / 60, unit.transform.rotation);
-                queue.TryAdd(from, to);
+                queue.TryAdd(nextCell, finishCell);
             }
         }
         animations.Clear();
