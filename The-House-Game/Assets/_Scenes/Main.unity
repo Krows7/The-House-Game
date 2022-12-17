@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028328, g: 0.22571328, b: 0.3069218, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2274,6 +2274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf5ae99bfab911e43b4e2f63b3e721a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  time: 0
   roundTime: 10
   winner: {fileID: 0}
 --- !u!1 &1082884549
@@ -2730,7 +2731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseControllerObject: {fileID: 767251696}
-  unitInfo: {fileID: 1511496689}
+  infoField: {fileID: 1783364356}
   groupInfo: {fileID: 579493173}
   unitInfoPrefab: {fileID: 7647459636238746426, guid: 25c4307c464f884a8b273257207e092a, type: 3}
 --- !u!1001 &1381286587
