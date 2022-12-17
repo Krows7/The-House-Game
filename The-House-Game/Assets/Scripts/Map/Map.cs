@@ -31,7 +31,7 @@ public class Map : MonoBehaviour
                 roomCells[j].SetId(counter);
                 counter++;
             }
-        }   
+        }
         mapGraph = new List<List<Cell>>();
         for (int i = 0; i < cells.Count; ++i) 
         {

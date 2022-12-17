@@ -4,27 +4,25 @@ using UnityEngine;
 
 namespace Units.Settings
 {
-    public enum UnitType
-    {
-        Army,
-        Leader
-    };
     
-    public class Unit : MonoBehaviour
+    public abstract class Unit : MonoBehaviour
     {
-        public UnitType type;
-        public int health = 100;
-        public int strength = 0;
-        public int speed = 0;
-        public float buff_c = 0;
-        public GameObject unitPrefab;
 
-        public Unit(UnitType Type, int Health, int Strength, int Speed, float Buff_c)
+        public Fraction fraction;
+
+        public abstract float getSpeed();
+
+        public abstract float CalculateTrueDamage();
+
+        public abstract void GiveDamage(float Damage);
+
+        public abstract float GetHealth();
+
+        public abstract bool WillSurvive(float Damage);
+
+        public void Die()
         {
-            type = Type;
-            health = Health;
-            strength = Strength;
-            speed = Speed;
+            Destroy(transform.gameObject);
         }
     }
 }
