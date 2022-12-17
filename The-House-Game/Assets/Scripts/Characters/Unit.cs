@@ -20,6 +20,8 @@ namespace Units.Settings
 
         public abstract bool WillSurvive(float Damage);
 
+        public abstract List<float> GetAllHealths();
+
         public void Die()
         {
             Destroy(transform.gameObject);

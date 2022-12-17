@@ -5,7 +5,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
-    float time;
+    public float time;
     public float roundTime;
 
     public Units.Settings.Fraction winner;
