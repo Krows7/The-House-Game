@@ -48,5 +48,15 @@ namespace Units.Settings {
         {
             return GetHealth() > Damage / transform.childCount;
         }
+
+        public override List<float> GetAllHealths()
+        {
+            List<float> result = new List<float>();
+            foreach (Transform unit in transform)
+            {
+                result.Add(unit.GetComponent<Unit>().GetHealth());
+            }
+            return result;
+        }
     }
 }

@@ -38,5 +38,12 @@ namespace Units.Settings
         {
             return GetHealth() > Damage;
         }
+
+        public override List<float> GetAllHealths()
+        {
+            List<float> result = new List<float>();
+            result.Add(health);
+            return result;
+        }
     }
 }

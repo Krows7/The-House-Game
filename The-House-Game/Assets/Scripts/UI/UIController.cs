@@ -6,11 +6,20 @@ using Units.Settings;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private GameObject pauseControllerObject;
-    [SerializeField] private GameObject unitInfo;
+    [SerializeField] private GameObject infoField;
+    [SerializeField] private GameObject groupInfo;
+    [SerializeField] private GameObject unitInfoPrefab;
 
     void Start()
     {
         HideUnitInfo();
+    }
+
+    void Update()
+    {
+        var ts = System.TimeSpan.FromSeconds((int)GameObject.Find("/MasterController").GetComponent<GameManager>().time);
+        var timerStr = ts.ToString(@"mm\:ss");
+        infoField.transform.Find("Timer").GetComponent<TMPro.TextMeshProUGUI>().text = timerStr;
     }
 
     public void PauseButton()
@@ -20,14 +29,27 @@ public class UIController : MonoBehaviour
 
     public void ShowUnitInfo(Unit unit)
     {
-        unitInfo.transform.Find("Health/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.GetHealth().ToString();
-        unitInfo.transform.Find("Strength/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.CalculateTrueDamage().ToString();
-        unitInfo.transform.Find("Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.getSpeed().ToString();
-        unitInfo.SetActive(true);
+        infoField.transform.Find("UnitField/Health/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.GetHealth().ToString();
+        infoField.transform.Find("UnitField/Strength/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.CalculateTrueDamage().ToString();
+        infoField.transform.Find("UnitField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.getSpeed().ToString();
+        infoField.transform.Find("UnitField").gameObject.SetActive(true);
+        int i = 0;
+        foreach (float hp in unit.GetAllHealths())
+        {
+            var singleUnit = Instantiate(unitInfoPrefab, groupInfo.transform);
+            var newPos = new Vector3(singleUnit.transform.localPosition.x + i * 100, singleUnit.transform.localPosition.y, singleUnit.transform.localPosition.z);
+            singleUnit.transform.SetLocalPositionAndRotation(newPos, singleUnit.transform.rotation);
+            singleUnit.transform.Find("Health").GetComponent<TMPro.TextMeshProUGUI>().text = hp.ToString();
+            ++i;
+        }
     }
 
     public void HideUnitInfo()
     {
-        unitInfo.SetActive(false);
+        infoField.transform.Find("UnitField").gameObject.SetActive(false);
+        foreach (Transform singleUnit in groupInfo.transform)
+        {
+            Destroy(singleUnit.gameObject);
+        }
     }
 }
