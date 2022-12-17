@@ -25,14 +25,14 @@ public class AnimationController : MonoBehaviour
             var finishCell = animation.Value;
             var unit = nextCell.GetUnit();
             var dt = nextCell.transform.position - unit.transform.position;
-            if (dt.magnitude <= unit.speed / 60)
+            if (dt.magnitude <= unit.getSpeed() * Time.deltaTime)
             {
                 unit.transform.SetPositionAndRotation(nextCell.transform.position, nextCell.transform.rotation);
                 nextCell.MoveUnitToCell(finishCell);
             }
             else
             {
-                unit.transform.SetPositionAndRotation(unit.transform.position + dt.normalized * unit.speed / 60, unit.transform.rotation);
+                unit.transform.SetPositionAndRotation(unit.transform.position + dt.normalized * unit.getSpeed() * Time.deltaTime, unit.transform.rotation);
                 queue.TryAdd(nextCell, finishCell);
             }
         }

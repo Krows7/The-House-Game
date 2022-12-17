@@ -8,10 +8,6 @@ public class Cell : MonoBehaviour
 {
     [SerializeField] private float cellSize;
 
-    private float positionX;
-    private float positionY;
-    
-
     [SerializeField] private int id;
 
     [SerializeField] private Unit currentUnit = null;
@@ -22,9 +18,7 @@ public class Cell : MonoBehaviour
 
     void Start()
     {
-        id = -1;
-        positionX = transform.position.x;
-        positionY = transform.position.y;
+        id = id == 0 ? -1 : id;
     }
 
     public void SetId(int _id) 
@@ -39,12 +33,12 @@ public class Cell : MonoBehaviour
 
     public float GetPositionX() 
     {
-        return positionX;
+        return transform.position.x;
     }
 
     public float GetPositionY() 
     {
-        return positionY;
+        return transform.position.y;
     }
 
     public float GetCellSize() 
@@ -123,6 +117,14 @@ public class Cell : MonoBehaviour
                 GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
                 nextCell.currentFlag.GetComponent<Flag>().StartCapture();
             }
+            else if(nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == currentUnit.fraction)
+            {
+                Debug.Log(nextCell.GetUnit() is Group);
+                if (nextCell.GetUnit() is Group && currentUnit is Group) return;
+                if (nextCell.GetUnit() is Group) CombineTo(nextCell.GetUnit() as Group, currentUnit, nextCell);
+                else if (currentUnit is Group) CombineTo(currentUnit as Group, nextCell.GetUnit(), nextCell);
+                else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);
+            }
             else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
             {
                 var thisUnit = currentUnit;
@@ -160,6 +162,26 @@ public class Cell : MonoBehaviour
             if (interruptedCell != null && interruptedCell.currentFlag != null) interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
         }
     }
+
+    public void CombineTo(Group AsGroup, Unit Add, Cell cell)
+    {
+        AsGroup.Add(Add);
+        DellUnit();
+        cell.SetUnit(AsGroup);
+    }
+
+    public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
+    {;
+        var group = new GameObject();
+        group.AddComponent<Group>();
+        group.transform.position = Base.transform.position;
+        Base.transform.parent = group.transform;
+        group.GetComponent<Group>().Add(Add);
+        group.GetComponent<Group>().fraction = Base.fraction;
+        DellUnit();
+        nextCell.SetUnit(group.GetComponent<Group>());
+    }
+
     private Color darker(Color color)
     {
         return new Color(color.r - 0.1F, color.g - 0.1F, color.g - 0.1F);

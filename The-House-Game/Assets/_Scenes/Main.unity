@@ -876,6 +876,7 @@ GameObject:
   - component: {fileID: 1079582822}
   - component: {fileID: 1079582823}
   - component: {fileID: 1079582824}
+  - component: {fileID: 1079582825}
   m_Layer: 0
   m_Name: MasterController
   m_TagString: Untagged
@@ -923,12 +924,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flagPrefab: {fileID: 8070056422589265992, guid: b1983adbd557a5945859847d86a425a1, type: 3}
-  maxFlags: 1
+  maxFlags: 2
   flagPoles:
   - {fileID: 77396821}
-  minDelay: 0
+  - {fileID: 1679522248}
+  minDelay: 1
   maxDelay: 2
   captureDelay: 2
+--- !u!114 &1079582825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079582819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf5ae99bfab911e43b4e2f63b3e721a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roundTime: 10
+  winner: {fileID: 0}
 --- !u!1 &1082884549
 GameObject:
   m_ObjectHideFlags: 0
@@ -1566,6 +1582,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4077489943479800894, guid: 573de1e156f53524cb7026a8ebfc1ebf, type: 3}
   m_PrefabInstance: {fileID: 1381286587}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1679522248 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5785075714209664131, guid: 573de1e156f53524cb7026a8ebfc1ebf, type: 3}
+  m_PrefabInstance: {fileID: 1381286587}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8980eea71f1c84a4385366048b845e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1684389121
 GameObject:
   m_ObjectHideFlags: 0

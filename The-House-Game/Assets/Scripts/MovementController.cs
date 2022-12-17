@@ -11,22 +11,26 @@ public class MovementController : MonoBehaviour
     {
         UpdateCurrentCell();
 
-        if (currentCell != null && Input.GetKeyDown(KeyCode.Mouse0)) 
-        {
-            currentCell.onPressDebug();
-            Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
-            Debug.Log(startCell != null ? startCell.GetUnit().fraction : null);
-            if (!currentCell.IsFree() && (startCell == null || currentCell.GetUnit().fraction == startCell.GetUnit().fraction))
+        if (currentCell != null) {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (startCell != null) startCell.onReleaseDebug();
-                startCell = currentCell;
-                startCell.onChosenDebug();
-            }
-            else if (startCell != null)
+                currentCell.onPressDebug();
+                Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
+                Debug.Log(startCell != null ? startCell.GetUnit().fraction : null);
+                if (!currentCell.IsFree())
+                {
+                    if (startCell != null) startCell.onReleaseDebug();
+                    startCell = currentCell;
+                    startCell.onChosenDebug();
+                }
+            } else if(Input.GetKeyDown(KeyCode.Mouse1))
             {
-                finishCell = currentCell;
-                MoveUnit();
-                ResetAll();
+                if (startCell != null)
+                {
+                    finishCell = currentCell;
+                    MoveUnit();
+                    ResetAll();
+                }
             }
         } 
     }

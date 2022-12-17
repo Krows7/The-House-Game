@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2670737471876249323}
-  - component: {fileID: -3918419825635473595}
+  - component: {fileID: 1606826776149135956}
   m_Layer: 0
   m_Name: RatLeader
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3918419825635473595
+--- !u!114 &1606826776149135956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,15 +42,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1264154734397936932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 006336d7e12e254429861216f5ecf4b4, type: 3}
+  m_Script: {fileID: 11500000, guid: a12f5f71aa808ac4185b896abdb67672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  fraction: {fileID: 0}
   health: 150
   strength: 70
   speed: 2
   buff_c: 1.5
-  fraction: {fileID: 0}
 --- !u!1 &7227509750495407332
 GameObject:
   m_ObjectHideFlags: 0

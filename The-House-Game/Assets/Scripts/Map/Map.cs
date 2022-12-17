@@ -9,17 +9,6 @@ public class Map : MonoBehaviour
     private List<Cell> cells;
     private List<List<Cell>> mapGraph;
 
-    public static string GetGameObjectPath(GameObject obj)
-    {
-        string path = "/" + obj.name;
-        while (obj.transform.parent != null)
-        {
-            obj = obj.transform.parent.gameObject;
-            path = "/" + obj.name + path;
-        }
-        return path;
-    }
-
     void FillRoomsArray() 
     {
         rooms = new List<Room>();
@@ -42,7 +31,7 @@ public class Map : MonoBehaviour
                 roomCells[j].SetId(counter);
                 counter++;
             }
-        }   
+        }
         mapGraph = new List<List<Cell>>();
         for (int i = 0; i < cells.Count; ++i) 
         {

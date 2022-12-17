@@ -106,7 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6265286256636225694}
-  - component: {fileID: 8257527020846760550}
+  - component: {fileID: 603748708032727618}
   m_Layer: 0
   m_Name: FourthArmy
   m_TagString: Untagged
@@ -130,7 +130,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8257527020846760550
+--- !u!114 &603748708032727618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,12 +139,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7873802044243165421}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 006336d7e12e254429861216f5ecf4b4, type: 3}
+  m_Script: {fileID: 11500000, guid: eab6b0df993a1d0429163cdfc100e485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  fraction: {fileID: 0}
   health: 100
   strength: 40
   speed: 3
-  buff_c: 0
-  fraction: {fileID: 0}
+  buff_c: 1
