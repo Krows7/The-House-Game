@@ -7,6 +7,8 @@ public class MovementController : MonoBehaviour
     private Cell currentCell;
     private Cell startCell, finishCell;
 
+    [SerializeField] private GameObject uiControllerObject;
+
     void Update()
     {
         UpdateCurrentCell();
@@ -21,6 +23,7 @@ public class MovementController : MonoBehaviour
                 {
                     if (startCell != null) startCell.onReleaseDebug();
                     startCell = currentCell;
+                    uiControllerObject.GetComponent<UIController>().ShowUnitInfo(startCell.GetUnit());
                     startCell.onChosenDebug();
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1))
@@ -37,6 +40,7 @@ public class MovementController : MonoBehaviour
 
     void MoveUnit() 
     {
+        uiControllerObject.GetComponent<UIController>().HideUnitInfo();
         startCell.MoveUnitToCell(finishCell);
     }
 
