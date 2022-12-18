@@ -16,6 +16,7 @@ public class Map : MonoBehaviour
 		foreach (Transform child in transform) 
         {
             Room r = child.gameObject.GetComponent<Room>();
+            Debug.Log(r.name);
             r.roomId = counter++;
 			rooms.Add(r);
 		}
@@ -28,6 +29,7 @@ public class Map : MonoBehaviour
         for (int i = 0; i < rooms.Count; ++i) 
         {
             List<Cell> roomCells = rooms[i].GetCells();
+            Debug.Log(rooms[i].name + " " +  roomCells.Count);
             for (int j = 0; j < roomCells.Count; ++j)
             {
                 cells.Add(roomCells[j]);

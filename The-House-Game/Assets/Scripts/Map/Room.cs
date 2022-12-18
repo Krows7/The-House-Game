@@ -2,22 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Room : MonoBehaviour
 {
     [SerializeField] private List<Cell> cells;
 
-	public int roomId { get; set; }
+    public int roomId { get; set; } = -1;
+
 
 	void FillCellsArray() 
     {
         cells = new List<Cell>();
         foreach (Transform child in transform) 
         {
+
             Cell c = child.gameObject.GetComponent<Cell>();
 			cells.Add(c);
         }
     }
+
 
     /*
     для будущей оптимизации
@@ -41,9 +45,14 @@ public class Room : MonoBehaviour
     }
     */
 
-    void Start()
+    void Awake()
     {
         FillCellsArray();
+	
+	}
+
+	void Start()
+    {
         //MakeGraph();
     }
 
