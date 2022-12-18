@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/_Scenes/MainMenu.unity
     guid: 4613561ff4380a9ed9052d4af9952942
   - enabled: 1
+    path: Assets/_Scenes/ChooseFraction.unity
+    guid: 6927e8303f46da3c5b86cc6d1a730360
+  - enabled: 1
     path: Assets/_Scenes/Main.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
