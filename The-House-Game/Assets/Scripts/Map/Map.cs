@@ -12,10 +12,13 @@ public class Map : MonoBehaviour
     void FillRoomsArray() 
     {
         rooms = new List<Room>();
-        foreach (Transform child in transform) 
+		int counter = 0;
+		foreach (Transform child in transform) 
         {
-            rooms.Add(child.gameObject.GetComponent<Room>());
-        }
+            Room r = child.gameObject.GetComponent<Room>();
+            r.roomId = counter++;
+			rooms.Add(r);
+		}
     }
 
     void SetIdForRooms()
@@ -28,6 +31,7 @@ public class Map : MonoBehaviour
             for (int j = 0; j < roomCells.Count; ++j)
             {
                 cells.Add(roomCells[j]);
+                roomCells[j].roomId = rooms[i].roomId;
                 roomCells[j].SetId(counter);
                 counter++;
             }
@@ -85,5 +89,10 @@ public class Map : MonoBehaviour
     public List<Cell> GetCells() 
     {
         return cells;
+    }
+
+    public List<Room> GetRooms()
+    {
+        return rooms;
     }
 }

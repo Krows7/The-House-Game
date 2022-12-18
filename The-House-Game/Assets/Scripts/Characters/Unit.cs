@@ -10,6 +10,8 @@ namespace Units.Settings
 
         public Fraction fraction;
 
+        public Cell CurrentCell;
+
         public abstract float getSpeed();
 
         public abstract float CalculateTrueDamage();

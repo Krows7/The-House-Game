@@ -10,11 +10,12 @@ public class Cell : MonoBehaviour
 
     [SerializeField] private int id;
 
-    [SerializeField] private Unit currentUnit = null;
+	[SerializeField] private Unit currentUnit = null;
 
     public GameObject currentFlag = null;
 
     public Map gameMap { get; set; }
+    public int roomId { get; set; }
 
     void Start()
     {
@@ -59,6 +60,7 @@ public class Cell : MonoBehaviour
     public void SetUnit(Unit unit)
     {
         currentUnit = unit;
+        currentUnit.CurrentCell = this;
     }
 
     public void DellUnit()
