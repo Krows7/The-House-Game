@@ -70,15 +70,16 @@ public class Cell : MonoBehaviour
 
     public void MoveUnitToCell(Cell finishCell)
     {
-        Queue<Cell> queue = new Queue<Cell>();
+		Queue<Cell> queue = new Queue<Cell>();
         List<int> visited = new List<int>();
 
+        Debug.LogWarning("Finish Cell ID: " + finishCell.GetId());
         for (int i = 0; i < gameMap.GetCells().Count; ++i)
         {
             visited.Add(-1);
         }
 
-        queue.Enqueue(this);
+		queue.Enqueue(this);
 
         while (queue.Count > 0)
         {
