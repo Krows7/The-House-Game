@@ -15,7 +15,7 @@ namespace Units.Settings
 
         public override float CalculateTrueDamage()
         {
-            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log10(Mathf.Max(fraction.Influence, 10));
+            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log10(Mathf.Max(fraction.influence, 10));
         }
 
         public override float GetHealth()

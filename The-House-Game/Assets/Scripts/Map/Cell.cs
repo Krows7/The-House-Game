@@ -165,7 +165,7 @@ public class Cell : MonoBehaviour
 				}
 				//interruptedCell = finishCell;
 				//Fix Influence
-				thisUnit.fraction.Influence += 100;
+				thisUnit.fraction.influence += 100;
 			}
 			other.GiveDamage(trueDamage);
 			thisUnit.GiveDamage(otherTrueDamage);
