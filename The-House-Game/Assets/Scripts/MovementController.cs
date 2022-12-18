@@ -17,7 +17,7 @@ public class MovementController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 currentCell.onPressDebug();
-                Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
+				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 Debug.Log(startCell != null ? startCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
@@ -28,7 +28,8 @@ public class MovementController : MonoBehaviour
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1))
             {
-                if (startCell != null)
+				Debug.LogWarning("MOVE!");
+				if (startCell != null)
                 {
                     finishCell = currentCell;
                     MoveUnit();
@@ -41,6 +42,7 @@ public class MovementController : MonoBehaviour
     void MoveUnit() 
     {
         uiControllerObject.GetComponent<UIController>().HideUnitInfo();
+        Debug.LogWarning("MOVE!");
         startCell.MoveUnitToCell(finishCell);
     }
 

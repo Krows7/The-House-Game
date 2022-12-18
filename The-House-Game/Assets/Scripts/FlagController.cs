@@ -40,8 +40,10 @@ public class FlagController : MonoBehaviour
 
     public void CaptureFlag(Cell cell)
     {
-        // Plz fix zis
-        cell.GetUnit().fraction.Influence += 100;
+		// Plz fix zis
+		Debug.Log("OK000");
+		cell.GetUnit().fraction.Influence += 100;
+        Debug.Log("OK111");
         flags.Remove(cell.currentFlag);
         Destroy(cell.currentFlag);
         cell.currentFlag = null;

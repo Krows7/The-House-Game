@@ -10,11 +10,12 @@ public class Cell : MonoBehaviour
 
     [SerializeField] private int id;
 
-    [SerializeField] private Unit currentUnit = null;
+	[SerializeField] private Unit currentUnit = null;
 
     public GameObject currentFlag = null;
 
     public Map gameMap { get; set; }
+    public int roomId { get; set; }
 
     void Start()
     {
@@ -59,6 +60,7 @@ public class Cell : MonoBehaviour
     public void SetUnit(Unit unit)
     {
         currentUnit = unit;
+        currentUnit.CurrentCell = this;
     }
 
     public void DellUnit()
@@ -100,7 +102,7 @@ public class Cell : MonoBehaviour
 
         if (visited[finishCell.id] != -1)
         {
-            Cell interruptedCell = null;
+           
             int prevId = finishCell.id;
             int nextCellId = -1;
             while (prevId != id)
@@ -109,63 +111,85 @@ public class Cell : MonoBehaviour
                 prevId = visited[prevId];
             }
             var nextCell = gameMap.GetCells()[nextCellId];
-            if(nextCell.IsFree() && nextCell.currentFlag != null)
-            {
-                interruptedCell = this;
-                nextCell.SetUnit(currentUnit);
-                DellUnit();
-                GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
-                nextCell.currentFlag.GetComponent<Flag>().StartCapture();
-            }
-            else if(nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == currentUnit.fraction)
-            {
-                Debug.Log(nextCell.GetUnit() is Group);
-                if (nextCell.GetUnit() is Group && currentUnit is Group) return;
-                if (nextCell.GetUnit() is Group) CombineTo(nextCell.GetUnit() as Group, currentUnit, nextCell);
-                else if (currentUnit is Group) CombineTo(currentUnit as Group, nextCell.GetUnit(), nextCell);
-                else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);
-            }
-            else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
-            {
-                var thisUnit = currentUnit;
-                var other = nextCell.GetUnit();
-                var trueDamage = thisUnit.CalculateTrueDamage();
-                var otherTrueDamage = other.CalculateTrueDamage();
-                if (trueDamage >= otherTrueDamage || !other.WillSurvive(trueDamage))
-                {
-                    DellUnit();
-                    finishCell.DellUnit();
-                    if (thisUnit.WillSurvive(otherTrueDamage))
-                    {
-                        finishCell.SetUnit(thisUnit);
-                        GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
-                    }
-                    if (other.WillSurvive(trueDamage))
-                    {
-                        SetUnit(other);
-                        GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
-                    }
-                    interruptedCell = finishCell;
-                    //Fix Influence
-                    thisUnit.fraction.Influence += 100;
-                }
-                other.GiveDamage(trueDamage);
-                thisUnit.GiveDamage(otherTrueDamage);
-            }
-            else
-            {
-                interruptedCell = this;
-                nextCell.SetUnit(currentUnit);
-                DellUnit();
-                GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
-            }
-            if (interruptedCell != null && interruptedCell.currentFlag != null) interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
+            TryMoveTo(nextCell, finishCell);
         }
     }
 
-    public void CombineTo(Group AsGroup, Unit Add, Cell cell)
+    public void TryMoveTo(Cell nextCell, Cell finishCell)
     {
-        AsGroup.Add(Add);
+		Cell interruptedCell = null;
+        // flag capture
+		if (nextCell.IsFree() && nextCell.currentFlag != null)
+		{
+			interruptedCell = this;
+			nextCell.SetUnit(currentUnit);
+			DellUnit();
+			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
+		}
+        // group union
+		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == currentUnit.fraction)
+		{
+			Debug.Log(nextCell.GetUnit() is Group);
+			if (nextCell.GetUnit() is Group && currentUnit is Group) return;
+			if (nextCell.GetUnit() is Group) CombineTo(nextCell.GetUnit() as Group, currentUnit, nextCell);
+			else if (currentUnit is Group) CombineTo(currentUnit as Group, nextCell.GetUnit(), nextCell, true);
+			else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);
+		}
+        // fight
+		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
+		{
+			var thisUnit = currentUnit;
+			var other = nextCell.GetUnit();
+			var trueDamage = thisUnit.CalculateTrueDamage();
+			var otherTrueDamage = other.CalculateTrueDamage();
+			if (trueDamage >= otherTrueDamage || !other.WillSurvive(trueDamage))
+			{
+				DellUnit();
+				finishCell.DellUnit();
+				if (thisUnit.WillSurvive(otherTrueDamage))
+				{
+					finishCell.SetUnit(thisUnit);        
+					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
+					if (nextCell.currentFlag != null)
+                    {
+                        interruptedCell = this;
+                        finishCell.currentFlag.GetComponent<Flag>().InterruptCapture();
+						finishCell.currentFlag.GetComponent<Flag>().StartCapture();
+					}
+				}
+				if (other.WillSurvive(trueDamage))
+				{
+					SetUnit(other);
+					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
+				}
+				//interruptedCell = finishCell;
+				//Fix Influence
+				thisUnit.fraction.Influence += 100;
+			}
+			other.GiveDamage(trueDamage);
+			thisUnit.GiveDamage(otherTrueDamage);
+		}
+        // just move
+		else
+		{
+			interruptedCell = this;
+			nextCell.SetUnit(currentUnit);
+			DellUnit();
+			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+		}
+        // interrupt flag capture
+		if (interruptedCell != null && interruptedCell.currentFlag != null)
+			interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
+	}
+
+    public void CombineTo(Group AsGroup, Unit Add, Cell cell, bool inUnitLocation = false)
+    {
+		if (inUnitLocation)
+		{
+			AsGroup.transform.SetPositionAndRotation(Add.transform.position, Add.transform.rotation);
+		}
+		AsGroup.Add(Add);
         DellUnit();
         cell.SetUnit(AsGroup);
     }

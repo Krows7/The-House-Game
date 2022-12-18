@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Room : MonoBehaviour
 {
     [SerializeField] private List<Cell> cells;
 
-    void FillCellsArray() 
+	public int roomId { get; set; }
+
+	void FillCellsArray() 
     {
         cells = new List<Cell>();
         foreach (Transform child in transform) 
         {
-            cells.Add(child.gameObject.GetComponent<Cell>());
+            Cell c = child.gameObject.GetComponent<Cell>();
+			cells.Add(c);
         }
     }
 
