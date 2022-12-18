@@ -46,10 +46,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fraction: {fileID: 0}
+  CurrentCell: {fileID: 0}
   health: 150
   strength: 70
   speed: 2
   buff_c: 1.5
+  skillTeleportDelay: 2
+  skillInfluence: 50
+  skillSuccessChance: 1
 --- !u!1 &7227509750495407332
 GameObject:
   m_ObjectHideFlags: 0
