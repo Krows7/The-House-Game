@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028328, g: 0.22571328, b: 0.3069218, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -466,6 +466,7 @@ MonoBehaviour:
   - {fileID: 1264154734397936932, guid: fae7ff3e7029cc546858454087d35726, type: 3}
   - {fileID: 1264154734397936932, guid: fae7ff3e7029cc546858454087d35726, type: 3}
   spawnRoom: {fileID: 900874927}
+  fractionName: Rats
 --- !u!1 &403979400
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,6 +1716,7 @@ MonoBehaviour:
   - {fileID: 7873802044243165421, guid: 90812daed1d74944c83daff15b568f7e, type: 3}
   - {fileID: 7873802044243165421, guid: e74871d7a1fe80a4c869128e573444ab, type: 3}
   spawnRoom: {fileID: 948495930}
+  fractionName: Fourth
 --- !u!114 &900874927 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2236395700788759347, guid: 573de1e156f53524cb7026a8ebfc1ebf, type: 3}

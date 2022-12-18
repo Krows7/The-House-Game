@@ -8,11 +8,22 @@ public class GameManager : MonoBehaviour
     public float time;
     public float roundTime;
 
+    public static string gamerFractionName = "Rats";
+    public static Units.Settings.Fraction gamerFraction;
     public Units.Settings.Fraction winner;
 
     void Start()
     {
-        
+        foreach (Transform fracTransform in GameObject.Find("Fractions").transform)
+        {
+            var frac = fracTransform.GetComponent<Units.Settings.Fraction>();
+            if (frac.name == gamerFractionName)
+            {
+                gamerFraction = frac;
+                break;
+            }
+        }
+        Debug.Log(gamerFractionName);
     }
 
     // Update is called once per frame
@@ -26,9 +37,9 @@ public class GameManager : MonoBehaviour
             foreach(Transform fraction in GameObject.Find("Fractions").transform)
             {
                 var f = fraction.GetComponent<Units.Settings.Fraction>();
-                if(f.Influence > maxInfluence)
+                if(f.influence > maxInfluence)
                 {
-                    maxInfluence = f.Influence;
+                    maxInfluence = f.influence;
                     mx = f;
                 }
             }

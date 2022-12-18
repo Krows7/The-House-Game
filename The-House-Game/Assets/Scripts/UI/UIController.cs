@@ -12,14 +12,16 @@ public class UIController : MonoBehaviour
 
     void Start()
     {
+        infoField.transform.Find("Fraction").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.gamerFractionName;
         HideUnitInfo();
     }
 
     void Update()
     {
-        var ts = System.TimeSpan.FromSeconds((int)GameObject.Find("/MasterController").GetComponent<GameManager>().time);
+        var ts = System.TimeSpan.FromSeconds((int)GameObject.Find("/MasterController").GetComponent<GameManager>().timeLeft());
         var timerStr = ts.ToString(@"mm\:ss");
         infoField.transform.Find("Timer").GetComponent<TMPro.TextMeshProUGUI>().text = timerStr;
+        infoField.transform.Find("Influence/Value").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.gamerFraction.influence.ToString();
     }
 
     public void PauseButton()

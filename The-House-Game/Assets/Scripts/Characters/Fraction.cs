@@ -9,9 +9,10 @@ namespace Units.Settings
     public class Fraction : MonoBehaviour
     {
 
-        public int Influence = 0;
+        public int influence = 0;
         public GameObject[] units;
         public Room spawnRoom;
+        public string fractionName;
 
         void Start()
         {

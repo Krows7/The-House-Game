@@ -12,7 +12,6 @@ public class MainMenuController : MonoBehaviour
 
     public void StartButton()
     {
-        SceneManager.LoadScene("Main");
-        Time.timeScale = 1f;
+        SceneManager.LoadScene("ChooseFraction");
     }
 }

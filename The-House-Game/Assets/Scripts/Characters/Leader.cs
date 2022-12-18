@@ -25,7 +25,7 @@ namespace Units.Settings
             {
                 if(Random.insideUnitCircle.x <= skillSuccessChance)
                 {
-                    fraction.Influence += skillInfluence;
+                    fraction.influence += skillInfluence;
                 }
                 CurrentCell.SetUnit(this);
                 SetVisible(true);
