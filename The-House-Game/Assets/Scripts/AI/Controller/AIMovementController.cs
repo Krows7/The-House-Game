@@ -6,9 +6,6 @@ using Units.Settings;
 public class AIMovementController : MonoBehaviour
 {
 
-	private Cell currentCell;
-	private Cell startCell, finishCell;
-
 	// Start is called before the first frame update
 	void Start()
     {
@@ -21,7 +18,7 @@ public class AIMovementController : MonoBehaviour
         
     }
 
-	void MoveUnit(Unit unit)
+	public void MoveUnit(Unit unit, Cell finishCell)
 	{
 		Debug.LogWarning("MOVE AI!");
 		unit.CurrentCell.MoveUnitToCell(finishCell);

@@ -24,6 +24,10 @@ public class AnimationController : MonoBehaviour
             var nextCell = animation.Key;
             var finishCell = animation.Value;
             var unit = nextCell.GetUnit();
+            if (unit == null)
+            {
+                continue;
+            }
             var dt = nextCell.transform.position - unit.transform.position;
             if (dt.magnitude <= unit.getSpeed() * Time.deltaTime)
             {
