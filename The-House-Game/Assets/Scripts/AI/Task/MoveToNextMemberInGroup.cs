@@ -4,36 +4,40 @@ using BehavourTree;
 using Units.Settings;
 using UnityEngine;
 
-public class DefineNextMemberInGroup : Node
+public class MoveToNextMemberInGroup : Node
 {
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
 	AnimationController animationController = null;
 
-	public DefineNextMemberInGroup(Unit unit)
+	public MoveToNextMemberInGroup(Unit unit)
 	{
 		_unit = unit;
+		state = NodeState.SUCCESS;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
 		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
-
 	}
+
 
 	public override NodeState Evaluate()
 	{
-		List<Cell> cells = _unit.CurrentCell.gameMap.GetCells();
-		foreach (Cell cell in cells)
+		if (state == NodeState.RUNNING)
 		{
-			Unit nextUnit = cell.GetUnit();
-			if (nextUnit != null && nextUnit != _unit && nextUnit.fraction == _unit.fraction && !(nextUnit is Group))
-			{
-				parent.SetData("nextUnitCell", nextUnit.CurrentCell);
-				state = NodeState.SUCCESS;
-				return state;
-			}
+			return state;
 		}
-		state = NodeState.FAIL;
+	
+		Cell unitCell = (Cell)GetData("nextUnitCell");
+		if (animationController.animations.ContainsValue(_unit.CurrentCell)
+			|| animationController.animations.ContainsKey(_unit.CurrentCell))
+		{
+			state = NodeState.SUCCESS;
+			return state;
+		}
+		state = NodeState.RUNNING;
+		movementController.MoveUnit(_unit, unitCell);
+		state = NodeState.SUCCESS;
 		return state;
 	}
 }

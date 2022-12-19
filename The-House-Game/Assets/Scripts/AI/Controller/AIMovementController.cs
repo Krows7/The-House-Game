@@ -20,7 +20,6 @@ public class AIMovementController : MonoBehaviour
 
 	public void MoveUnit(Unit unit, Cell finishCell)
 	{
-		Debug.LogWarning("MOVE AI!");
 		unit.CurrentCell.MoveUnitToCell(finishCell);
 	}
 }
