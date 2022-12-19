@@ -28,7 +28,8 @@ namespace Units.Settings
             {
                 Cell cell = cells.GetChild(range[i]).GetComponent<Cell>();
                 GameObject unitObject = Instantiate(units[i], cell.transform.position, Quaternion.identity);
-                cell.SetUnit(unitObject.GetComponent<Unit>());
+				//unitObject.GetComponent<Unit>().fraction = this;
+				cell.SetUnit(unitObject.GetComponent<Unit>());
             }
         }
     }
