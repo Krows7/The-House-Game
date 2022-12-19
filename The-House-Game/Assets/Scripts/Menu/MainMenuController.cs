@@ -12,6 +12,7 @@ public class MainMenuController : MonoBehaviour
 
     public void StartButton()
     {
+        GameObject.Find("Audio Source").GetComponent<Audio>().audioSource.loop = false;
         SceneManager.LoadScene("ChooseFraction");
     }
 }

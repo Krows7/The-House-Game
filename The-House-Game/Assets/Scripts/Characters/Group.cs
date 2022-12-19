@@ -58,5 +58,12 @@ namespace Units.Settings {
             }
             return result;
         }
+
+        public override float GetMaxHealth()
+        {
+            float hp = 0;
+            foreach (Transform unit in transform) hp = Mathf.Max(hp, unit.GetComponent<Unit>().GetMaxHealth());
+            return hp;
+        }
     }
 }

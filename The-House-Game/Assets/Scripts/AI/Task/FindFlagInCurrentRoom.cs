@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehavourTree;
 using Units.Settings;
+using System.Linq;
 
 public class FindFlagInCurrentRoom : Node
 {
@@ -21,6 +22,17 @@ public class FindFlagInCurrentRoom : Node
 
 	public override NodeState Evaluate()
 	{
+		var a = GameObject.Find("TemporaryDebugObjects/TemporaryFixedMap/Map").GetComponent<Map>();
+		foreach (Cell f in a.GetRooms()[_unit.CurrentCell.roomId].GetCells())
+        {
+			if(f.currentFlag != null)
+            {
+				parent.SetData("flagFound", f);
+				state = NodeState.SUCCESS;
+				return state;
+			}
+        }
+		/*
 		foreach (Cell f in flagController.flagPoles)
 		{
 			if (f.roomId == _unit.CurrentCell.roomId && f.currentFlag != null)
@@ -31,6 +43,7 @@ public class FindFlagInCurrentRoom : Node
 			}
 
 		}
+		*/
 		parent.SetData("flagFound", null);
 		state = NodeState.FAIL;
 		return state;

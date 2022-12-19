@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Flag : MonoBehaviour
 {
@@ -8,10 +9,12 @@ public class Flag : MonoBehaviour
     public Cell cell;
     float time;
     FlagController flags;
+    GameObject cylinder;
 
     void Start()
     {
         flags = GameObject.Find("MasterController").GetComponent<FlagController>();
+        cylinder = GameObject.Find("Cylinder").gameObject;
     }
 
     public void StartCapture()
@@ -31,13 +34,23 @@ public class Flag : MonoBehaviour
     {
         if (captureDelay > 0)
         {
-            if(time >= captureDelay)
+            if (time == 0) {
+                cylinder.SetActive(true);
+                cylinder.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = 1;
+            }
+            if (time >= captureDelay)
             {
                 flags.CaptureFlag(cell);
+                cylinder.SetActive(false);
             }
             time += Time.deltaTime;
+            cylinder.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = TimeLeft() / captureDelay;
         }
-        else time = 0;
+        else
+        {
+            time = 0;
+            cylinder.SetActive(false);
+        }
     }
 
     // Time left to capture in seconds

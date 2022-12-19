@@ -8,23 +8,26 @@ public class FlagController : MonoBehaviour
     public GameObject flagPrefab;
     public int maxFlags;
     List<GameObject> flags;
-    public List<Cell> flagPoles;
+    //public List<Cell> flagPoles;
+    public List<Room> exceptions;
     public float minDelay;
     public float maxDelay;
     public float captureDelay;
     float time;
     float chosenDelay;
     List<Cell> freeFlagPoles;
+    Map map;
 
     void Start()
     {
         flags = new();
         chosenDelay = Random.Range(minDelay, maxDelay);
+        map = GameObject.Find("TemporaryDebugObjects/TemporaryFixedMap/Map").GetComponent<Map>();
     }
 
     void Update()
     {
-        freeFlagPoles = flagPoles.Where(x => x.currentFlag == null && x.IsFree()).ToList();
+        freeFlagPoles = map.GetCells().Where(x => x.currentFlag == null && x.IsFree() && exceptions.Where(y => y.roomId == x.roomId).Count() == 0).ToList();
         if (flags.Count < maxFlags && freeFlagPoles.Count > 0)
         {
             if (time >= chosenDelay)
