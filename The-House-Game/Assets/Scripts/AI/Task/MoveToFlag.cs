@@ -4,15 +4,16 @@ using UnityEngine;
 using BehavourTree;
 using Units.Settings;
 
-public class FindFlagInCurrentRoom : Node
+public class MoveToFlag : Node
 {
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
 	AnimationController animationController = null;
 
-	public FindFlagInCurrentRoom(Unit unit)
+	public MoveToFlag(Unit unit)
 	{
+		state = NodeState.FAIL;
 		_unit = unit;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
@@ -21,20 +22,23 @@ public class FindFlagInCurrentRoom : Node
 
 	public override NodeState Evaluate()
 	{
-		foreach (Cell f in flagController.flagPoles)
+		if (state == NodeState.RUNNING)
 		{
-			if (f.roomId == _unit.CurrentCell.roomId && f.currentFlag != null)
-			{
-				parent.SetData("flagFound", f);
-				state = NodeState.SUCCESS;
-				return state;
-			}
-
+			return state;
 		}
-		parent.SetData("flagFound", null);
-		state = NodeState.FAIL;
+
+		Cell flagCell = (Cell)GetData("flagFound");
+		if (animationController.animations.ContainsValue(_unit.CurrentCell)
+			|| animationController.animations.ContainsKey(_unit.CurrentCell))
+		{
+			state = NodeState.SUCCESS;
+			return state;
+		}
+
+		state = NodeState.RUNNING;
+		movementController.MoveUnit(_unit, flagCell);
+		state = NodeState.SUCCESS;
 		return state;
 
 	}
-
 }

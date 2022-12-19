@@ -10,7 +10,7 @@ namespace Units.Settings
 
         public Fraction fraction;
 
-        public Cell CurrentCell;
+        public Cell CurrentCell { set; get; } = null;
 
         public abstract float getSpeed();
 

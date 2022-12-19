@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028328, g: 0.22571328, b: 0.3069218, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -459,12 +459,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bea49b72907090543b87d19687d0c350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Influence: 0
+  influence: 0
   units:
-  - {fileID: 1264154734397936932, guid: bf24924ee09c58140b6db3ac98c39fc1, type: 3}
-  - {fileID: 1264154734397936932, guid: fae7ff3e7029cc546858454087d35726, type: 3}
-  - {fileID: 1264154734397936932, guid: fae7ff3e7029cc546858454087d35726, type: 3}
-  - {fileID: 1264154734397936932, guid: fae7ff3e7029cc546858454087d35726, type: 3}
+  - {fileID: 1264154734397936932, guid: 3a2fe7987ec37904eb2f8e658440e534, type: 3}
+  - {fileID: 1264154734397936932, guid: 99073b9f89feac54a898604358908186, type: 3}
+  - {fileID: 1264154734397936932, guid: 99073b9f89feac54a898604358908186, type: 3}
+  - {fileID: 1264154734397936932, guid: 99073b9f89feac54a898604358908186, type: 3}
   spawnRoom: {fileID: 900874927}
   fractionName: Rats
 --- !u!1 &403979400
@@ -1711,7 +1711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bea49b72907090543b87d19687d0c350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Influence: 0
+  influence: 0
   units:
   - {fileID: 7873802044243165421, guid: 90812daed1d74944c83daff15b568f7e, type: 3}
   - {fileID: 7873802044243165421, guid: e74871d7a1fe80a4c869128e573444ab, type: 3}
@@ -2232,6 +2232,7 @@ GameObject:
   - component: {fileID: 1079582823}
   - component: {fileID: 1079582824}
   - component: {fileID: 1079582825}
+  - component: {fileID: 1079582826}
   m_Layer: 0
   m_Name: MasterController
   m_TagString: Untagged
@@ -2301,6 +2302,18 @@ MonoBehaviour:
   time: 0
   roundTime: 10
   winner: {fileID: 0}
+--- !u!114 &1079582826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079582819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cd20c78c45b9164c868134750ba3f09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1082884549
 GameObject:
   m_ObjectHideFlags: 0

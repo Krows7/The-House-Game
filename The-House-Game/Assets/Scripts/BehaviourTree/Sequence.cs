@@ -19,9 +19,11 @@ namespace BehavourTree
 				switch (node.Evaluate())
 				{
 					case NodeState.FAIL:
+						Debug.Log("Found: Fail" );
 						state = NodeState.FAIL;
 						return state;
 					case NodeState.SUCCESS:
+						Debug.Log("Found: Success");
 						continue;
 					case NodeState.RUNNING:
 						anyChildIsRunning = true;

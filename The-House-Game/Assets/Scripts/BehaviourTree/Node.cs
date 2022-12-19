@@ -41,7 +41,7 @@ namespace BehavourTree
 
 		public virtual NodeState Evaluate() => NodeState.FAIL;
 
-		public void setData(string key, object value)
+		public void SetData(string key, object value)
 		{
 			_dataContext[key] = value;
 		}

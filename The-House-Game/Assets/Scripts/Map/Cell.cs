@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
-using System.Linq;
+
 
 public class Cell : MonoBehaviour
 {
@@ -196,12 +196,24 @@ public class Cell : MonoBehaviour
     }
 
     public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
-    {;
-        var group = new GameObject();
+    {
+        var group = new GameObject("Group");
         group.AddComponent<Group>();
         group.transform.position = Base.transform.position;
         Base.transform.parent = group.transform;
         group.GetComponent<Group>().Add(Add);
+
+        MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
+        foreach (MonoBehaviour script in scriptList)
+        {
+            group.AddComponent(script.GetType());
+            System.Reflection.FieldInfo[] fields = script.GetType().GetFields();
+            foreach (System.Reflection.FieldInfo field in fields)
+            {
+                field.SetValue(group.GetComponent(script.GetType()), field.GetValue(script));
+            }
+        }
+
         group.GetComponent<Group>().fraction = Base.fraction;
         DellUnit();
         nextCell.SetUnit(group.GetComponent<Group>());

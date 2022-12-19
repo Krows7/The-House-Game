@@ -62,4 +62,5 @@ public class FlagController : MonoBehaviour
         flags.Add(flagObject);
         flagPole.currentFlag = flagObject;
     }
+
 }

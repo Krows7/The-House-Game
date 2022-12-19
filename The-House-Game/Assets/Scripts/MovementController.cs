@@ -18,7 +18,6 @@ public class MovementController : MonoBehaviour
             {
                 currentCell.onPressDebug();
 				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
-                Debug.Log(startCell != null ? startCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
                     if (startCell != null) startCell.onReleaseDebug();
