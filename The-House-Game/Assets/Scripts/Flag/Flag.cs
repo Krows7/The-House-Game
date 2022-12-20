@@ -14,7 +14,8 @@ public class Flag : MonoBehaviour
     void Start()
     {
         flags = GameObject.Find("MasterController").GetComponent<FlagController>();
-        cylinder = GameObject.Find("Cylinder").gameObject;
+        cylinder = transform.Find("Cylinder").gameObject;
+        transform.localScale = Vector3.zero;
     }
 
     public void StartCapture()
@@ -34,6 +35,7 @@ public class Flag : MonoBehaviour
     {
         if (captureDelay > 0)
         {
+            
             if (time == 0) {
                 cylinder.SetActive(true);
                 cylinder.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = 1;
@@ -42,6 +44,7 @@ public class Flag : MonoBehaviour
             {
                 flags.CaptureFlag(cell);
                 cylinder.SetActive(false);
+                return;
             }
             time += Time.deltaTime;
             cylinder.transform.GetChild(0).GetChild(0).GetComponent<Image>().fillAmount = TimeLeft() / captureDelay;

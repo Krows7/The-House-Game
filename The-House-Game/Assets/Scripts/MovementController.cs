@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Units.Settings;
 
 public class MovementController : MonoBehaviour
 {
     private Cell currentCell;
-    private Cell startCell, finishCell;
+    private Cell finishCell;
+    private Unit unit;
 
     [SerializeField] private GameObject uiControllerObject;
 
@@ -20,37 +22,52 @@ public class MovementController : MonoBehaviour
 				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
-                    if (startCell != null) startCell.onReleaseDebug();
-                    startCell = currentCell;
-                    uiControllerObject.GetComponent<UIController>().ShowUnitInfo(startCell.GetUnit());
-                    startCell.onChosenDebug();
+                    if (unit != null) unit.CurrentCell.onReleaseDebug();
+                    unit = currentCell.GetUnit();
+                    uiControllerObject.GetComponent<UIController>().ShowUnitInfo(unit);
+                    unit.CurrentCell.onChosenDebug();
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1))
             {
 				Debug.LogWarning("MOVE!");
-				if (startCell != null)
+				if (unit != null)
                 {
                     finishCell = currentCell;
-                    MoveUnit();
                     ResetAll();
+                    MoveUnit();
+                    finishCell = null;
+                }
+            } else if (unit != null)
+            {
+                RenderCells();
+            }
+            if(unit != null)
+            {
+                if(Input.GetKeyDown(KeyCode.Q))
+                {
+                    if (unit is Leader) (unit as Leader).UseSkill();
                 }
             }
         } 
+    }
+
+    private void RenderCells()
+    {
+        unit.CurrentCell.onPressDebug();
     }
 
     void MoveUnit() 
     {
         uiControllerObject.GetComponent<UIController>().HideUnitInfo();
         Debug.LogWarning("MOVE!");
-        startCell.MoveUnitToCell(finishCell);
+        Debug.LogWarning(finishCell);
+        unit.CurrentCell.MoveUnitToCell(finishCell);
     }
 
     void ResetAll()
     {
-        Reset(startCell);
+        Reset(unit.CurrentCell);
         Reset(finishCell);
-        startCell = null;
-        finishCell = null;
     }
 
     void Reset(Cell cell)
@@ -60,7 +77,7 @@ public class MovementController : MonoBehaviour
 
     void UpdateCurrentCell() 
     {
-        if (currentCell != null && currentCell != startCell) currentCell.onReleaseDebug();
+        if (currentCell != null) currentCell.onReleaseDebug();
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawLine(ray.origin, ray.GetPoint(10));
         RaycastHit rayHit;

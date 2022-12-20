@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Units.Settings
 {
@@ -20,20 +21,20 @@ namespace Units.Settings
 
         public abstract float GetHealth();
 
+        public abstract void Heal(float Health);
+
         public abstract float GetMaxHealth();
 
         public abstract bool WillSurvive(float Damage);
 
         public abstract List<float> GetAllHealths();
 
-        void Update()
+        public void Update()
         {
-            var progressBar = GameObject.Find("ProgressBar");
-            var init = 1.25F;
-            var now = init * (GetHealth() / GetMaxHealth());
-            var p = progressBar.transform.localScale;
-            progressBar.transform.localScale = new Vector3(now, p.y, p.z);
-            progressBar.transform.position = new Vector3((init - now) / 2, p.y, p.z);
+            if (gameObject.GetComponent<Group>() != null) return;
+            Debug.Log(this);
+            var progressBar = transform.Find("ProgressBar").transform.GetChild(0).GetChild(0).GetComponent<Image>();
+            progressBar.fillAmount = GetHealth() / GetMaxHealth();
         }
 
         public void Die()

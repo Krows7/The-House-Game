@@ -1,12 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Room : MonoBehaviour
 {
     [SerializeField] private List<Cell> cells;
+    public Material color;
 
     public int roomId { get; set; } = -1;
 
@@ -19,6 +17,7 @@ public class Room : MonoBehaviour
 
             Cell c = child.gameObject.GetComponent<Cell>();
 			cells.Add(c);
+            if (color != null) c.transform.GetChild(0).GetComponent<MeshRenderer>().material.color = color.color;
         }
     }
 
@@ -58,7 +57,6 @@ public class Room : MonoBehaviour
 
     void Update()
     {
-
     }
 
     public List<Cell> GetCells() 

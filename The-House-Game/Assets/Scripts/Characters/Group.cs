@@ -7,12 +7,14 @@ namespace Units.Settings {
     public class Group : Unit
     {
         float yoffset = 0.4F;
-        float height;
+        int count;
+
         public void Add(Unit unit)
         {
-            height += yoffset;
             unit.transform.parent = transform;
-            unit.transform.position = transform.position + Vector3.up * height;
+            var p = transform.position;
+            unit.transform.position = new Vector3(yoffset * ((count % 3) - 1), yoffset * ((count / 3) - 1), 0) + p;
+            count++;
         }
 
         public override float CalculateTrueDamage()
@@ -64,6 +66,14 @@ namespace Units.Settings {
             float hp = 0;
             foreach (Transform unit in transform) hp = Mathf.Max(hp, unit.GetComponent<Unit>().GetMaxHealth());
             return hp;
+        }
+
+        public override void Heal(float Health)
+        {
+            foreach (Transform unit in transform)
+            {
+                unit.GetComponent<Unit>().Heal(Health);
+            }
         }
     }
 }

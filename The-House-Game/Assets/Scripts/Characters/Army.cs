@@ -56,5 +56,10 @@ namespace Units.Settings
         {
             return maxHealth;
         }
+
+        public override void Heal(float Health)
+        {
+            health = Mathf.Min(health + Health, maxHealth);
+        }
     }
 }

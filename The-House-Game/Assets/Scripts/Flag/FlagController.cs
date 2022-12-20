@@ -66,4 +66,10 @@ public class FlagController : MonoBehaviour
         flagPole.currentFlag = flagObject;
     }
 
+    public void ShowFlags()
+    {
+        Debug.Log("Flags Shown");
+        var flags = map.GetCells().Where(x => x.currentFlag != null).ToList();
+        foreach (var flag in flags) flag.currentFlag.transform.localScale = Vector3.one / 2;
+    }
 }

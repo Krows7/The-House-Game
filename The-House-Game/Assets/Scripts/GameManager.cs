@@ -1,16 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
+using Units.Settings;
 using UnityEngine;
-using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public float time;
     public float roundTime;
 
-    public static string gamerFractionName = "Rats";
+    public static string gamerFractionName = "Fourth";
     public static Units.Settings.Fraction gamerFraction;
-    public Units.Settings.Fraction winner;
+    public static Units.Settings.Fraction winner;
+    public static Dictionary<string, Fraction> fractions = new();
 
     void Start()
     {
@@ -20,22 +21,22 @@ public class GameManager : MonoBehaviour
             if (frac.name == gamerFractionName)
             {
                 gamerFraction = frac;
-                break;
             }
+            fractions.Add(frac.name, frac);
         }
         Debug.Log(gamerFractionName);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (winner != null) return;
         if (time >= roundTime)
         {
-            int maxInfluence = 0;
+            int maxInfluence = - 1;
             Units.Settings.Fraction mx = null;
             foreach(Transform fraction in GameObject.Find("Fractions").transform)
             {
+                Debug.Log("111");
                 var f = fraction.GetComponent<Units.Settings.Fraction>();
                 if(f.influence > maxInfluence)
                 {
@@ -44,7 +45,9 @@ public class GameManager : MonoBehaviour
                 }
             }
             winner = mx;
-            // Tirgger game over scene
+            SceneManager.LoadScene("GameOver");
+            Time.timeScale = 1f;
+            return;
         }
         time += Time.deltaTime;
     }
