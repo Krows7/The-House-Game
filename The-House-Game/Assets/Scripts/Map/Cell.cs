@@ -60,12 +60,13 @@ public class Cell : MonoBehaviour
     public void SetUnit(Unit unit)
     {
         currentUnit = unit;
-        currentUnit.CurrentCell = this;
+        if(unit != null) currentUnit.CurrentCell = this;
     }
 
     public void DellUnit()
     {
         currentUnit = null;
+        onReleaseDebug();
     }
 
     public void MoveUnitToCell(Cell finishCell)
@@ -119,8 +120,11 @@ public class Cell : MonoBehaviour
     public void TryMoveTo(Cell nextCell, Cell finishCell)
     {
 		Cell interruptedCell = null;
+        var thisUnit = currentUnit;
+        Debug.LogWarning("KEKW");
+        Debug.LogWarning(nextCell.GetUnit());
         // flag capture
-		if (nextCell.IsFree() && nextCell.currentFlag != null)
+        if (nextCell.IsFree() && nextCell.currentFlag != null)
 		{
 			interruptedCell = this;
 			nextCell.SetUnit(currentUnit);
@@ -129,7 +133,7 @@ public class Cell : MonoBehaviour
 			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
 		}
         // group union
-		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == currentUnit.fraction)
+		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
 		{
 			Debug.Log(nextCell.GetUnit() is Group);
 			if (nextCell.GetUnit() is Group && currentUnit is Group) return;
@@ -140,7 +144,6 @@ public class Cell : MonoBehaviour
         // fight
 		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
 		{
-			var thisUnit = currentUnit;
 			var other = nextCell.GetUnit();
 			var trueDamage = thisUnit.CalculateTrueDamage();
 			var otherTrueDamage = other.CalculateTrueDamage();
@@ -175,7 +178,7 @@ public class Cell : MonoBehaviour
 		else
 		{
 			interruptedCell = this;
-			nextCell.SetUnit(currentUnit);
+			nextCell.SetUnit(thisUnit);
 			DellUnit();
 			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 		}
@@ -200,7 +203,7 @@ public class Cell : MonoBehaviour
         var group = new GameObject("Group");
         group.AddComponent<Group>();
         group.transform.position = Base.transform.position;
-        Base.transform.parent = group.transform;
+        group.GetComponent<Group>().Add(Base);
         group.GetComponent<Group>().Add(Add);
 
         MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
@@ -236,10 +239,19 @@ public class Cell : MonoBehaviour
 
     public void onReleaseDebug()
     {
-        transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+        var material = transform.parent.GetComponent<Room>().color;
+        if (material != null) transform.GetChild(0).GetComponent<MeshRenderer>().material.color = material.color;
+        else transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
     }
     public void onChosenDebug()
     {
         transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", darker(Color.green));
+    }
+
+    void Update()
+    {
+        if (transform.parent.name.Equals("MedRoom") && currentUnit != null) currentUnit.Heal(15 * Time.deltaTime);
+        else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.fraction.fractionName)) currentUnit.Heal(5 * Time.deltaTime);
+        else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.fraction.fractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
     }
 }   

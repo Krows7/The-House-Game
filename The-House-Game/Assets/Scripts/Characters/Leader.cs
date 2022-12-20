@@ -18,8 +18,9 @@ namespace Units.Settings
             CurrentCell.DellUnit();
         }
 
-        void Update()
+        public new void Update()
         {
+            base.Update();
             if (skillTimer == -1) return;
             if(skillTimer >= skillTeleportDelay)
             {
@@ -37,7 +38,10 @@ namespace Units.Settings
 
         private void SetVisible(bool Visible)
         {
-            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = Visible;
+            transform.localScale = Vector3.one * (Visible ? 0.25F : 0);
+            Debug.Log(transform);
+            Debug.Log("Local Scale: " + transform.localScale);
+            Debug.Log(Visible);
         }
     }
 }

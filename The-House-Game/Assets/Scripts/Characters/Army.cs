@@ -8,10 +8,16 @@ namespace Units.Settings
     public class Army : Unit
     {
         public float health;
+        float maxHealth;
         public float strength;
         // Cells per second
         public float speed;
         public float buff_c = 1;
+
+        void Start()
+        {
+            maxHealth = health;
+        }
 
         public override float CalculateTrueDamage()
         {
@@ -44,6 +50,16 @@ namespace Units.Settings
             List<float> result = new List<float>();
             result.Add(health);
             return result;
+        }
+
+        public override float GetMaxHealth()
+        {
+            return maxHealth;
+        }
+
+        public override void Heal(float Health)
+        {
+            health = Mathf.Min(health + Health, maxHealth);
         }
     }
 }

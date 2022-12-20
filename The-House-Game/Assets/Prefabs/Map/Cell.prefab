@@ -49,6 +49,7 @@ MonoBehaviour:
   cellSize: 1
   id: 0
   currentUnit: {fileID: 0}
+  currentFlag: {fileID: 0}
 --- !u!65 &8882723082397222159
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -123,7 +124,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 34ed4efd76fc5f542a72275c5e030d44, type: 2}
+  - {fileID: 2100000, guid: a46ddefb78a484643af07aed081bf055, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

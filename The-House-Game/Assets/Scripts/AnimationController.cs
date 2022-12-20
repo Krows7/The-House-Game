@@ -14,7 +14,7 @@ public class AnimationController : MonoBehaviour
 
     public void Add(Cell from, Cell to)
     {
-        queue.Add(from, to);
+        queue[from] = to;
     }
 
     void Update()
