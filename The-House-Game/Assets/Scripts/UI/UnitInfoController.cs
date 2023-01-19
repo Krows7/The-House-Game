@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
 
-public class UIController : MonoBehaviour
+public class UnitInfoController : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseControllerObject;
     [SerializeField] private GameObject infoField;
     [SerializeField] private GameObject groupInfo;
     [SerializeField] private GameObject unitInfoPrefab;
@@ -22,11 +21,6 @@ public class UIController : MonoBehaviour
         var timerStr = ts.ToString(@"mm\:ss");
         infoField.transform.Find("Timer").GetComponent<TMPro.TextMeshProUGUI>().text = timerStr;
         infoField.transform.Find("Influence/Value").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.gamerFraction.influence.ToString();
-    }
-
-    public void PauseButton()
-    {
-        pauseControllerObject.GetComponent<PauseController>().PauseGame();
     }
 
     public void ShowUnitInfo(Unit unit)
