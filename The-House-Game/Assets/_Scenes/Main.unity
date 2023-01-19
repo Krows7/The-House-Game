@@ -7956,8 +7956,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+      - m_Target: {fileID: 1291764550}
+        m_TargetAssemblyTypeName: PauseButtonController, Assembly-CSharp
         m_MethodName: PauseButton
         m_Mode: 1
         m_Arguments:
@@ -12415,7 +12415,7 @@ GameObject:
   - component: {fileID: 1291764547}
   - component: {fileID: 1291764550}
   - component: {fileID: 1291764549}
-  - component: {fileID: 1291764548}
+  - component: {fileID: 1291764552}
   m_Layer: 5
   m_Name: UIContoller
   m_TagString: Untagged
@@ -12443,20 +12443,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1291764548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1291764546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38ef565382ccb0a4789ea67f605c284d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitPickPrefab: {fileID: 56041856702873430, guid: beb134a39312c12c6adabec8d804bc9b, type: 3}
-  unitPickField: {fileID: 387946955}
 --- !u!114 &1291764549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12485,6 +12471,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseControllerObject: {fileID: 767251696}
+--- !u!114 &1291764552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291764546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c7584d5cc871c9185e126c1aa27c6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitPickPrefab: {fileID: 3786374260412136251, guid: e928e3c1159b0c13eaa19ec6ce3e9130, type: 3}
+  unitPickField: {fileID: 387946955}
 --- !u!1001 &1300642822
 PrefabInstance:
   m_ObjectHideFlags: 0
