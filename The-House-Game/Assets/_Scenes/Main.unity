@@ -3362,12 +3362,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   influence: 0
-  unitPrefabs:
+  units:
   - {fileID: 1264154734397936932, guid: 4a68e8730248d9a4fb70de9ee4e31640, type: 3}
   - {fileID: 1264154734397936932, guid: d4aa2c6a6aa69fc439033f3efaa42253, type: 3}
   - {fileID: 1264154734397936932, guid: d4aa2c6a6aa69fc439033f3efaa42253, type: 3}
   - {fileID: 1264154734397936932, guid: d4aa2c6a6aa69fc439033f3efaa42253, type: 3}
-  units: []
   spawnRoom: {fileID: 718059920}
   fractionName: Rats
 --- !u!1001 &318975267
@@ -8608,10 +8607,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   influence: 0
-  unitPrefabs:
+  units:
   - {fileID: 7873802044243165421, guid: 90812daed1d74944c83daff15b568f7e, type: 3}
   - {fileID: 7873802044243165421, guid: e74871d7a1fe80a4c869128e573444ab, type: 3}
-  units: []
   spawnRoom: {fileID: 144135331}
   fractionName: Fourth
 --- !u!1001 &886062354
