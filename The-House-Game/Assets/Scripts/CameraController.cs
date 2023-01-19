@@ -41,6 +41,7 @@ public class CameraController : MonoBehaviour
 
     void Awake()
     {
+        Cursor.lockState = CursorLockMode.Confined; 
         SetViewBorders();
         cameraTransform = cameraObject.transform;
         canMoveCamera = true;
