@@ -24,7 +24,7 @@ public class MovementController : MonoBehaviour
                 {
                     if (unit != null) unit.CurrentCell.onReleaseDebug();
                     unit = currentCell.GetUnit();
-                    uiControllerObject.GetComponent<UIController>().ShowUnitInfo(unit);
+                    uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(unit);
                     unit.CurrentCell.onChosenDebug();
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1))
@@ -58,7 +58,7 @@ public class MovementController : MonoBehaviour
 
     void MoveUnit() 
     {
-        uiControllerObject.GetComponent<UIController>().HideUnitInfo();
+        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
         Debug.LogWarning("MOVE!");
         Debug.LogWarning(finishCell);
         unit.CurrentCell.MoveUnitToCell(finishCell);

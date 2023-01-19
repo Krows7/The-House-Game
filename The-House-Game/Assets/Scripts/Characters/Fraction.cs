@@ -30,6 +30,7 @@ namespace Units.Settings
                 GameObject unitObject = Instantiate(units[i], cell.transform.position, Quaternion.identity);
 				//unitObject.GetComponent<Unit>().fraction = this;
 				cell.SetUnit(unitObject.GetComponent<Unit>());
+                units[i] = unitObject;
             }
         }
     }

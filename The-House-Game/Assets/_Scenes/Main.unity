@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028328, g: 0.22571328, b: 0.3069218, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3654,6 +3654,42 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
+--- !u!1 &387946955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 387946956}
+  m_Layer: 5
+  m_Name: UnitPickField
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &387946956
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387946955}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1785271150}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -100}
+  m_SizeDelta: {x: -600, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &398963676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7919,8 +7955,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1291764548}
-        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+      - m_Target: {fileID: 1291764550}
+        m_TargetAssemblyTypeName: PauseButtonController, Assembly-CSharp
         m_MethodName: PauseButton
         m_Mode: 1
         m_Arguments:
@@ -12375,7 +12411,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1291764547}
-  - component: {fileID: 1291764548}
+  - component: {fileID: 1291764550}
+  - component: {fileID: 1291764549}
+  - component: {fileID: 1291764552}
   m_Layer: 5
   m_Name: UIContoller
   m_TagString: Untagged
@@ -12403,7 +12441,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1291764548
+--- !u!114 &1291764549
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12412,13 +12450,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 1291764546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b7cdcd4786d14cd79eaa15a7d82a3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a77c19f44ae4ed159ac99d93f548490, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseControllerObject: {fileID: 767251696}
   infoField: {fileID: 1783364356}
   groupInfo: {fileID: 579493173}
   unitInfoPrefab: {fileID: 7647459636238746426, guid: 25c4307c464f884a8b273257207e092a, type: 3}
+--- !u!114 &1291764550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291764546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee98a380d42a3402a39eac540262af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseControllerObject: {fileID: 767251696}
+--- !u!114 &1291764552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291764546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c7584d5cc871c9185e126c1aa27c6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitPickPrefab: {fileID: 3786374260412136251, guid: e928e3c1159b0c13eaa19ec6ce3e9130, type: 3}
+  unitPickField: {fileID: 387946955}
 --- !u!1001 &1300642822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16110,6 +16174,7 @@ RectTransform:
   - {fileID: 1291764547}
   - {fileID: 1783364357}
   - {fileID: 579493174}
+  - {fileID: 387946956}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
