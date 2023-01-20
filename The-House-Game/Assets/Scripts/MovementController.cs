@@ -85,6 +85,10 @@ public class MovementController : MonoBehaviour
         if (Physics.Raycast(ray, out rayHit, 100.0f)) {
             if (rayHit.collider.tag == "Cell") {
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
+            } else if(rayHit.collider.tag == "Selection Collider")
+            {
+                var unit = rayHit.collider.transform.parent.parent.GetComponent<Unit>();
+                if (unit.CurrentCell != null) currentCell = unit.CurrentCell;
             }
         }
         if (currentCell != null) currentCell.onHoverDebug();
