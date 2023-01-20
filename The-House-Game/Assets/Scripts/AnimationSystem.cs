@@ -7,8 +7,6 @@ public class AnimationSystem : MonoBehaviour
 
     public List<MovementComponent> MovableObjects;
 
-	Dictionary<Cell, Cell> animations;
-
 	// Start is called before the first frame update
 	void Start()
     {

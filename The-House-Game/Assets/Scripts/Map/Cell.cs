@@ -130,12 +130,12 @@ public class Cell : MonoBehaviour
 			interruptedCell = this;
 			nextCell.SetUnit(currentUnit);
 			DellUnit();
-            currentUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
+            thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
 			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
 		}
         // group union
-		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
+		else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
 		{
 			Debug.Log(nextCell.GetUnit() is Group);
 			if (nextCell.GetUnit() is Group && currentUnit is Group) return;
@@ -144,7 +144,7 @@ public class Cell : MonoBehaviour
 			else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);
 		}
         // fight
-		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
+		else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
 		{
 			var other = nextCell.GetUnit();
 			var trueDamage = thisUnit.CalculateTrueDamage();
@@ -179,7 +179,7 @@ public class Cell : MonoBehaviour
 			thisUnit.GiveDamage(otherTrueDamage);
 		}
         // just move
-		else
+		else if (thisUnit != null)
 		{
 			interruptedCell = this;
 			nextCell.SetUnit(thisUnit);
