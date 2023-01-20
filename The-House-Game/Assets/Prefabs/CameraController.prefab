@@ -650,9 +650,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 10
+  zoomSpeed: 1500
   bordersPercentageWidth: 5
   ButtonsCameraMoveEnabled: 1
   CursorCameraMoveEnabled: 1
+  MouseWheelZoomEnabled: 1
+  ZoomToCursorEnabled: 1
   cameraObject: {fileID: 4064408219953476116}
   upperBorderObject: {fileID: 41454097498333055}
   lowerBorderObject: {fileID: 6486976478355913485}

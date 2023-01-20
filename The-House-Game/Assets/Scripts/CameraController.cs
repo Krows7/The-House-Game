@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     // speed of camera
     [SerializeField] private float movementSpeed;
+    [SerializeField] private float zoomSpeed;
 
     // borders on the edge of the screen on which cursor moves camera (in pixels)
     [SerializeField] private float bordersPercentageWidth;
@@ -16,6 +17,8 @@ public class CameraController : MonoBehaviour
     // switchers
     [SerializeField] public bool ButtonsCameraMoveEnabled;
     [SerializeField] public bool CursorCameraMoveEnabled;
+    [SerializeField] public bool MouseWheelZoomEnabled;
+    [SerializeField] public bool ZoomToCursorEnabled;
 
     [SerializeField] private GameObject cameraObject;
     private Transform cameraTransform;
@@ -29,6 +32,8 @@ public class CameraController : MonoBehaviour
     private float lowerBorder;
     private float leftBorder;
     private float rightBorder;
+    private float backBorder;
+    private float frontBorder;
 
     private Vector3 newPosition;
 
@@ -39,8 +44,18 @@ public class CameraController : MonoBehaviour
         rightBorder = rightBorderObject.transform.position.x;
     }
 
+    Vector3 CorrectCoordinates(Vector3 coordinates) {
+        coordinates[0] = Mathf.Max(coordinates[0], leftBorder);
+        coordinates[0] = Mathf.Min(coordinates[0], rightBorder);
+        coordinates[1] = Mathf.Max(coordinates[1], lowerBorder);
+        coordinates[1] = Mathf.Min(coordinates[1], upperBorder);
+        return coordinates;
+    }
+
     void Awake()
     {
+        backBorder  = -13;
+        frontBorder =  -3;
         Cursor.lockState = CursorLockMode.Confined; 
         SetViewBorders();
         cameraTransform = cameraObject.transform;
@@ -53,6 +68,7 @@ public class CameraController : MonoBehaviour
         {
             if (ButtonsCameraMoveEnabled) ButtonsCameraMove();
             if (CursorCameraMoveEnabled) CursorCameraMove();
+            if (MouseWheelZoomEnabled) MouseWheelZoom();
         }
     }
 
@@ -80,18 +96,30 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    void MouseWheelZoom()
+    {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll != 0.0f)
+        {
+            Vector3 direction;
+            if (ZoomToCursorEnabled)
+                direction = Camera.main.ScreenPointToRay(Input.mousePosition).direction * scroll * zoomSpeed * Time.deltaTime;
+            else
+                direction = cameraTransform.forward * scroll * zoomSpeed * Time.deltaTime;
+
+            if ((direction[2] > 0 && cameraTransform.position.z < frontBorder) ||
+                (direction[2] < 0 && cameraTransform.position.z > backBorder))
+            {
+                cameraTransform.position = CorrectCoordinates(cameraTransform.position + direction);
+            }
+        } 
+    }
+
     void MoveCamera(Vector3 direction)
     {
         direction = Vector3.Normalize(direction);
         direction *= movementSpeed * Time.deltaTime;
 
-        newPosition = cameraTransform.position + direction;
-
-        newPosition.y = Mathf.Min(newPosition.y, upperBorder);
-        newPosition.y = Mathf.Max(newPosition.y, lowerBorder);
-        newPosition.x = Mathf.Max(newPosition.x, leftBorder);
-        newPosition.x = Mathf.Min(newPosition.x, rightBorder);
-
-        cameraTransform.position = newPosition;
+        cameraTransform.position = CorrectCoordinates(cameraTransform.position + direction);
     }
 }
