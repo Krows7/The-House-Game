@@ -20,7 +20,8 @@ public class Cell : MonoBehaviour
     void Start()
     {
         id = id == 0 ? -1 : id;
-    }
+
+	}
 
     public void SetId(int _id) 
     {
@@ -129,11 +130,12 @@ public class Cell : MonoBehaviour
 			interruptedCell = this;
 			nextCell.SetUnit(currentUnit);
 			DellUnit();
-			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+            thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
+			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
 		}
         // group union
-		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
+		else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
 		{
 			Debug.Log(nextCell.GetUnit() is Group);
 			if (nextCell.GetUnit() is Group && currentUnit is Group) return;
@@ -142,7 +144,7 @@ public class Cell : MonoBehaviour
 			else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);
 		}
         // fight
-		else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
+		else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
 		{
 			var other = nextCell.GetUnit();
 			var trueDamage = thisUnit.CalculateTrueDamage();
@@ -153,8 +155,9 @@ public class Cell : MonoBehaviour
 				finishCell.DellUnit();
 				if (thisUnit.WillSurvive(otherTrueDamage))
 				{
-					finishCell.SetUnit(thisUnit);        
-					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
+					finishCell.SetUnit(thisUnit);
+					thisUnit.GetComponent<MovementComponent>().AddMovement(finishCell, finishCell);
+					//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
 					if (nextCell.currentFlag != null)
                     {
                         interruptedCell = this;
@@ -165,7 +168,8 @@ public class Cell : MonoBehaviour
 				if (other.WillSurvive(trueDamage))
 				{
 					SetUnit(other);
-					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
+					other.GetComponent<MovementComponent>().AddMovement(this, this);
+					//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
 				}
 				//interruptedCell = finishCell;
 				//Fix Influence
@@ -175,12 +179,13 @@ public class Cell : MonoBehaviour
 			thisUnit.GiveDamage(otherTrueDamage);
 		}
         // just move
-		else
+		else if (thisUnit != null)
 		{
 			interruptedCell = this;
 			nextCell.SetUnit(thisUnit);
 			DellUnit();
-			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+			thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
+			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 		}
         // interrupt flag capture
 		if (interruptedCell != null && interruptedCell.currentFlag != null)
