@@ -91,3 +91,9 @@ crashlytics-build.properties
 
 # VS Config
 /The-House-Game/.vsconfig
+
+# Bin Files
+bin/
+
+#Bugfixes
+The-House-Game/ProjectSettings/Packages/com.unity.testtools.codecoverage/
