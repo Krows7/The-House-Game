@@ -25,6 +25,7 @@ public class UnitInfoController : MonoBehaviour
 
     public void ShowUnitInfo(Unit unit)
     {
+        DeleteGroupInfo();
         infoField.transform.Find("UnitField/Health/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetHealth()).ToString();
         infoField.transform.Find("UnitField/Strength/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.CalculateTrueDamage()).ToString();
         infoField.transform.Find("UnitField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.getSpeed()).ToString();
@@ -43,6 +44,11 @@ public class UnitInfoController : MonoBehaviour
     public void HideUnitInfo()
     {
         infoField.transform.Find("UnitField").gameObject.SetActive(false);
+        DeleteGroupInfo();
+    }
+
+    private void DeleteGroupInfo()
+    {
         foreach (Transform singleUnit in groupInfo.transform)
         {
             Destroy(singleUnit.gameObject);
