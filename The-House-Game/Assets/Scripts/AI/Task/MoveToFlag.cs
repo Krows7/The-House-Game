@@ -22,18 +22,23 @@ public class MoveToFlag : Node
 
 	public override NodeState Evaluate()
 	{
+		if (_unit.GetComponent<MovementComponent>().GetAnimations().Count != 0)
+		{
+			state = NodeState.SUCCESS;
+			return state;
+		}
 		if (state == NodeState.RUNNING)
 		{
 			return state;
 		}
 
 		Cell flagCell = (Cell)GetData("flagFound");
-		if (animationController.animations.ContainsValue(_unit.CurrentCell)
+		/*if (animationController.animations.ContainsValue(_unit.CurrentCell)
 			|| animationController.animations.ContainsKey(_unit.CurrentCell))
 		{
 			state = NodeState.SUCCESS;
 			return state;
-		}
+		}*/
 
 		state = NodeState.RUNNING;
 		movementController.MoveUnit(_unit, flagCell);

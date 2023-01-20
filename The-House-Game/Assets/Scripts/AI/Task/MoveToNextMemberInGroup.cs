@@ -23,18 +23,23 @@ public class MoveToNextMemberInGroup : Node
 
 	public override NodeState Evaluate()
 	{
+		if (_unit.GetComponent<MovementComponent>().GetAnimations().Count != 0)
+		{
+			state = NodeState.SUCCESS;
+			return state;
+		}
 		if (state == NodeState.RUNNING)
 		{
 			return state;
 		}
 	
 		Cell unitCell = (Cell)GetData("nextUnitCell");
-		if (animationController.animations.ContainsValue(_unit.CurrentCell)
+		/*if (animationController.animations.ContainsValue(_unit.CurrentCell)
 			|| animationController.animations.ContainsKey(_unit.CurrentCell))
 		{
 			state = NodeState.SUCCESS;
 			return state;
-		}
+		}*/
 		state = NodeState.RUNNING;
 		movementController.MoveUnit(_unit, unitCell);
 		state = NodeState.SUCCESS;

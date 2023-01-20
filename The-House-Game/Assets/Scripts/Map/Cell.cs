@@ -20,7 +20,8 @@ public class Cell : MonoBehaviour
     void Start()
     {
         id = id == 0 ? -1 : id;
-    }
+
+	}
 
     public void SetId(int _id) 
     {
@@ -129,7 +130,8 @@ public class Cell : MonoBehaviour
 			interruptedCell = this;
 			nextCell.SetUnit(currentUnit);
 			DellUnit();
-			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+            currentUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
+			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
 		}
         // group union
@@ -153,8 +155,9 @@ public class Cell : MonoBehaviour
 				finishCell.DellUnit();
 				if (thisUnit.WillSurvive(otherTrueDamage))
 				{
-					finishCell.SetUnit(thisUnit);        
-					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
+					finishCell.SetUnit(thisUnit);
+					thisUnit.GetComponent<MovementComponent>().AddMovement(finishCell, finishCell);
+					//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
 					if (nextCell.currentFlag != null)
                     {
                         interruptedCell = this;
@@ -165,7 +168,8 @@ public class Cell : MonoBehaviour
 				if (other.WillSurvive(trueDamage))
 				{
 					SetUnit(other);
-					GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
+					other.GetComponent<MovementComponent>().AddMovement(this, this);
+					//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
 				}
 				//interruptedCell = finishCell;
 				//Fix Influence
@@ -180,7 +184,8 @@ public class Cell : MonoBehaviour
 			interruptedCell = this;
 			nextCell.SetUnit(thisUnit);
 			DellUnit();
-			GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+			thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
+			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 		}
         // interrupt flag capture
 		if (interruptedCell != null && interruptedCell.currentFlag != null)
