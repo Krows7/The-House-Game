@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float movementSpeed;
 
     // borders on the edge of the screen on which cursor moves camera (in pixels)
-    [SerializeField] private float bordersWidth;
+    [SerializeField] private float bordersPercentageWidth;
 
     // switchers
     [SerializeField] public bool ButtonsCameraMoveEnabled;
@@ -70,10 +70,10 @@ public class CameraController : MonoBehaviour
 
     void CursorCameraMove()
     {
-        if (Input.mousePosition.x >= Screen.width  - bordersWidth && Input.mousePosition.x <= Screen.width + bordersWidth
-            || Input.mousePosition.x <= 0 + bordersWidth && Input.mousePosition.x >= 0 - bordersWidth
-            || Input.mousePosition.y >= Screen.height - bordersWidth && Input.mousePosition.y <= Screen.height + bordersWidth
-            || Input.mousePosition.y <= 0 + bordersWidth && Input.mousePosition.y >= 0 - bordersWidth)
+        if ((Input.mousePosition.x >= Screen.width *  (1 - bordersPercentageWidth / 100)) ||
+            (Input.mousePosition.x <= Screen.width *  (0 + bordersPercentageWidth / 100)) ||
+            (Input.mousePosition.y >= Screen.height * (1 - bordersPercentageWidth / 100)) ||
+            (Input.mousePosition.y <= Screen.height * (0 + bordersPercentageWidth / 100)))
         {
             Vector3 direction = Input.mousePosition - new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
             MoveCamera(direction);
