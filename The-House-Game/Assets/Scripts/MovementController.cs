@@ -89,6 +89,7 @@ public class MovementController : MonoBehaviour
         {
             unit.CurrentCell.MoveUnitToCell(finishCell);
         }
+        units.Clear();
     }
 
     void ResetAll()
