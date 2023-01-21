@@ -8,6 +8,7 @@ public class MovementController : MonoBehaviour
     private Cell currentCell;
     private Cell finishCell;
     private List<Unit> units;
+    bool inRectMode = false;
 
     [SerializeField] private GameObject uiControllerObject;
 
@@ -19,8 +20,15 @@ public class MovementController : MonoBehaviour
     {
         UpdateCurrentCell();
 
-        if (Input.GetKey(KeyCode.LeftAlt)) {
+        if (Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            inRectMode = false;
+            uiControllerObject.GetComponent<SelectionRectController>().HideRect();
+        }
+        else if (Input.GetKey(KeyCode.LeftAlt))
+        {
             RectangleMode();
+            return;
         }
 
         if (currentCell != null) {
@@ -119,15 +127,19 @@ public class MovementController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             uiControllerObject.GetComponent<SelectionRectController>().InitializeRect(Input.mousePosition);
+            inRectMode = true;
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        else if (inRectMode)
         {
-            uiControllerObject.GetComponent<SelectionRectController>().HideRect();
-            ChooseUnitsRect(uiControllerObject.GetComponent<SelectionRectController>().firstCorner, Input.mousePosition);
-        }
-        else if (Input.GetKey(KeyCode.Mouse0))
-        {
-            uiControllerObject.GetComponent<SelectionRectController>().SetSecondCorner(Input.mousePosition);
+            if (Input.GetKeyUp(KeyCode.Mouse0)) {
+                uiControllerObject.GetComponent<SelectionRectController>().HideRect();
+                ChooseUnitsRect(uiControllerObject.GetComponent<SelectionRectController>().firstCorner, Input.mousePosition);
+                inRectMode = false;
+            }
+            else if (Input.GetKey(KeyCode.Mouse0))
+            {
+                uiControllerObject.GetComponent<SelectionRectController>().SetSecondCorner(Input.mousePosition);
+            }
         }
     }
 
