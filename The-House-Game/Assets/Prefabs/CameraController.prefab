@@ -661,3 +661,5 @@ MonoBehaviour:
   lowerBorderObject: {fileID: 6486976478355913485}
   leftBorderObject: {fileID: 1964805901240705536}
   rightBorderObject: {fileID: 2423393061627471953}
+  backBorder: -13
+  frontBorder: -3
