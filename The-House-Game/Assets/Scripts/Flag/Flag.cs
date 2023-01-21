@@ -18,6 +18,11 @@ public class Flag : MonoBehaviour
         transform.localScale = Vector3.zero;
     }
 
+    public void SetVisible(bool visible)
+    {
+        transform.localScale = visible ? Vector3.one / 2 : Vector3.zero;
+    }
+
     public void StartCapture()
     {
         InterruptCapture();

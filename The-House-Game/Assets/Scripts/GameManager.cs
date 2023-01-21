@@ -7,14 +7,17 @@ public class GameManager : MonoBehaviour
 {
     public float time;
     public float roundTime;
+    public GameObject BaseUnit;
 
     public static string gamerFractionName = "Fourth";
     public static Units.Settings.Fraction gamerFraction;
     public static Units.Settings.Fraction winner;
     public static Dictionary<string, Fraction> fractions = new();
+    public static GameManager instance;
 
     void Start()
     {
+        instance = this;
         foreach (Transform fracTransform in GameObject.Find("Fractions").transform)
         {
             var frac = fracTransform.GetComponent<Units.Settings.Fraction>();

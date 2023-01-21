@@ -33,7 +33,7 @@ namespace Units.Settings
         {
             if (gameObject.GetComponent<Group>() != null) return;
             Debug.Log(this);
-            var progressBar = transform.Find("ProgressBar").transform.GetChild(0).GetChild(0).GetComponent<Image>();
+            var progressBar = transform.Find("Unit Base").Find("ProgressBar").transform.GetChild(0).GetChild(0).GetComponent<Image>();
             progressBar.fillAmount = GetHealth() / GetMaxHealth();
         }
 

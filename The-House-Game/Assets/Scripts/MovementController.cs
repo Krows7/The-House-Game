@@ -31,9 +31,7 @@ public class MovementController : MonoBehaviour
                 if (!currentCell.IsFree())
                 {
                     if (unit != null) unit.CurrentCell.onReleaseDebug();
-                    unit = currentCell.GetUnit();
-                    uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(unit);
-                    unit.CurrentCell.onChosenDebug();
+                    ChooseUnit(currentCell.GetUnit());
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -65,6 +63,13 @@ public class MovementController : MonoBehaviour
                 }
             }
         } 
+    }
+
+    public void ChooseUnit(Unit Unit)
+    {
+        unit = Unit;
+        uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(unit);
+        unit.CurrentCell.onChosenDebug();
     }
 
     private void RenderCells()
@@ -101,6 +106,11 @@ public class MovementController : MonoBehaviour
         if (Physics.Raycast(ray, out rayHit, 100.0f)) {
             if (rayHit.collider.tag == "Cell") {
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
+            } else if(rayHit.collider.tag == "Selection Collider")
+            {
+                Debug.LogWarning("Selected Unit");
+                var unit = rayHit.collider.transform.parent.parent.GetComponent<Unit>();
+                if (unit.CurrentCell != null) currentCell = unit.CurrentCell;
             }
         }
         if (currentCell != null) currentCell.onHoverDebug();

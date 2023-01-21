@@ -8,17 +8,14 @@ using UnityEngine;
 public class MovementComponent : MonoBehaviour
 {
     AnimationSystem animationSystem;
-	Queue<Tuple<Cell, Cell>> queue = new Queue<Tuple<Cell, Cell>>();
+	Queue<Tuple<Cell, Cell>> queue = new();
 
-	// Start is called before the first frame update
 	void Start()
     {
-		Debug.LogWarning("NEW COMPONENT!");
 		animationSystem = GameObject.Find("MasterController").GetComponent<AnimationSystem>();
         animationSystem.Add(this);
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -36,7 +33,6 @@ public class MovementComponent : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		Debug.LogWarning("DESTROY!");
 		queue.Clear();
         animationSystem.Remove(this);
 	}

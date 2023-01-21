@@ -23,23 +23,23 @@ public class AnimationSystem : MonoBehaviour
 			while (obj.GetAnimations().Count > 1)
 				obj.GetAnimations().Dequeue();
             var animation =  obj.GetAnimations().Dequeue();
-			Cell nextCell = animation.Item1;
-			Cell finishCell = animation.Item2;
-			var unit = nextCell.GetUnit();
+			Cell currentCell = animation.Item1;
+			Cell nextCell = animation.Item2;
+			var unit = currentCell.GetUnit();
 			if (unit == null)
 			{
 				continue;
 			}
-			var dt = nextCell.transform.position - unit.transform.position;
+			var dt = currentCell.transform.position - unit.transform.position;
 			if (dt.magnitude <= unit.getSpeed() * Time.deltaTime)
 			{
-				unit.transform.SetPositionAndRotation(nextCell.transform.position, nextCell.transform.rotation);
-				nextCell.MoveUnitToCell(finishCell);
+				unit.transform.SetPositionAndRotation(currentCell.transform.position, currentCell.transform.rotation);
+				currentCell.MoveUnitToCell(nextCell);
 			}
 			else
 			{
 				unit.transform.SetPositionAndRotation(unit.transform.position + dt.normalized * unit.getSpeed() * Time.deltaTime, unit.transform.rotation);
-				obj.AddMovement(nextCell, finishCell);
+				obj.AddMovement(currentCell, nextCell);
 			}
 		}
     }

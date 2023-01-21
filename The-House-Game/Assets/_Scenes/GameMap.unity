@@ -10595,6 +10595,7 @@ GameObject:
   - component: {fileID: 1079582825}
   - component: {fileID: 1079582826}
   - component: {fileID: 1079582827}
+  - component: {fileID: 1079582828}
   m_Layer: 0
   m_Name: MasterController
   m_TagString: Untagged
@@ -10665,6 +10666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   time: 0
   roundTime: 300
+  BaseUnit: {fileID: 7403157610545294867, guid: 3f7622995799e87498e4edc4228cb1ac, type: 3}
 --- !u!114 &1079582826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10690,6 +10692,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovableObjects: []
+--- !u!114 &1079582828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079582819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82aba5b2a15a5d448abad978e4d25956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objects: []
+  AnimationTime: 0.5
+  AtackRadius: 1.2
 --- !u!1 &1082884549
 GameObject:
   m_ObjectHideFlags: 0
@@ -17295,6 +17312,10 @@ PrefabInstance:
     - target: {fileID: 1880707587680209803, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
       propertyPath: bordersWidth
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880707587680209803, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
+      propertyPath: CursorCameraMoveEnabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2166249421538922167, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
       propertyPath: m_LocalPosition.y
