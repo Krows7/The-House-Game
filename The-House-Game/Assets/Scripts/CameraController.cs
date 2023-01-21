@@ -120,6 +120,16 @@ public class CameraController : MonoBehaviour
         direction = Vector3.Normalize(direction);
         direction *= movementSpeed * Time.deltaTime;
 
-        cameraTransform.position = CorrectCoordinates(cameraTransform.position + direction);
+        SetCamera(cameraTransform.position + direction);
+    }
+
+    public void SetCamera(Vector3 position)
+    {
+        cameraTransform.position = CorrectCoordinates(position);
+    }
+
+    public Transform getCameraTransform()
+    {
+        return cameraTransform;
     }
 }

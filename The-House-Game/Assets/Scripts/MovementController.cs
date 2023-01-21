@@ -5,9 +5,9 @@ using Units.Settings;
 
 public class MovementController : MonoBehaviour
 {
-    private Cell currentCell;
-    private Cell finishCell;
-    private Unit unit;
+    public Cell currentCell;
+    public Cell finishCell;
+    public Unit unit;
 
     [SerializeField] private GameObject uiControllerObject;
 
@@ -23,13 +23,10 @@ public class MovementController : MonoBehaviour
                 if (!currentCell.IsFree())
                 {
                     if (unit != null) unit.CurrentCell.onReleaseDebug();
-                    unit = currentCell.GetUnit();
-                    uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(unit);
-                    unit.CurrentCell.onChosenDebug();
+                    ChooseUnit(currentCell.GetUnit());
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1))
             {
-				Debug.LogWarning("MOVE!");
 				if (unit != null)
                 {
                     finishCell = currentCell;
@@ -49,6 +46,13 @@ public class MovementController : MonoBehaviour
                 }
             }
         } 
+    }
+
+    public void ChooseUnit(Unit Unit)
+    {
+        unit = Unit;
+        uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(unit);
+        unit.CurrentCell.onChosenDebug();
     }
 
     private void RenderCells()
@@ -87,6 +91,7 @@ public class MovementController : MonoBehaviour
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
             } else if(rayHit.collider.tag == "Selection Collider")
             {
+                Debug.LogWarning("Selected Unit");
                 var unit = rayHit.collider.transform.parent.parent.GetComponent<Unit>();
                 if (unit.CurrentCell != null) currentCell = unit.CurrentCell;
             }
