@@ -8,7 +8,12 @@ public class SelectionRectController : MonoBehaviour
 {
     [SerializeField] private GameObject rect;
     [SerializeField] private GameObject uiCanvas;
-    Vector3 firstCorner;
+    public Vector3 firstCorner;
+
+    void Start()
+    {
+        rect.SetActive(false);
+    }
 
     public void InitializeRect(Vector3 corner)
     {
