@@ -32,8 +32,8 @@ public class CameraController : MonoBehaviour
     private float lowerBorder;
     private float leftBorder;
     private float rightBorder;
-    private float backBorder;
-    private float frontBorder;
+    [SerializeField] private float backBorder;
+    [SerializeField] private float frontBorder;
 
     private Vector3 newPosition;
 
@@ -54,8 +54,6 @@ public class CameraController : MonoBehaviour
 
     void Awake()
     {
-        backBorder  = -13;
-        frontBorder =  -3;
         Cursor.lockState = CursorLockMode.Confined; 
         SetViewBorders();
         cameraTransform = cameraObject.transform;

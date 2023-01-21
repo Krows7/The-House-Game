@@ -11,6 +11,12 @@ public class MovementController : MonoBehaviour
 
     [SerializeField] private GameObject uiControllerObject;
 
+    private bool MouseRightButtonDown;
+
+    void Start() {
+        MouseRightButtonDown = false;
+    }
+
     void Update()
     {
         UpdateCurrentCell();
@@ -18,6 +24,7 @@ public class MovementController : MonoBehaviour
         if (currentCell != null) {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
+                MouseRightButtonDown = false;
                 currentCell.onPressDebug();
 				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
@@ -29,15 +36,11 @@ public class MovementController : MonoBehaviour
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1))
             {
-				Debug.LogWarning("MOVE!");
-				if (unit != null)
-                {
-                    finishCell = currentCell;
-                    ResetAll();
-                    MoveUnit();
-                    finishCell = null;
-                }
-            } else if (unit != null)
+                MouseRightButtonDown = true;
+            } else if(Input.GetKeyUp(KeyCode.Mouse1))
+            {
+                MouseRightButtonDown = false;
+            }else if (unit != null)
             {
                 RenderCells();
             }
@@ -46,6 +49,17 @@ public class MovementController : MonoBehaviour
                 if(Input.GetKeyDown(KeyCode.Q))
                 {
                     if (unit is Leader) (unit as Leader).UseSkill();
+                }
+            }
+            if (MouseRightButtonDown) 
+            {
+				Debug.LogWarning("MOVE!");
+				if (unit != null)
+                {
+                    finishCell = currentCell;
+                    ResetAll();
+                    MoveUnit();
+                    finishCell = null;
                 }
             }
         } 
