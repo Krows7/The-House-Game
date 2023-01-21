@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Cell
   - FlagRoom
+  - Selection Collider
   layers:
   - Default
   - TransparentFX
