@@ -7,6 +7,7 @@ public class MovementController : MonoBehaviour
 {
     private Cell currentCell;
     private Cell finishCell;
+    private Cell lastCurrentCell;
     private Unit unit;
 
     [SerializeField] private GameObject uiControllerObject;
@@ -20,9 +21,9 @@ public class MovementController : MonoBehaviour
     void Update()
     {
         UpdateCurrentCell();
-
-        if (currentCell != null) {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+		Cell thisCell = currentCell;
+		if (thisCell != null) {
+			if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 MouseRightButtonDown = false;
                 currentCell.onPressDebug();
@@ -51,12 +52,13 @@ public class MovementController : MonoBehaviour
                     if (unit is Leader) (unit as Leader).UseSkill();
                 }
             }
-            if (MouseRightButtonDown) 
+			if (MouseRightButtonDown) 
             {
-				Debug.LogWarning("MOVE!");
-				if (unit != null)
+				Debug.Log("MOVE!");
+				if (unit != null && thisCell != lastCurrentCell)
                 {
-                    finishCell = currentCell;
+                    lastCurrentCell = thisCell;
+					finishCell = currentCell;
                     ResetAll();
                     MoveUnit();
                     finishCell = null;
