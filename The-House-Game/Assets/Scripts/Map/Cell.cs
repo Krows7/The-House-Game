@@ -259,4 +259,9 @@ public class Cell : MonoBehaviour
         else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.fraction.fractionName)) currentUnit.Heal(5 * Time.deltaTime);
         else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.fraction.fractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
     }
+
+    public Room GetRoom()
+    {
+        return transform.parent.GetComponent<Room>();
+    }
 }   

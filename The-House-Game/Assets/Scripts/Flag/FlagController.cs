@@ -7,7 +7,7 @@ public class FlagController : MonoBehaviour
 {
     public GameObject flagPrefab;
     public int maxFlags;
-    List<GameObject> flags;
+    public static List<GameObject> flags;
     //public List<Cell> flagPoles;
     public List<Room> exceptions;
     public float minDelay;
