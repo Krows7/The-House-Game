@@ -75,7 +75,6 @@ public class Cell : MonoBehaviour
 		Queue<Cell> queue = new Queue<Cell>();
         List<int> visited = new List<int>();
 
-        Debug.LogWarning("Finish Cell ID: " + finishCell.GetId());
         for (int i = 0; i < gameMap.GetCells().Count; ++i)
         {
             visited.Add(-1);
@@ -122,8 +121,6 @@ public class Cell : MonoBehaviour
     {
 		Cell interruptedCell = null;
         var thisUnit = currentUnit;
-        Debug.LogWarning("KEKW");
-        Debug.LogWarning(nextCell.GetUnit());
         // flag capture
         if (nextCell.IsFree() && nextCell.currentFlag != null)
 		{
@@ -146,37 +143,7 @@ public class Cell : MonoBehaviour
         // fight
 		else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
 		{
-			var other = nextCell.GetUnit();
-			var trueDamage = thisUnit.CalculateTrueDamage();
-			var otherTrueDamage = other.CalculateTrueDamage();
-			if (trueDamage >= otherTrueDamage || !other.WillSurvive(trueDamage))
-			{
-				DellUnit();
-				finishCell.DellUnit();
-				if (thisUnit.WillSurvive(otherTrueDamage))
-				{
-					finishCell.SetUnit(thisUnit);
-					thisUnit.GetComponent<MovementComponent>().AddMovement(finishCell, finishCell);
-					//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(finishCell, finishCell);
-					if (nextCell.currentFlag != null)
-                    {
-                        interruptedCell = this;
-                        finishCell.currentFlag.GetComponent<Flag>().InterruptCapture();
-						finishCell.currentFlag.GetComponent<Flag>().StartCapture();
-					}
-				}
-				if (other.WillSurvive(trueDamage))
-				{
-					SetUnit(other);
-					other.GetComponent<MovementComponent>().AddMovement(this, this);
-					//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(this, this);
-				}
-				//interruptedCell = finishCell;
-				//Fix Influence
-				thisUnit.fraction.influence += 100;
-			}
-			other.GiveDamage(trueDamage);
-			thisUnit.GiveDamage(otherTrueDamage);
+            AsFightingComponent(thisUnit).StartAnimation(nextCell.GetUnit());
 		}
         // just move
 		else if (thisUnit != null)
@@ -192,6 +159,12 @@ public class Cell : MonoBehaviour
 			interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
 	}
 
+    // TODO Replace to Another class
+    private FightingComponent AsFightingComponent(Unit unit)
+    {
+        return unit.transform.GetChild(0).GetComponent<FightingComponent>();
+    }
+
     public void CombineTo(Group AsGroup, Unit Add, Cell cell, bool inUnitLocation = false)
     {
 		if (inUnitLocation)
@@ -205,11 +178,13 @@ public class Cell : MonoBehaviour
 
     public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
     {
+        var prefab = GameManager.instance.BaseUnit;
         var group = new GameObject("Group");
         group.AddComponent<Group>();
         group.transform.position = Base.transform.position;
         group.GetComponent<Group>().Add(Base);
         group.GetComponent<Group>().Add(Add);
+        Instantiate(prefab, group.transform.position, group.transform.rotation).transform.parent = group.transform;
 
         MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
         foreach (MonoBehaviour script in scriptList)
