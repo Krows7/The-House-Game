@@ -38,6 +38,10 @@ public class MovementController : MonoBehaviour
 				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
+                    if (units.Count == 1)
+                    {
+                        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+                    }
                     foreach (Unit unit in units)
                     {
                         unit.CurrentCell.onReleaseDebug();
@@ -82,14 +86,16 @@ public class MovementController : MonoBehaviour
 
     void MoveUnits() 
     {
-        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
         Debug.LogWarning("MOVE!");
         Debug.LogWarning(finishCell);
         foreach (Unit unit in units)
         {
             unit.CurrentCell.MoveUnitToCell(finishCell);
         }
-        units.Clear();
+        if (units.Count > 1)
+        {
+            units.Clear();
+        }
     }
 
     void ResetAll()
@@ -157,6 +163,15 @@ public class MovementController : MonoBehaviour
 
     private void ChooseUnitsRect(Vector3 corner1, Vector3 corner2)
     {
+        if (units.Count == 1)
+        {
+            foreach (Unit unit in units)
+            {
+                Reset(unit.CurrentCell);
+            }
+            uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+        }
+        units.Clear();
         RaycastHit rayHit;
         if (!GetRayhit(corner1, out rayHit))
         {
