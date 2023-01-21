@@ -15,6 +15,10 @@ public class MovementController : MonoBehaviour
     {
         UpdateCurrentCell();
 
+        if (Input.GetKey(KeyCode.LeftAlt)) {
+            RectangleMode();
+        }
+
         if (currentCell != null) {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -78,11 +82,9 @@ public class MovementController : MonoBehaviour
     void UpdateCurrentCell() 
     {
         if (currentCell != null) currentCell.onReleaseDebug();
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawLine(ray.origin, ray.GetPoint(10));
-        RaycastHit rayHit;
         currentCell = null;
-        if (Physics.Raycast(ray, out rayHit, 100.0f)) {
+        RaycastHit rayHit;
+        if (GetRayhit(out rayHit)) {
             if (rayHit.collider.tag == "Cell") {
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
             } else if(rayHit.collider.tag == "Selection Collider")
@@ -92,5 +94,32 @@ public class MovementController : MonoBehaviour
             }
         }
         if (currentCell != null) currentCell.onHoverDebug();
+    }
+
+    private void RectangleMode()
+    {
+        Debug.Log("1");
+        RaycastHit rayHit;
+        if (!GetRayhit(out rayHit)) {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            Debug.Log("2");
+            uiControllerObject.GetComponent<SelectionRectController>().InitializeRect(Input.mousePosition);
+        } else if (Input.GetKey(KeyCode.Mouse0)) {
+            Debug.Log("3");
+            uiControllerObject.GetComponent<SelectionRectController>().SetSecondCorner(Input.mousePosition);
+        }
+    }
+
+    private bool GetRayhit(out RaycastHit rayHit)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawLine(ray.origin, ray.GetPoint(10));
+        if (Physics.Raycast(ray, out rayHit, 100.0f))
+        {
+            return true;
+        }
+        return false;
     }
 }
