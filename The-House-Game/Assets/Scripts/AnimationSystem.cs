@@ -7,6 +7,7 @@ public class AnimationSystem : MonoBehaviour
 
     public List<MovementComponent> MovableObjects;
 
+
 	// Start is called before the first frame update
 	void Start()
     {
@@ -49,7 +50,7 @@ public class AnimationSystem : MonoBehaviour
         MovableObjects.Add(obj);
     }
 
-    public void Remove(MovementComponent obj)
+	public void Remove(MovementComponent obj)
     {
         MovableObjects.Remove(obj);
     }
