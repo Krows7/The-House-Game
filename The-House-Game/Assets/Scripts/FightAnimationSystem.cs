@@ -22,15 +22,12 @@ public class FightAnimationSystem : MonoBehaviour
 
     void Update()
     {
-        Debug.LogWarning("Anim size: " + animations.Count);
         foreach (var anim in animations)
         {
             var unit = anim.Item1;
             var left = anim.Item2;
             if (unit == null || unit.enemy == null) continue;
-            Debug.LogWarning(unit + ": " + left);
             // 1) Miro Case
-            Debug.LogWarning("Enemy: " + unit.enemy);
             var dist = (unit.enemy.transform.position - AsUnit(unit).transform.position).magnitude;
             if (dist > AtackRadius) InterruptAnimation(anim);
             // 2) Miro Case
