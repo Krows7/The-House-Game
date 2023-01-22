@@ -1577,7 +1577,7 @@ MonoBehaviour:
   - {fileID: 1264154734397936932, guid: d4aa2c6a6aa69fc439033f3efaa42253, type: 3}
   - {fileID: 1264154734397936932, guid: d4aa2c6a6aa69fc439033f3efaa42253, type: 3}
   - {fileID: 1264154734397936932, guid: d4aa2c6a6aa69fc439033f3efaa42253, type: 3}
-  spawnRoom: {fileID: 0}
+  spawnRoom: {fileID: 422432214}
   fractionName: Rats
 --- !u!1001 &309224932
 PrefabInstance:
@@ -1646,7 +1646,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1752882617}
+    m_TransformParent: {fileID: 747895956}
     m_Modifications:
     - target: {fileID: 1843226526789337860, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_Name
@@ -1654,7 +1654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_RootOrder
-      value: 21
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1674,15 +1674,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5461,7 +5461,7 @@ MonoBehaviour:
   units:
   - {fileID: 7873802044243165421, guid: 90812daed1d74944c83daff15b568f7e, type: 3}
   - {fileID: 7873802044243165421, guid: e74871d7a1fe80a4c869128e573444ab, type: 3}
-  spawnRoom: {fileID: 0}
+  spawnRoom: {fileID: 681830242}
   fractionName: Fourth
 --- !u!1001 &893258182
 PrefabInstance:
@@ -9185,7 +9185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_RootOrder
-      value: 23
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10500,7 +10500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_RootOrder
-      value: 22
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 3921565790858093511, guid: 02d8da67b0badf44482518193950d7b4, type: 3}
       propertyPath: m_LocalPosition.x

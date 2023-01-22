@@ -38,6 +38,8 @@ public class Map : MonoBehaviour
                 counter++;
             }
         }
+        // SKIP
+        /*
         mapGraph = new List<List<Cell>>();
         for (int i = 0; i < cells.Count; ++i) 
         {
@@ -52,6 +54,47 @@ public class Map : MonoBehaviour
                 }
             }
         }
+        */
+        // TODO Graph Hardcode
+        mapGraph = new();
+        for (int i = 0; i < cells.Count; ++i) mapGraph.Add(new());
+        foreach (var room in rooms)
+        {
+            foreach (var i in room.GetCells())
+            {
+                foreach (var j in room.GetCells())
+                {
+                    float distance = Mathf.Abs(i.GetPositionX() - j.GetPositionX()) + Mathf.Abs(i.GetPositionY() - j.GetPositionY());
+                    if (i.GetCellSize() - CellsEps <= distance && distance <= i.GetCellSize() + CellsEps)
+                    {
+                        mapGraph[i.GetId()].Add(j);
+                        j.gameMap = this;
+                    }
+                        
+                }
+            }
+        }
+        ApplyPath(40, 81, cells);
+        ApplyPath(36, 0, cells);
+        ApplyPath(38, 74, cells);
+        ApplyPath(15, 4, cells);
+        ApplyPath(12, 47, cells);
+        ApplyPath(50, 11, cells);
+        ApplyPath(16, 53, cells);
+        ApplyPath(51, 84, cells);
+        ApplyPath(23, 57, cells);
+        ApplyPath(21, 70, cells);
+        ApplyPath(75, 66, cells);
+        ApplyPath(78, 60, cells);
+        ApplyPath(3, 48, cells);
+        ApplyPath(34, 49, cells);
+        ApplyPath(29, 68, cells);
+    }
+    
+    private void ApplyPath(int x, int y, List<Cell> cells)
+    {
+        mapGraph[x].Add(cells[y]);
+        mapGraph[y].Add(cells[x]);
     }
 
     void Start()
@@ -71,7 +114,7 @@ public class Map : MonoBehaviour
     }
 
     void DisplayGraph() 
-    {   
+    {
         for (int i = 0; i < mapGraph.Count; ++i) 
         {
             for (int j = 0; j < mapGraph[i].Count; ++j) 
