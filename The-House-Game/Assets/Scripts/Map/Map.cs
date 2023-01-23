@@ -81,7 +81,7 @@ public class Map : MonoBehaviour
         ApplyPath(12, 47, cells);
         ApplyPath(50, 11, cells);
         ApplyPath(16, 53, cells);
-        ApplyPath(51, 84, cells);
+        ApplyPath(52, 84, cells);
         ApplyPath(23, 57, cells);
         ApplyPath(21, 70, cells);
         ApplyPath(75, 66, cells);

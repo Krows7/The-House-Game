@@ -6796,6 +6796,7 @@ GameObject:
   - component: {fileID: 1079582826}
   - component: {fileID: 1079582827}
   - component: {fileID: 1079582828}
+  - component: {fileID: 1079582829}
   m_Layer: 0
   m_Name: MasterController
   m_TagString: Untagged
@@ -6909,6 +6910,18 @@ MonoBehaviour:
   objects: []
   AnimationTime: 0.5
   AtackRadius: 1.2
+--- !u!114 &1079582829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079582819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a4b0379d89bdd4ebd639a941028554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1082884549
 GameObject:
   m_ObjectHideFlags: 0
@@ -10965,11 +10978,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1880707587680209803, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
       propertyPath: CursorCameraMoveEnabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2166249421538922167, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
       propertyPath: m_LocalPosition.y
       value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177254458554296612, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
+      propertyPath: orthographic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2219642356693732115, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
       propertyPath: m_LocalPosition.x
