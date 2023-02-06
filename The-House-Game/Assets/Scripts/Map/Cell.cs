@@ -127,7 +127,7 @@ public class Cell : MonoBehaviour
 			interruptedCell = this;
 			nextCell.SetUnit(currentUnit);
 			DellUnit();
-			thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
+			thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell, null);
 			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
 		}
@@ -152,10 +152,11 @@ public class Cell : MonoBehaviour
 		// just move
 		else if (thisUnit != null)
 		{
-			interruptedCell = this;
-			nextCell.SetUnit(thisUnit);
-			DellUnit();
-			thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell);
+			/*			interruptedCell = this;
+						nextCell.SetUnit(thisUnit);
+						DellUnit();*/
+			BaseMoveAction action = new BaseMoveAction(this, nextCell, thisUnit);
+			thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
 			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
 		}
 		// interrupt flag capture

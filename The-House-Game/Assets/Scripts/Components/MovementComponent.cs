@@ -8,7 +8,7 @@ using UnityEngine;
 public class MovementComponent : MonoBehaviour
 {
     AnimationSystem animationSystem;
-	Queue<Tuple<Cell, Cell>> queue = new();
+	Queue<Tuple<Cell, Cell, IAction>> queue = new();
 
 	void Start()
     {
@@ -21,12 +21,12 @@ public class MovementComponent : MonoBehaviour
         
     }
 
-    public void AddMovement(Cell from, Cell to)
+    public void AddMovement(Cell from, Cell to, IAction action)
     {
-        queue.Enqueue(new Tuple<Cell, Cell>(from, to));
+        queue.Enqueue(new Tuple<Cell, Cell, IAction>(from, to, action));
     }
 
-    public Queue<Tuple<Cell, Cell>> GetAnimations()
+    public Queue<Tuple<Cell, Cell, IAction>> GetAnimations()
     {
         return queue;
     }

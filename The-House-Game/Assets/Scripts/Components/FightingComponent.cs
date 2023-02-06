@@ -45,7 +45,7 @@ public class FightingComponent : MonoBehaviour
 			if (unit.WillSurvive(enemyTrueDamage))
 			{
 				enemyCell.SetUnit(unit);
-				unit.GetComponent<MovementComponent>().AddMovement(enemyCell, enemyCell);
+				unit.GetComponent<MovementComponent>().AddMovement(enemyCell, enemyCell, null);
 				if (cell.currentFlag != null)
 				{
 					interruptedCell = cell;
@@ -56,7 +56,7 @@ public class FightingComponent : MonoBehaviour
 			if (enemy.WillSurvive(trueDamage))
 			{
 				cell.SetUnit(enemy);
-				enemy.GetComponent<MovementComponent>().AddMovement(cell, cell);
+				enemy.GetComponent<MovementComponent>().AddMovement(cell, cell, null);
 			}
 			//interruptedCell = finishCell;
 			//Fix Influence
