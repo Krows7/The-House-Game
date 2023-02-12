@@ -1,11 +1,14 @@
 using Units.Settings;
+using System.Collections.Generic;
 
-public interface IAction
+public abstract class IAction
 {
-	bool IsDone { get; }
+	public bool IsDone { get; protected set; }
+	public bool StopAfterDone { get; protected set; } = false;
 	public Cell from { get; set; }
 	public Cell to { get; set; }
 	public Unit unit { get; set; }
+	
 
-	void Execute();
+	abstract public void Execute();
 }

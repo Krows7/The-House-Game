@@ -71,6 +71,8 @@ public class AnimationSystem : MonoBehaviour
 				else if (!action.IsDone && (dt - nextCell.transform.position).magnitude < (dt - currentCell.transform.position).magnitude)
 				{
 					action.Execute();
+					if (action.StopAfterDone)
+						continue;
 					obj.AddMovement(currentCell, finishCell, action);
 				}
 				else

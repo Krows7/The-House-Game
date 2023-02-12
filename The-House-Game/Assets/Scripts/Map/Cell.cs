@@ -124,21 +124,27 @@ public class Cell : MonoBehaviour
 		// flag capture
 		if (nextCell.IsFree() && nextCell.currentFlag != null)
 		{
-			interruptedCell = this;
+			/*interruptedCell = this;
 			nextCell.SetUnit(currentUnit);
 			DellUnit();
 			thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell, null);
-			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
-			nextCell.currentFlag.GetComponent<Flag>().StartCapture();
+			nextCell.currentFlag.GetComponent<Flag>().StartCapture();*/
+
+			FlagCaptureAction action = new FlagCaptureAction(this, nextCell, thisUnit);
+			thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
+			return;
 		}
 		// group union
 		else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
 		{
-			Debug.Log(nextCell.GetUnit() is Group);
-			if (nextCell.GetUnit() is Group && currentUnit is Group) return;
-			if (nextCell.GetUnit() is Group) CombineTo(nextCell.GetUnit() as Group, currentUnit, nextCell);
-			else if (currentUnit is Group) CombineTo(currentUnit as Group, nextCell.GetUnit(), nextCell, true);
-			else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);
+			/*Debug.Log(nextCell.GetUnit() is Group);
+				if (nextCell.GetUnit() is Group && currentUnit is Group) return;
+				if (nextCell.GetUnit() is Group) CombineTo(nextCell.GetUnit() as Group, currentUnit, nextCell);
+				else if (currentUnit is Group) CombineTo(currentUnit as Group, nextCell.GetUnit(), nextCell, true);
+				else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);*/
+			GroupAction action = new GroupAction(this, nextCell, thisUnit);
+			thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
+			return;
 		}
 		// fight
 		else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
@@ -157,7 +163,7 @@ public class Cell : MonoBehaviour
 						DellUnit();*/
 			BaseMoveAction action = new BaseMoveAction(this, nextCell, thisUnit);
 			thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
-			//GameObject.Find("MasterController").GetComponent<AnimationController>().Add(nextCell, finishCell);
+			return;
 		}
 		// interrupt flag capture
 		if (interruptedCell != null && interruptedCell.currentFlag != null)
@@ -170,7 +176,48 @@ public class Cell : MonoBehaviour
 		return unit.transform.GetChild(0).GetComponent<FightingComponent>();
 	}
 
-	public void CombineTo(Group AsGroup, Unit Add, Cell cell, bool inUnitLocation = false)
+	private Color darker(Color color)
+	{
+		return new Color(color.r - 0.1F, color.g - 0.1F, color.g - 0.1F);
+	}
+
+	public void onHoverDebug()
+	{
+		transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.gray);
+	}
+
+	public void onPressDebug()
+	{
+		transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", darker(Color.gray));
+	}
+
+	public void onReleaseDebug()
+	{
+		var material = transform.parent.GetComponent<Room>().color;
+		if (material != null) transform.GetChild(0).GetComponent<MeshRenderer>().material.color = material.color;
+		else transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+	}
+	public void onChosenDebug()
+	{
+		transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", darker(Color.green));
+	}
+
+	void Update()
+	{
+		if (transform.parent.name.Equals("MedRoom") && currentUnit != null) currentUnit.Heal(15 * Time.deltaTime);
+		else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.fraction.fractionName)) currentUnit.Heal(5 * Time.deltaTime);
+		else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.fraction.fractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
+	}
+
+	public Room GetRoom()
+	{
+		return transform.parent.GetComponent<Room>();
+	}
+}
+
+
+/*
+ public void CombineTo(Group AsGroup, Unit Add, Cell cell, bool inUnitLocation = false)
 	{
 		if (inUnitLocation)
 		{
@@ -215,42 +262,4 @@ public class Cell : MonoBehaviour
 		DellUnit();
 		nextCell.SetUnit(group.GetComponent<Group>());
 	}
-
-	private Color darker(Color color)
-	{
-		return new Color(color.r - 0.1F, color.g - 0.1F, color.g - 0.1F);
-	}
-
-	public void onHoverDebug()
-	{
-		transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.gray);
-	}
-
-	public void onPressDebug()
-	{
-		transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", darker(Color.gray));
-	}
-
-	public void onReleaseDebug()
-	{
-		var material = transform.parent.GetComponent<Room>().color;
-		if (material != null) transform.GetChild(0).GetComponent<MeshRenderer>().material.color = material.color;
-		else transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
-	}
-	public void onChosenDebug()
-	{
-		transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", darker(Color.green));
-	}
-
-	void Update()
-	{
-		if (transform.parent.name.Equals("MedRoom") && currentUnit != null) currentUnit.Heal(15 * Time.deltaTime);
-		else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.fraction.fractionName)) currentUnit.Heal(5 * Time.deltaTime);
-		else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.fraction.fractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
-	}
-
-	public Room GetRoom()
-	{
-		return transform.parent.GetComponent<Room>();
-	}
-}
+ */
