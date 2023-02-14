@@ -17,6 +17,7 @@ public class FlagRevealSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (FlagController.flags == null) return;
         foreach (var flag in FlagController.flags)
         {
             bool isSomeoneIn = false;

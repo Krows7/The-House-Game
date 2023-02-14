@@ -29,6 +29,7 @@ public class GroupAction : IAction
 
 	public void CombineTo(Group AsGroup, Unit Add, Cell cell, bool inUnitLocation = false)
 	{
+		if (Add == null || AsGroup == null || cell == null) return;
 		if (inUnitLocation)
 		{
 			AsGroup.transform.SetPositionAndRotation(Add.transform.position, Add.transform.rotation);
@@ -40,6 +41,7 @@ public class GroupAction : IAction
 
 	public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
 	{
+		if (Base == null || Add == null || nextCell == null) return;
         Base.GetComponent<MovementComponent>().Delete();
         Add.GetComponent<MovementComponent>().Delete();
 

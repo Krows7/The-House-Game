@@ -7,7 +7,7 @@ using Units.Settings;
 public class FightAnimationSystem : MonoBehaviour
 {
     public List<FightingComponent> objects = new();
-    public float AnimationTime = 1f;
+    public float AnimationTime = 2f;
     public float AtackRadius = 1000;
 
     public List<Tuple<FightingComponent, float>> animations = new();

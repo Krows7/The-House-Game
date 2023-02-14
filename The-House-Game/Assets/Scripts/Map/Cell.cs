@@ -117,7 +117,55 @@ public class Cell : MonoBehaviour
         }
     }
 
-    public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
+    public void FollowEnemy(Cell finishCell, Unit unit)
+    {
+        Queue<Cell> queue = new Queue<Cell>();
+        List<int> visited = new List<int>();
+
+        for (int i = 0; i < gameMap.GetCells().Count; ++i)
+        {
+            visited.Add(-1);
+        }
+
+        queue.Enqueue(this);
+
+        while (queue.Count > 0)
+        {
+            Cell cell = queue.Dequeue();
+            if (finishCell.id == cell.id)
+            {
+                break;
+            }
+            foreach (Cell c in gameMap.GetGraph()[cell.id])
+            {
+                if (visited[c.id] == -1)
+                {
+                    visited[c.id] = cell.id;
+                    if (c.IsFree())
+                    {
+                        queue.Enqueue(c);
+                    }
+                }
+            }
+
+        }
+
+        if (visited[finishCell.id] != -1)
+        {
+
+            int prevId = finishCell.id;
+            int nextCellId = -1;
+            while (prevId != id)
+            {
+                nextCellId = prevId;
+                prevId = visited[prevId];
+            }
+            var nextCell = gameMap.GetCells()[nextCellId];
+            TryMoveTo(nextCell, finishCell, unit);
+        }
+    }
+
+        public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
     {
         Cell interruptedCell = null;
         var thisUnit = unit;
