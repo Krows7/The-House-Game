@@ -52,7 +52,6 @@ public class MovementController : MonoBehaviour
             }
 			if (MouseRightButtonDown) 
             {
-				Debug.Log("MOVE!");
 				if (unit != null && thisCell != lastCurrentCell)
                 {
                     lastCurrentCell = thisCell;
@@ -80,8 +79,6 @@ public class MovementController : MonoBehaviour
     void MoveUnit() 
     {
         uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
-        Debug.LogWarning("MOVE!");
-        Debug.LogWarning(finishCell);
         unit.CurrentCell.MoveUnitToCell(finishCell, unit);
     }
 
@@ -108,7 +105,6 @@ public class MovementController : MonoBehaviour
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
             } else if(rayHit.collider.tag == "Selection Collider")
             {
-                Debug.LogWarning("Selected Unit");
                 var unit = rayHit.collider.transform.parent.parent.GetComponent<Unit>();
                 if (unit.CurrentCell != null) currentCell = unit.CurrentCell;
             }

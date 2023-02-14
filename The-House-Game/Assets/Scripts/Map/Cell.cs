@@ -124,12 +124,6 @@ public class Cell : MonoBehaviour
         // flag capture
         if (nextCell.IsFree() && nextCell.currentFlag != null)
         {
-            /*interruptedCell = this;
-			nextCell.SetUnit(currentUnit);
-			DellUnit();
-			thisUnit.GetComponent<MovementComponent>().AddMovement(nextCell, finishCell, null);
-			nextCell.currentFlag.GetComponent<Flag>().StartCapture();*/
-
             FlagCaptureAction action = new FlagCaptureAction(this, nextCell, thisUnit);
             thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
             return;
@@ -137,32 +131,20 @@ public class Cell : MonoBehaviour
         // group union
         else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
         {
-            /*Debug.Log(nextCell.GetUnit() is Group);
-				if (nextCell.GetUnit() is Group && currentUnit is Group) return;
-				if (nextCell.GetUnit() is Group) CombineTo(nextCell.GetUnit() as Group, currentUnit, nextCell);
-				else if (currentUnit is Group) CombineTo(currentUnit as Group, nextCell.GetUnit(), nextCell, true);
-				else CreateGroup(nextCell.GetUnit(), currentUnit, nextCell);*/
             GroupAction action = new GroupAction(this, nextCell, thisUnit);
             thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
             return;
         }
         // fight
-        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != currentUnit.fraction)
+        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != thisUnit.fraction)
         {
             FightAction action = new(this, nextCell, thisUnit);
             thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
-            /*if (AsFightingComponent(thisUnit) != null)
-			{
-				AsFightingComponent(thisUnit).StartAnimation(nextCell.GetUnit());
-			}*/
 
         }
         // just move
         else if (thisUnit != null)
         {
-            /*			interruptedCell = this;
-						nextCell.SetUnit(thisUnit);
-						DellUnit();*/
             BaseMoveAction action = new BaseMoveAction(this, nextCell, thisUnit);
             thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
             return;

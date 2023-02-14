@@ -40,8 +40,12 @@ public class GroupAction : IAction
 
 	public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
 	{
-		var prefab = GameManager.instance.BaseUnit;
-		for (int i = 0; i < prefab.transform.childCount; i++)
+        Base.GetComponent<MovementComponent>().Delete();
+        Add.GetComponent<MovementComponent>().Delete();
+
+        var prefab = GameManager.instance.BaseUnit;
+        prefab.AddComponent<MovementComponent>();
+        for (int i = 0; i < prefab.transform.childCount; i++)
 		{
 			var nextChild = prefab.transform.GetChild(i);
 			if (nextChild.tag != "Selection Collider")
@@ -57,7 +61,7 @@ public class GroupAction : IAction
 		group.GetComponent<Group>().Add(Base);
 		group.GetComponent<Group>().Add(Add);
 
-		MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
+        MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
 		foreach (MonoBehaviour script in scriptList)
 		{
 			group.AddComponent(script.GetType());
