@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
+using TMPro;
 
 // TODO Inherit to Unit (Like as MovementComponent)
 public class FightingComponent : MonoBehaviour
@@ -64,10 +65,18 @@ public class FightingComponent : MonoBehaviour
 		}
 		enemy.GiveDamage(trueDamage);
 		unit.GiveDamage(enemyTrueDamage);
+		ShowDamage(unit, enemyTrueDamage);
+		ShowDamage(enemy, trueDamage);
 		if (interruptedCell != null && interruptedCell.currentFlag != null)
 			interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
 		OnAnimationInterrupt();
 	}
+
+	private void ShowDamage(Unit unit, float dmg)
+    {
+		var particle = Instantiate<GameObject>(FightAnimationSystem.instance.DamageParticlePrefab, unit.transform.position, Quaternion.identity);
+		particle.transform.GetChild(0).GetComponent<TextMeshPro>().SetText((int) (dmg + 0.5f) + "");
+    }
 
     private void OnDestroy()
     {

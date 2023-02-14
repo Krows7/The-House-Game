@@ -9,6 +9,7 @@ public class FightAnimationSystem : MonoBehaviour
     public List<FightingComponent> objects = new();
     public float AnimationTime = 1.5f;
     public float AtackRadius = 1000;
+    public GameObject DamageParticlePrefab;
 
     public List<Tuple<FightingComponent, float>> animations = new();
     public List<Tuple<FightingComponent, float>> buffer = new();

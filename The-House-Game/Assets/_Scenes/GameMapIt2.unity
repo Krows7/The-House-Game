@@ -6870,6 +6870,7 @@ MonoBehaviour:
   time: 0
   roundTime: 300
   BaseUnit: {fileID: 7403157610545294867, guid: 3f7622995799e87498e4edc4228cb1ac, type: 3}
+  Damage: {fileID: 8019441249869491491, guid: 2db1315b23c4add4bad16cf4438bcc6a, type: 3}
 --- !u!114 &1079582826
 MonoBehaviour:
   m_ObjectHideFlags: 0
