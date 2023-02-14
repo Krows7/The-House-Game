@@ -14,7 +14,8 @@ namespace Units.Settings
 		public List<Unit> units = new();
 		public void Add(Unit unit)
 		{
-			var children = unit.transform.GetChild(0);
+            unit.GetComponent<MovementComponent>().Delete();
+            var children = unit.transform.GetChild(0);
 			for (int i = 0; i < children.transform.childCount; i++)
 			{
 				var nextChild = children.transform.GetChild(i);

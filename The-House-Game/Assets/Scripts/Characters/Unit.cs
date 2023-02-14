@@ -13,6 +13,8 @@ namespace Units.Settings
 
         public Cell CurrentCell { set; get; } = null;
 
+        public bool CanMove { get; set; } = true;
+
         public abstract float getSpeed();
 
         public abstract float CalculateTrueDamage();

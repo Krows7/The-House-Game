@@ -31,9 +31,14 @@ public class MovementComponent : MonoBehaviour
         return queue;
     }
 
+    public void Delete()
+    {
+        queue.Clear();
+        animationSystem.Remove(this);
+    }
+
 	private void OnDestroy()
 	{
-		queue.Clear();
-        animationSystem.Remove(this);
+        Delete();
 	}
 }

@@ -14,12 +14,13 @@ public class FightingComponent : MonoBehaviour
     void Start()
     {
 		fight = FightAnimationSystem.instance;
-		Debug.LogWarning("Fight: " + fight);
 		fight.objects.Add(this);
     }
 
     public void StartAnimation(Unit Enemy)
     {
+		var unit = transform.parent.GetComponent<Unit>();
+		//unit.CanMove = false;
         enemy = Enemy;
         enemyCell = Enemy.CurrentCell;
 		fight.RegisterAnimation(this);
@@ -29,6 +30,7 @@ public class FightingComponent : MonoBehaviour
     {
         enemyCell = null;
         enemy = null;
+        var unit = transform.parent.GetComponent<Unit>();
     }
 
     public void OnAnimationEnd()
