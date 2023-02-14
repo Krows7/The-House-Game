@@ -82,7 +82,7 @@ public class MovementController : MonoBehaviour
         uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
         Debug.LogWarning("MOVE!");
         Debug.LogWarning(finishCell);
-        unit.CurrentCell.MoveUnitToCell(finishCell);
+        unit.CurrentCell.MoveUnitToCell(finishCell, unit);
     }
 
     void ResetAll()

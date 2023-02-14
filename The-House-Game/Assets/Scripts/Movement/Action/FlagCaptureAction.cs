@@ -16,6 +16,5 @@ public class FlagCaptureAction : BaseMoveAction
 	{
 		to.currentFlag.GetComponent<Flag>().StartCapture();
 		base.Execute();
-		Debug.Log("FLAG " + to.currentFlag.GetComponent<Flag>() != null);
 	}
 }

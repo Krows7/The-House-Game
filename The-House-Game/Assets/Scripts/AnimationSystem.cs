@@ -38,7 +38,7 @@ public class AnimationSystem : MonoBehaviour
 				if (dt.magnitude <= unit.getSpeed() * Time.deltaTime)
 				{
 					unit.transform.SetPositionAndRotation(currentCell.transform.position, currentCell.transform.rotation);
-					currentCell.MoveUnitToCell(nextCell);
+					currentCell.MoveUnitToCell(nextCell, unit);
 				}
 				else
 				{
@@ -53,7 +53,10 @@ public class AnimationSystem : MonoBehaviour
 				IAction action = animation.Item3;
 				Cell nextCell = action.to;
 				Unit unit = action.unit;
-
+				if (unit == null)
+				{
+					continue;
+				}
 				if (currentCell.GetUnit() == null && nextCell.GetUnit() == null)
 				{
 					continue;
@@ -66,7 +69,7 @@ public class AnimationSystem : MonoBehaviour
 						action.Execute();
 					}
 					unit.transform.SetPositionAndRotation(nextCell.transform.position, nextCell.transform.rotation);
-					nextCell.MoveUnitToCell(finishCell);
+					nextCell.MoveUnitToCell(finishCell, unit);
 				}
 				else if (!action.IsDone && (dt - nextCell.transform.position).magnitude < (dt - currentCell.transform.position).magnitude)
 				{

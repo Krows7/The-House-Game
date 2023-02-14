@@ -32,7 +32,7 @@ public class AnimationController : MonoBehaviour
             if (dt.magnitude <= unit.getSpeed() * Time.deltaTime)
             {
                 unit.transform.SetPositionAndRotation(nextCell.transform.position, nextCell.transform.rotation);
-                nextCell.MoveUnitToCell(finishCell);
+                nextCell.MoveUnitToCell(finishCell, unit);
             }
             else
             {
