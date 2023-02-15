@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Units.Settings;
@@ -35,8 +36,11 @@ public class AnimationSystem : MonoBehaviour
             Cell currentCell = animation.Item1;
             Cell finishCell = animation.Item2;
             IAction action = animation.Item3;
+            if (action == null) continue;
+
             Cell nextCell = action.to;
             Unit unit = action.unit;
+
             if (unit == null || !unit.CanMove)
             {
                 continue;

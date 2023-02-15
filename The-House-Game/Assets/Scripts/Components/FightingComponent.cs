@@ -21,7 +21,6 @@ public class FightingComponent : MonoBehaviour
     public void StartAnimation(Unit Enemy)
     {
 		var unit = transform.parent.GetComponent<Unit>();
-		//unit.CanMove = false;
         enemy = Enemy;
         enemyCell = Enemy.CurrentCell;
 		fight.RegisterAnimation(this);
@@ -41,8 +40,9 @@ public class FightingComponent : MonoBehaviour
 		var cell = unit.CurrentCell;
 		var trueDamage = unit.CalculateTrueDamage();
 		var enemyTrueDamage = enemy.CalculateTrueDamage();
-		if (trueDamage >= enemyTrueDamage || !enemy.WillSurvive(trueDamage))
-		{
+        if (cell.GetUnit() != unit || enemyCell.GetUnit() != enemy) return;
+        if (trueDamage >= enemyTrueDamage || !enemy.WillSurvive(trueDamage))
+		{;
 			cell.DellUnit();
 			enemyCell.DellUnit();
 			if (unit.WillSurvive(enemyTrueDamage))
