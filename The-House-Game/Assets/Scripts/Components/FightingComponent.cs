@@ -65,10 +65,10 @@ public class FightingComponent : MonoBehaviour
 			//Fix Influence
 			unit.fraction.influence += 100;
 		}
-		enemy.GiveDamage(trueDamage);
-		unit.GiveDamage(enemyTrueDamage);
 		ShowDamage(unit, enemyTrueDamage);
 		ShowDamage(enemy, trueDamage);
+		enemy.GiveDamage(trueDamage);
+		unit.GiveDamage(enemyTrueDamage);
 		if (interruptedCell != null && interruptedCell.currentFlag != null)
 			interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
 		OnAnimationInterrupt();
