@@ -58,6 +58,7 @@ public class GroupAction : IAction
 
 		var group = new GameObject("Group");
 		group.AddComponent<Group>();
+		group.AddComponent<FightingComponent>();
 		group.transform.position = Base.transform.position;
 		Cell.Instantiate(prefab, group.transform.position, group.transform.rotation).transform.parent = group.transform;
 		group.GetComponent<Group>().Add(Base);

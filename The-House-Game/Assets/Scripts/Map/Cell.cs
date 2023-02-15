@@ -19,7 +19,6 @@ public class Cell : MonoBehaviour
     void Start()
     {
         id = id == 0 ? -1 : id;
-
     }
 
     public void SetId(int _id)
@@ -69,8 +68,19 @@ public class Cell : MonoBehaviour
         onReleaseDebug();
     }
 
+    private Unit GetEnemy(Unit unit)
+    {
+        return unit == null ? null : unit.transform.GetChild(0).GetComponent<FightingComponent>().enemy;
+    }
+
     public void MoveUnitToCell(Cell finishCell, Unit unit)
     {
+        if (GetEnemy(unit) != null)
+        {
+            finishCell = GetEnemy(unit).CurrentCell;
+            Debug.LogWarning("11");
+        }
+
         Queue<Cell> queue = new Queue<Cell>();
         List<int> visited = new List<int>();
 
@@ -193,7 +203,7 @@ public class Cell : MonoBehaviour
         // just move
         else if (thisUnit != null)
         {
-            BaseMoveAction action = new BaseMoveAction(this, nextCell, thisUnit);
+            BaseMoveAction action = new(this, nextCell, thisUnit);
             thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
             return;
         }

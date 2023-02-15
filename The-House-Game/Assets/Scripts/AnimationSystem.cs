@@ -20,11 +20,6 @@ public class AnimationSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (var obj in ToRemove)
-        {
-            MovableObjects.Remove(obj);
-            ToRemove.Remove(obj);
-        }
         foreach (var obj in MovableObjects)
         {
             if (obj == null || obj.GetAnimations().Count == 0)
@@ -81,7 +76,7 @@ public class AnimationSystem : MonoBehaviour
 
     public void Remove(MovementComponent obj)
     {
-        ToRemove.Add(obj);
+        MovableObjects.Remove(obj);
     }
 }
 

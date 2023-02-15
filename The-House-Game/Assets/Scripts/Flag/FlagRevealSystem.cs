@@ -24,7 +24,7 @@ public class FlagRevealSystem : MonoBehaviour
             Room room = flag.GetComponent<Flag>().cell.GetRoom();
             foreach (var unit in GameManager.gamerFraction.units)
             {
-                if (room == unit.GetComponent<Unit>().CurrentCell.GetRoom())
+                if (unit != null && room == unit.GetComponent<Unit>().CurrentCell.GetRoom())
                 {
                     isSomeoneIn = true;
                     break;
