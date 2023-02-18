@@ -6908,8 +6908,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objects: []
-  AnimationTime: 0.5
-  AtackRadius: 1.2
+  AnimationTime: 0.3
+  AtackRadius: 1.5
+  DamageParticlePrefab: {fileID: 8019441249869491491, guid: 2db1315b23c4add4bad16cf4438bcc6a, type: 3}
 --- !u!114 &1079582829
 MonoBehaviour:
   m_ObjectHideFlags: 0

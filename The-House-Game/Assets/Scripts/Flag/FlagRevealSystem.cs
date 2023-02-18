@@ -17,13 +17,14 @@ public class FlagRevealSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (FlagController.flags == null) return;
         foreach (var flag in FlagController.flags)
         {
             bool isSomeoneIn = false;
             Room room = flag.GetComponent<Flag>().cell.GetRoom();
             foreach (var unit in GameManager.gamerFraction.units)
             {
-                if (room == unit.GetComponent<Unit>().CurrentCell.GetRoom())
+                if (unit != null && room == unit.GetComponent<Unit>().CurrentCell.GetRoom())
                 {
                     isSomeoneIn = true;
                     break;
