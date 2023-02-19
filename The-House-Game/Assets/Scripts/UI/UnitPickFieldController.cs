@@ -8,9 +8,20 @@ public class UnitPickFieldController : MonoBehaviour
     [SerializeField] private GameObject unitPickPrefab;
     [SerializeField] private GameObject unitPickField;
 
+    private const KeyCode NUM0_KEYCODE = KeyCode.Alpha1;
+
     void Start()
     {
         StartCoroutine("StartUpdating");
+    }
+
+    void Update()
+    {
+        for (int i = 0; i < 9; ++i) {
+            if (Input.GetKeyDown(NUM0_KEYCODE + i)) {
+                unitPickField.transform.GetChild(i).gameObject.GetComponent<UnitPickController>().PickUnit();
+            }
+        }
     }
 
     IEnumerator StartUpdating()
