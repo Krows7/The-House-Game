@@ -52,7 +52,9 @@ public class AnimationSystem : MonoBehaviour
                     action.Execute();
                 }
                 unit.transform.SetPositionAndRotation(nextCell.transform.position, nextCell.transform.rotation);
-                nextCell.MoveUnitToCell(finishCell, unit);
+
+                obj.Strategy.MoveUnitToCell(finishCell, unit);
+                //nextCell.MoveUnitToCell(finishCell, unit);
             }
             else if (!action.IsDone && (dt - nextCell.transform.position).magnitude < (dt - currentCell.transform.position).magnitude)
             {

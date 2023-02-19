@@ -78,7 +78,6 @@ public class Cell : MonoBehaviour
         if (GetEnemy(unit) != null)
         {
             finishCell = GetEnemy(unit).CurrentCell;
-            Debug.LogWarning("11");
         }
 
         Queue<Cell> queue = new Queue<Cell>();
@@ -196,7 +195,7 @@ public class Cell : MonoBehaviour
         // fight
         else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != thisUnit.fraction)
         {
-            FightAction action = new(this, nextCell, thisUnit);
+            FightAction action = new(this, nextCell, thisUnit, nextCell.GetUnit());
             thisUnit.GetComponent<MovementComponent>().AddMovement(this, finishCell, action);
 
         }
@@ -256,52 +255,3 @@ public class Cell : MonoBehaviour
         return transform.parent.GetComponent<Room>();
     }
 }
-
-
-/*
- public void CombineTo(Group AsGroup, Unit Add, Cell cell, bool inUnitLocation = false)
-	{
-		if (inUnitLocation)
-		{
-			AsGroup.transform.SetPositionAndRotation(Add.transform.position, Add.transform.rotation);
-		}
-		AsGroup.Add(Add);
-		DellUnit();
-		cell.SetUnit(AsGroup);
-	}
-
-	public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
-	{
-		var prefab = GameManager.instance.BaseUnit;
-		for (int i = 0; i < prefab.transform.childCount; i++)
-		{
-			var nextChild = prefab.transform.GetChild(i);
-			if (nextChild.tag != "Selection Collider")
-			{
-				nextChild.gameObject.SetActive(false);
-			}
-		}
-
-		var group = new GameObject("Group");
-		group.AddComponent<Group>();
-		group.transform.position = Base.transform.position;
-		Instantiate(prefab, group.transform.position, group.transform.rotation).transform.parent = group.transform;
-		group.GetComponent<Group>().Add(Base);
-		group.GetComponent<Group>().Add(Add);
-
-		MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
-		foreach (MonoBehaviour script in scriptList)
-		{
-			group.AddComponent(script.GetType());
-			System.Reflection.FieldInfo[] fields = script.GetType().GetFields();
-			foreach (System.Reflection.FieldInfo field in fields)
-			{
-				field.SetValue(group.GetComponent(script.GetType()), field.GetValue(script));
-			}
-		}
-
-		group.GetComponent<Group>().fraction = Base.fraction;
-		DellUnit();
-		nextCell.SetUnit(group.GetComponent<Group>());
-	}
- */

@@ -14,54 +14,61 @@ public class MovementController : MonoBehaviour
 
     private bool MouseRightButtonDown;
 
-    void Start() {
+    void Start()
+    {
         MouseRightButtonDown = false;
     }
 
     void Update()
     {
         UpdateCurrentCell();
-		Cell thisCell = currentCell;
-		if (thisCell != null) {
-			if (Input.GetKeyDown(KeyCode.Mouse0))
+        UpdateStrategy();
+        Cell thisCell = currentCell;
+        if (thisCell != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 MouseRightButtonDown = false;
                 currentCell.onPressDebug();
-				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
+                Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
                     if (unit != null) unit.CurrentCell.onReleaseDebug();
                     ChooseUnit(currentCell.GetUnit());
                 }
-            } else if(Input.GetKeyDown(KeyCode.Mouse1))
+            }
+            else if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 MouseRightButtonDown = true;
-            } else if(Input.GetKeyUp(KeyCode.Mouse1))
+            }
+            else if (Input.GetKeyUp(KeyCode.Mouse1))
             {
                 MouseRightButtonDown = false;
-            }else if (unit != null)
+            }
+
+            else if (unit != null)
             {
                 RenderCells();
             }
-            if(unit != null)
+            if (unit != null)
             {
-                if(Input.GetKeyDown(KeyCode.Q))
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
                     if (unit is Leader) (unit as Leader).UseSkill();
                 }
             }
-			if (MouseRightButtonDown) 
+            if (MouseRightButtonDown)
             {
-				if (unit != null && thisCell != lastCurrentCell)
+                if (unit != null && thisCell != lastCurrentCell)
                 {
                     lastCurrentCell = thisCell;
-					finishCell = currentCell;
+                    finishCell = currentCell;
                     ResetAll();
                     MoveUnit();
                     finishCell = null;
                 }
             }
-        } 
+        }
     }
 
     public void ChooseUnit(Unit Unit)
@@ -76,10 +83,13 @@ public class MovementController : MonoBehaviour
         unit.CurrentCell.onPressDebug();
     }
 
-    void MoveUnit() 
+    void MoveUnit()
     {
         uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
-        unit.CurrentCell.MoveUnitToCell(finishCell, unit);
+
+        IMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
+        strategy.MoveUnitToCell(finishCell, unit, true);
+        //unit.CurrentCell.MoveUnitToCell(finishCell, unit);
     }
 
     void ResetAll()
@@ -93,22 +103,39 @@ public class MovementController : MonoBehaviour
         cell.onReleaseDebug();
     }
 
-    void UpdateCurrentCell() 
+    void UpdateCurrentCell()
     {
         if (currentCell != null) currentCell.onReleaseDebug();
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawLine(ray.origin, ray.GetPoint(10));
         RaycastHit rayHit;
         currentCell = null;
-        if (Physics.Raycast(ray, out rayHit, 100.0f)) {
-            if (rayHit.collider.tag == "Cell") {
+        if (Physics.Raycast(ray, out rayHit, 100.0f))
+        {
+            if (rayHit.collider.tag == "Cell")
+            {
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
-            } else if(rayHit.collider.tag == "Selection Collider")
+            }
+            else if (rayHit.collider.tag == "Selection Collider")
             {
                 var unit = rayHit.collider.transform.parent.parent.GetComponent<Unit>();
                 if (unit.CurrentCell != null) currentCell = unit.CurrentCell;
             }
         }
         if (currentCell != null) currentCell.onHoverDebug();
+    }
+
+    private void UpdateStrategy()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && unit != null)
+        {
+            Debug.Log("Base movement");
+            unit.GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && unit != null)
+        {
+            Debug.Log("Follow movement");
+            unit.GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
+        }
     }
 }
