@@ -9,7 +9,6 @@ public class MoveToRandomRoom : Node
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
-	AnimationController animationController = null;
 
 	public MoveToRandomRoom(Unit unit)
 	{
@@ -17,7 +16,6 @@ public class MoveToRandomRoom : Node
 		_unit = unit;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
-		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
 	}
 
 	public override NodeState Evaluate()

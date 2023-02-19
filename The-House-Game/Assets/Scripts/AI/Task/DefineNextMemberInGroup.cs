@@ -9,14 +9,12 @@ public class DefineNextMemberInGroup : Node
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
-	AnimationController animationController = null;
 
 	public DefineNextMemberInGroup(Unit unit)
 	{
 		_unit = unit;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
-		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
 
 	}
 
