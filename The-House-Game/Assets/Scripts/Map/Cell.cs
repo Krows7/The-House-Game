@@ -175,7 +175,7 @@ public class Cell : MonoBehaviour
         }
     }
 
-        public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
+    public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
     {
         Cell interruptedCell = null;
         var thisUnit = unit;
