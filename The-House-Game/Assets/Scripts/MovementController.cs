@@ -7,58 +7,70 @@ public class MovementController : MonoBehaviour
 {
     private Cell currentCell;
     private Cell finishCell;
-    private Cell lastCurrentCell;
-    private Unit unit;
+    private List<Unit> units;
+    bool inRectMode = false;
 
     [SerializeField] private GameObject uiControllerObject;
 
-    private bool MouseRightButtonDown;
-
     void Start() {
-        MouseRightButtonDown = false;
+        units = new List<Unit>();
     }
 
     void Update()
     {
         UpdateCurrentCell();
-		Cell thisCell = currentCell;
-		if (thisCell != null) {
-			if (Input.GetKeyDown(KeyCode.Mouse0))
+
+        if (Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            inRectMode = false;
+            uiControllerObject.GetComponent<SelectionRectController>().HideRect();
+        }
+        else if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            RectangleMode();
+            return;
+        }
+
+        if (currentCell != null) {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                MouseRightButtonDown = false;
                 currentCell.onPressDebug();
 				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
-                    if (unit != null) unit.CurrentCell.onReleaseDebug();
-                    ChooseUnit(currentCell.GetUnit());
+                    if (units.Count == 1)
+                    {
+                        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+                    }
+                    foreach (Unit unit in units)
+                    {
+                        unit.CurrentCell.onReleaseDebug();
+                    }
+                    units.Clear();
+                    units.Add(currentCell.GetUnit());
+                    uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(units[0]);
+                    units[0].CurrentCell.onChosenDebug();
                 }
-            } else if(Input.GetKeyDown(KeyCode.Mouse1))
+            } else if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                MouseRightButtonDown = true;
-            } else if(Input.GetKeyUp(KeyCode.Mouse1))
-            {
-                MouseRightButtonDown = false;
-            }else if (unit != null)
+				Debug.LogWarning("MOVE!");
+				if (units.Count != 0)
+                {
+                    finishCell = currentCell;
+                    ResetAll();
+                    MoveUnits();
+                    finishCell = null;
+                }
+            } else if (units.Count != 0)
             {
                 RenderCells();
             }
-            if(unit != null)
+            
+            if (units.Count == 1)
             {
-                if(Input.GetKeyDown(KeyCode.Q))
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    if (unit is Leader) (unit as Leader).UseSkill();
-                }
-            }
-			if (MouseRightButtonDown) 
-            {
-				if (unit != null && thisCell != lastCurrentCell)
-                {
-                    lastCurrentCell = thisCell;
-					finishCell = currentCell;
-                    ResetAll();
-                    MoveUnit();
-                    finishCell = null;
+                    if (units[0] is Leader) (units[0] as Leader).UseSkill();
                 }
             }
         } 
@@ -66,25 +78,40 @@ public class MovementController : MonoBehaviour
 
     public void ChooseUnit(Unit Unit)
     {
-        unit = Unit;
-        uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(unit);
-        unit.CurrentCell.onChosenDebug();
+        units.Clear();
+        units.Add(Unit);
+        uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(Unit);
+        Unit.CurrentCell.onChosenDebug();
     }
 
     private void RenderCells()
     {
-        unit.CurrentCell.onPressDebug();
+        foreach (Unit unit in units)
+        {
+            unit.CurrentCell.onPressDebug();
+        }
     }
 
-    void MoveUnit() 
+    void MoveUnits() 
     {
-        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
-        unit.CurrentCell.MoveUnitToCell(finishCell, unit);
+        Debug.LogWarning("MOVE!");
+        Debug.LogWarning(finishCell);
+        foreach (Unit unit in units)
+        {
+            unit.CurrentCell.MoveUnitToCell(finishCell, unit);
+        }
+        if (units.Count > 1)
+        {
+            units.Clear();
+        }
     }
 
     void ResetAll()
     {
-        Reset(unit.CurrentCell);
+        foreach (Unit unit in units)
+        {
+            Reset(unit.CurrentCell);
+        }
         Reset(finishCell);
     }
 
@@ -96,11 +123,9 @@ public class MovementController : MonoBehaviour
     void UpdateCurrentCell() 
     {
         if (currentCell != null) currentCell.onReleaseDebug();
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawLine(ray.origin, ray.GetPoint(10));
-        RaycastHit rayHit;
         currentCell = null;
-        if (Physics.Raycast(ray, out rayHit, 100.0f)) {
+        RaycastHit rayHit;
+        if (GetRayhit(Input.mousePosition, out rayHit)) {
             if (rayHit.collider.tag == "Cell") {
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
             } else if(rayHit.collider.tag == "Selection Collider")
@@ -110,5 +135,81 @@ public class MovementController : MonoBehaviour
             }
         }
         if (currentCell != null) currentCell.onHoverDebug();
+    }
+
+    private void RectangleMode()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            uiControllerObject.GetComponent<SelectionRectController>().InitializeRect(Input.mousePosition);
+            inRectMode = true;
+        }
+        else if (inRectMode)
+        {
+            if (Input.GetKeyUp(KeyCode.Mouse0)) {
+                uiControllerObject.GetComponent<SelectionRectController>().HideRect();
+                ChooseUnitsRect(uiControllerObject.GetComponent<SelectionRectController>().firstCorner, Input.mousePosition);
+                inRectMode = false;
+            }
+            else if (Input.GetKey(KeyCode.Mouse0))
+            {
+                uiControllerObject.GetComponent<SelectionRectController>().SetSecondCorner(Input.mousePosition);
+            }
+        }
+    }
+
+    private bool GetRayhit(Vector3 point, out RaycastHit rayHit)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(point);
+        Debug.DrawLine(ray.origin, ray.GetPoint(10));
+        if (Physics.Raycast(ray, out rayHit, 100.0f))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void ChooseUnitsRect(Vector3 corner1, Vector3 corner2)
+    {
+        if (units.Count == 1)
+        {
+            foreach (Unit unit in units)
+            {
+                Reset(unit.CurrentCell);
+            }
+            uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+        }
+        units.Clear();
+        RaycastHit rayHit;
+        if (!GetRayhit(corner1, out rayHit))
+        {
+            return;
+        }
+        corner1 = rayHit.point;
+        if (!GetRayhit(corner2, out rayHit))
+        {
+            return;
+        }
+        corner2 = rayHit.point;
+        if (corner1.x > corner2.x)
+        {
+            float buf = corner1.x;
+            corner1.x = corner2.x;
+            corner2.x = buf;
+        }
+        if (corner1.y > corner2.y)
+        {
+            float buf = corner1.y;
+            corner1.y = corner2.y;
+            corner2.y = buf;
+        }
+        Rect box = new Rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y);
+        foreach (GameObject unitObject in GameManager.gamerFraction.units)
+        {
+            if (box.Contains(new Vector2(unitObject.transform.position.x, unitObject.transform.position.y)))
+            {
+                units.Add(unitObject.GetComponent<Unit>());
+            }
+        }
     }
 }
