@@ -5,21 +5,23 @@ using UnityEngine;
 
 public class FightAction : IAction
 {
+	public Unit Enemy { get; set; }
 
-	public FightAction(Cell from, Cell to, Unit unit)
+	public FightAction(Cell from, Cell to, Unit unit, Unit enemy)
 	{
 		this.from = from;
 		this.to = to;
 		this.unit = unit;
 		IsDone = false;
 		StopAfterDone = true;
+		Enemy = enemy;
 	}
 
 	public override void Execute()
 	{
-		if (AsFightingComponent(unit) != null)
+		if (Enemy != null && AsFightingComponent(unit) != null)
 		{
-			AsFightingComponent(unit).StartAnimation(to.GetUnit());
+			AsFightingComponent(Enemy).StartAnimation(Enemy);
 		}
 	}
 

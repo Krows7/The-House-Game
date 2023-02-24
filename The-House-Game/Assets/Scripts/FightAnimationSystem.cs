@@ -27,6 +27,10 @@ public class FightAnimationSystem : MonoBehaviour
         {
             var unitComponent = anim.Item1;
             var left = anim.Item2;
+            if(unitComponent == null)
+            {
+                return;
+            }
             var unit = AsUnit(unitComponent);
             if (unitComponent == null || unitComponent.enemy == null || unit == null) continue;
             // 1) Miro Case

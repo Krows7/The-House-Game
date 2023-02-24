@@ -19,7 +19,7 @@ public class MovementController : MonoBehaviour
     void Update()
     {
         UpdateCurrentCell();
-
+        UpdateStrategy();
         if (Input.GetKeyUp(KeyCode.LeftAlt))
         {
             inRectMode = false;
@@ -31,11 +31,12 @@ public class MovementController : MonoBehaviour
             return;
         }
 
-        if (currentCell != null) {
+        if (currentCell != null)
+        {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 currentCell.onPressDebug();
-				Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
+                Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
                     if (units.Count == 1)
@@ -46,10 +47,7 @@ public class MovementController : MonoBehaviour
                     {
                         unit.CurrentCell.onReleaseDebug();
                     }
-                    units.Clear();
-                    units.Add(currentCell.GetUnit());
-                    uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(units[0]);
-                    units[0].CurrentCell.onChosenDebug();
+                    ChooseUnit(currentCell.GetUnit());
                 }
             } else if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -73,7 +71,7 @@ public class MovementController : MonoBehaviour
                     if (units[0] is Leader) (units[0] as Leader).UseSkill();
                 }
             }
-        } 
+        }
     }
 
     public void ChooseUnit(Unit Unit)
@@ -94,11 +92,11 @@ public class MovementController : MonoBehaviour
 
     void MoveUnits() 
     {
-        Debug.LogWarning("MOVE!");
-        Debug.LogWarning(finishCell);
+        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
         foreach (Unit unit in units)
         {
-            unit.CurrentCell.MoveUnitToCell(finishCell, unit);
+            IMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
+            strategy.MoveUnitToCell(finishCell, unit, true);
         }
         if (units.Count > 1)
         {
@@ -120,7 +118,7 @@ public class MovementController : MonoBehaviour
         cell.onReleaseDebug();
     }
 
-    void UpdateCurrentCell() 
+    void UpdateCurrentCell()
     {
         if (currentCell != null) currentCell.onReleaseDebug();
         currentCell = null;
@@ -128,13 +126,34 @@ public class MovementController : MonoBehaviour
         if (GetRayhit(Input.mousePosition, out rayHit)) {
             if (rayHit.collider.tag == "Cell") {
                 currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
-            } else if(rayHit.collider.tag == "Selection Collider")
+            }
+            else if (rayHit.collider.tag == "Selection Collider")
             {
                 var unit = rayHit.collider.transform.parent.parent.GetComponent<Unit>();
                 if (unit.CurrentCell != null) currentCell = unit.CurrentCell;
             }
         }
         if (currentCell != null) currentCell.onHoverDebug();
+    }
+
+    private void UpdateStrategy()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("Base movement");
+            foreach (Unit unit in units)
+            {
+                unit.GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("Follow movement");
+            foreach (Unit unit in units)
+            {
+                unit.GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
+            }
+        }
     }
 
     private void RectangleMode()
@@ -146,7 +165,8 @@ public class MovementController : MonoBehaviour
         }
         else if (inRectMode)
         {
-            if (Input.GetKeyUp(KeyCode.Mouse0)) {
+            if (Input.GetKeyUp(KeyCode.Mouse0))
+            {
                 uiControllerObject.GetComponent<SelectionRectController>().HideRect();
                 ChooseUnitsRect(uiControllerObject.GetComponent<SelectionRectController>().firstCorner, Input.mousePosition);
                 inRectMode = false;
@@ -213,3 +233,4 @@ public class MovementController : MonoBehaviour
         }
     }
 }
+
