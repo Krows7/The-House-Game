@@ -9,7 +9,6 @@ public class MoveToNextMemberInGroup : Node
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
-	AnimationController animationController = null;
 
 	public MoveToNextMemberInGroup(Unit unit)
 	{
@@ -17,7 +16,6 @@ public class MoveToNextMemberInGroup : Node
 		state = NodeState.SUCCESS;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
-		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
 	}
 
 

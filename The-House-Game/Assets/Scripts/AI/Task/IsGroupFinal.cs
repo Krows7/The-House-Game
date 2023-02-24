@@ -10,7 +10,6 @@ public class IsGroupFinal : Node
 	int _maxGroupSize;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
-	AnimationController animationController = null;
 
 	public IsGroupFinal(Unit unit, int maxGroupSize)
 	{
@@ -19,7 +18,6 @@ public class IsGroupFinal : Node
 		_maxGroupSize = maxGroupSize;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
-		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
 
 	}
 
