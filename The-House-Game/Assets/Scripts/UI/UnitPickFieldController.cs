@@ -33,7 +33,7 @@ public class UnitPickFieldController : MonoBehaviour
     IEnumerator UpdateButtons()
     {
         int i = 0;
-        foreach (GameObject unitObject in GameManager.gamerFraction.units)
+        foreach (GameObject unitObject in GameManager.gamerFraction.Units)
         {
             if (unitObject == null)
             {

@@ -20,7 +20,7 @@ public class FindFlagInCurrentRoom : Node
 
 	public override NodeState Evaluate()
 	{
-		var a = GameObject.Find("TemporaryDebugObjects/TemporaryFixedMap/Map").GetComponent<Map>();
+		var a = GameObject.Find("Map").GetComponent<Map>();
 		foreach (Cell f in a.GetRooms()[_unit.CurrentCell.roomId].GetCells())
         {
 			if(f.currentFlag != null)

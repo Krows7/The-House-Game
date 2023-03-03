@@ -15,7 +15,7 @@ public class FollowEnemyStrategy : IMovementStrategy
         if (reset)
         {
             Unit possibleEnemy = finishCell.GetUnit();
-            if (possibleEnemy != null && possibleEnemy.fraction != unit.fraction)
+            if (possibleEnemy != null && possibleEnemy.Fraction != unit.Fraction)
             {
                 Enemy = possibleEnemy;
             }
@@ -93,14 +93,14 @@ public class FollowEnemyStrategy : IMovementStrategy
             return;
         }
         // group union
-        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
+        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == thisUnit.Fraction)
         {
             GroupAction action = new GroupAction(currentCell, nextCell, thisUnit);
             thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
             return;
         }
         // fight
-        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != thisUnit.fraction)
+        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction != thisUnit.Fraction)
         {
             FightAction action = new(currentCell, nextCell, thisUnit, nextCell.GetUnit());
             thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);

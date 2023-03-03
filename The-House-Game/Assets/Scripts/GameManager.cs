@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public float roundTime;
     public GameObject BaseUnit;
 
-    public static string gamerFractionName = "Fourth";
+    public static Fraction.Name gamerFractionName = Fraction.Name.FOURTH;
     public static Units.Settings.Fraction gamerFraction;
     public static Units.Settings.Fraction winner;
     public static Dictionary<string, Fraction> fractions = new();
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         foreach (Transform fracTransform in GameObject.Find("Fractions").transform)
         {
             var frac = fracTransform.GetComponent<Units.Settings.Fraction>();
-            if (frac.name == gamerFractionName)
+            if (frac.FractionName == gamerFractionName)
             {
                 gamerFraction = frac;
             }

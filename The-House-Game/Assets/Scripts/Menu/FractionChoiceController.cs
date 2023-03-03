@@ -7,14 +7,14 @@ public class FractionChoiceController : MonoBehaviour
 {
     public void ChooseRats()
     {
-        GameManager.gamerFractionName = "Rats";
+        GameManager.gamerFractionName = Units.Settings.Fraction.Name.RATS;
         SceneManager.LoadScene("GameMapIt2");
         Time.timeScale = 1f;
     }
 
     public void ChooseFourth()
     {
-        GameManager.gamerFractionName = "Fourth";
+        GameManager.gamerFractionName = Units.Settings.Fraction.Name.FOURTH;
         SceneManager.LoadScene("GameMapIt2");
         Time.timeScale = 1f;
     }

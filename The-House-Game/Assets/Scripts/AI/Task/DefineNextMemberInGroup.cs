@@ -24,7 +24,7 @@ public class DefineNextMemberInGroup : Node
 		foreach (Cell cell in cells)
 		{
 			Unit nextUnit = cell.GetUnit();
-			if (nextUnit != null && nextUnit != _unit && nextUnit.fraction == _unit.fraction && !(nextUnit is Group))
+			if (nextUnit != null && nextUnit != _unit && nextUnit.Fraction == _unit.Fraction && !(nextUnit is Group))
 			{
 				parent.SetData("nextUnitCell", nextUnit.CurrentCell);
 				state = NodeState.SUCCESS;

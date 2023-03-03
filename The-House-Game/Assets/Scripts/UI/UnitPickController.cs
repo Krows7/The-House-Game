@@ -13,7 +13,7 @@ public class UnitPickController : MonoBehaviour
         var cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
         Vector3 v = unit.transform.position * 1;
         v.z = cameraController.getCameraTransform().position.z;
-        GameObject.Find("/MovementController").GetComponent<MovementController>().ChooseUnit(unit);
+        GameObject.Find("/MovementController").GetComponent<InputController>().ChooseUnit(unit);
         cameraController.SetCamera(v);
     }
 }

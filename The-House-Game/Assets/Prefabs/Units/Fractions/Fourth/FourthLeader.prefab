@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6265286256636225694}
   - component: {fileID: 6415837659239060983}
-  - component: {fileID: -1397282915951587562}
   m_Layer: 0
   m_Name: FourthLeader
   m_TagString: Untagged
@@ -54,18 +53,6 @@ MonoBehaviour:
   skillTeleportDelay: 3
   skillInfluence: 70
   skillSuccessChance: 0.7
---- !u!114 &-1397282915951587562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7873802044243165421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c763839415f62d641b272bebacb2c09b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5770931451976062834
 PrefabInstance:
   m_ObjectHideFlags: 0

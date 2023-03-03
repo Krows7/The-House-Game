@@ -10,7 +10,7 @@ public class FlagRevealSystem : MonoBehaviour
 
     void Start()
     {
-        Map = GameObject.Find("/TemporaryDebugObjects/TemporaryFixedMap").GetComponent<Map>();
+        Map = GameObject.Find("Map").GetComponent<Map>();
         gameManager = GameObject.Find("/MasterController").GetComponent<GameManager>();
     }
 
@@ -22,7 +22,7 @@ public class FlagRevealSystem : MonoBehaviour
         {
             bool isSomeoneIn = false;
             Room room = flag.GetComponent<Flag>().cell.GetRoom();
-            foreach (var unit in GameManager.gamerFraction.units)
+            foreach (var unit in GameManager.gamerFraction.Units)
             {
                 if (unit != null && room == unit.GetComponent<Unit>().CurrentCell.GetRoom())
                 {

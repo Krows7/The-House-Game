@@ -14,14 +14,20 @@ namespace Units.Settings
         public float speed;
         public float buff_c = 1;
 
-        void Start()
+        new void Start()
         {
+            health = stats.Health;
+            strength = stats.Strength;
+            speed = stats.Speed;
+            buff_c = stats.Buff_c;
             maxHealth = health;
+            UpdateMoveSpeed(speed);
+            base.Start();
         }
 
         public override float CalculateTrueDamage()
         {
-            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log10(Mathf.Max(fraction.influence, 10));
+            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log10(Mathf.Max(Fraction.influence, 10));
         }
 
         public override float GetHealth()
@@ -29,7 +35,7 @@ namespace Units.Settings
             return health;
         }
 
-        public override float getSpeed()
+        public override float GetSpeed()
         {
             return speed;
         }

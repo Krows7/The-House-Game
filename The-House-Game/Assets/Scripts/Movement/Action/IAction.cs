@@ -1,5 +1,6 @@
 using Units.Settings;
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class IAction
 {
@@ -11,4 +12,14 @@ public abstract class IAction
 	
 
 	abstract public void Execute();
+
+	public virtual void PreAnimation(Animator animator)
+    {
+		
+    }
+
+	public virtual bool IsValid()
+    {
+		return true;
+    }
 }

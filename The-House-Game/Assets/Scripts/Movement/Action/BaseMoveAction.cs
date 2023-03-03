@@ -16,10 +16,20 @@ public class BaseMoveAction : IAction
 
 	public override void Execute()
 	{
-		to.SetUnit(from.GetUnit());
-		from.DellUnit();
-		if (from.currentFlag != null)
-			from.currentFlag.GetComponent<Flag>().InterruptCapture();
+		Debug.LogWarning(from);
+		Debug.LogWarning(from.GetUnit());
+		from.GetUnit().MoveTo(to);
+		if (from.currentFlag != null) from.currentFlag.GetComponent<Flag>().InterruptCapture();
 		IsDone = true;
 	}
+
+	public override void PreAnimation(Animator animator)
+    {
+		animator.SetTrigger("Move");
+    }
+
+    public override bool IsValid()
+    {
+		return to.IsFree();
+    }
 }

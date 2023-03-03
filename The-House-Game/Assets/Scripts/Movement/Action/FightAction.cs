@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Units.Settings;
 using UnityEngine;
 
@@ -19,14 +20,57 @@ public class FightAction : IAction
 
 	public override void Execute()
 	{
-		if (Enemy != null && AsFightingComponent(unit) != null)
+		//Debug.LogWarning("Start Fight");
+		//if (Enemy != null && AsFightingComponent(unit) != null)
+		//{
+		//	AsFightingComponent(Enemy).StartAnimation(Enemy);
+		//}
+
+		var trueDamage = unit.CalculateTrueDamage();
+		var enemyTrueDamage = Enemy.CalculateTrueDamage();
+		//if (from.GetUnit() != unit || to.GetUnit() != Enemy) return;
+		if (trueDamage >= enemyTrueDamage || !Enemy.WillSurvive(trueDamage))
 		{
-			AsFightingComponent(Enemy).StartAnimation(Enemy);
+			if (unit.WillSurvive(enemyTrueDamage))
+			{
+				if (from.currentFlag != null)
+				{
+					to.currentFlag.GetComponent<Flag>().StartCapture();
+				}
+			}
+			//Fix Influence
+			unit.Fraction.influence += 100;
 		}
+		ShowDamage(unit, enemyTrueDamage);
+		ShowDamage(Enemy, trueDamage);
+		Enemy.GiveDamage(trueDamage);
+		unit.GiveDamage(enemyTrueDamage);
+
+		//TODO Apply Follow
+		//OnAnimationInterrupt();
+	}
+
+	private void ShowDamage(Unit unit, float dmg)
+	{
+		var particle = Object.Instantiate(FightAnimationSystem.instance.DamageParticlePrefab, unit.transform.position, Quaternion.identity);
+		particle.transform.GetChild(0).GetComponent<TextMeshPro>().SetText((int)(dmg + 0.5f) + "");
 	}
 
 	private FightingComponent AsFightingComponent(Unit unit)
 	{
 		return unit.transform.GetChild(0).GetComponent<FightingComponent>();
+	}
+
+	public override bool IsValid()
+	{
+		var dt = from.transform.position - Enemy.CurrentCell.transform.position;
+		return dt.magnitude < 2;
+	}
+
+	public override void PreAnimation(Animator animator)
+	{
+		animator.SetTrigger("Attack");
+		//TODO Tak ne dolzhno rabotaty
+		Enemy.transform.Find("HeroKnight").GetComponent<Animator>().SetTrigger("Attack");
 	}
 }

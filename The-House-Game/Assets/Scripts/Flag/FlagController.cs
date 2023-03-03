@@ -22,7 +22,7 @@ public class FlagController : MonoBehaviour
     {
         flags = new();
         chosenDelay = Random.Range(minDelay, maxDelay);
-        map = GameObject.Find("TemporaryDebugObjects/TemporaryFixedMap/Map").GetComponent<Map>();
+        map = GameObject.Find("Map").GetComponent<Map>();
     }
 
     void Update()
@@ -46,7 +46,7 @@ public class FlagController : MonoBehaviour
 		// Plz fix zis
 		Debug.Log("OK000");
         if (cell.GetUnit() != null)
-		    cell.GetUnit().fraction.influence += 100;
+		    cell.GetUnit().Fraction.influence += 100;
         Debug.Log("OK111");
         flags.Remove(cell.currentFlag);
         Destroy(cell.currentFlag);

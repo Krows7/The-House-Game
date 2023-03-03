@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
 
-public class MovementController : MonoBehaviour
+public class InputController : MonoBehaviour
 {
     private Cell currentCell;
     private Cell finishCell;
     private List<Unit> units;
     bool inRectMode = false;
 
-    [SerializeField] private GameObject uiControllerObject;
+    public GameObject uiControllerObject;
 
     void Start() {
         units = new List<Unit>();
@@ -20,6 +20,7 @@ public class MovementController : MonoBehaviour
     {
         UpdateCurrentCell();
         UpdateStrategy();
+
         if (Input.GetKeyUp(KeyCode.LeftAlt))
         {
             inRectMode = false;
@@ -27,7 +28,7 @@ public class MovementController : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.LeftAlt))
         {
-            RectangleMode();
+            UpdateRectangleMode();
             return;
         }
 
@@ -36,7 +37,6 @@ public class MovementController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 currentCell.onPressDebug();
-                Debug.Log(!currentCell.IsFree() ? currentCell.GetUnit().fraction : null);
                 if (!currentCell.IsFree())
                 {
                     if (units.Count == 1)
@@ -122,16 +122,9 @@ public class MovementController : MonoBehaviour
     {
         if (currentCell != null) currentCell.onReleaseDebug();
         currentCell = null;
-        RaycastHit rayHit;
-        if (GetRayhit(Input.mousePosition, out rayHit)) {
-            if (rayHit.collider.tag == "Cell") {
-                currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
-            }
-            else if (rayHit.collider.tag == "Selection Collider")
-            {
-                var unit = rayHit.collider.transform.parent.parent.GetComponent<Unit>();
-                if (unit.CurrentCell != null) currentCell = unit.CurrentCell;
-            }
+        if (GetRayhit(Input.mousePosition, out RaycastHit rayHit))
+        {
+            if (rayHit.collider.CompareTag("Cell")) currentCell = rayHit.collider.transform.gameObject.GetComponent<Cell>();
         }
         if (currentCell != null) currentCell.onHoverDebug();
     }
@@ -143,20 +136,19 @@ public class MovementController : MonoBehaviour
             Debug.Log("Base movement");
             foreach (Unit unit in units)
             {
-                unit.GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
+                unit.transform.GetChild(0).GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        } else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("Follow movement");
             foreach (Unit unit in units)
             {
-                unit.GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
+                unit.transform.GetChild(0).GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
             }
         }
     }
 
-    private void RectangleMode()
+    private void UpdateRectangleMode()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -193,23 +185,13 @@ public class MovementController : MonoBehaviour
     {
         if (units.Count == 1)
         {
-            foreach (Unit unit in units)
-            {
-                Reset(unit.CurrentCell);
-            }
+            foreach (Unit unit in units) Reset(unit.CurrentCell);
             uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
         }
         units.Clear();
-        RaycastHit rayHit;
-        if (!GetRayhit(corner1, out rayHit))
-        {
-            return;
-        }
+        if (!GetRayhit(corner1, out RaycastHit rayHit)) return;
         corner1 = rayHit.point;
-        if (!GetRayhit(corner2, out rayHit))
-        {
-            return;
-        }
+        if (!GetRayhit(corner2, out rayHit)) return;
         corner2 = rayHit.point;
         if (corner1.x > corner2.x)
         {
@@ -223,8 +205,8 @@ public class MovementController : MonoBehaviour
             corner1.y = corner2.y;
             corner2.y = buf;
         }
-        Rect box = new Rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y);
-        foreach (GameObject unitObject in GameManager.gamerFraction.units)
+        Rect box = new(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y);
+        foreach (GameObject unitObject in GameManager.gamerFraction.Units)
         {
             if (box.Contains(new Vector2(unitObject.transform.position.x, unitObject.transform.position.y)))
             {

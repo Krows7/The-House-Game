@@ -24,14 +24,18 @@ namespace Units.Settings
             if (skillTimer == -1) return;
             if(skillTimer >= skillTeleportDelay)
             {
-                if(Random.insideUnitCircle.x <= skillSuccessChance)
+                if (CurrentCell.IsFree())
                 {
-                    fraction.influence += skillInfluence;
+                    if (Random.insideUnitCircle.x <= skillSuccessChance)
+                    {
+                        Fraction.influence += skillInfluence;
+                    }
+                    // Cringe
+                    MoveTo(CurrentCell);
+                    SetVisible(true);
+                    skillTimer = -1;
+                    return;
                 }
-                CurrentCell.SetUnit(this);
-                SetVisible(true);
-                skillTimer = -1;
-                return;
             }
             skillTimer += Time.deltaTime;
         }

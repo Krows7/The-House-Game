@@ -50,45 +50,35 @@ public class SafeMovementStrategy : IMovementStrategy
                 prevId = visited[prevId];
             }
             var nextCell = startCell.gameMap.GetCells()[nextCellId];
-            TryMoveTo(startCell, nextCell, finishCell, unit);
+            TryMoveTo(nextCell, finishCell, unit);
         }
     }
 
-    public void TryMoveTo(Cell currentCell, Cell nextCell, Cell finishCell, Unit unit)
+    public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
     {
-        Cell interruptedCell = null;
-        var thisUnit = unit;
+        Cell currentCell = unit.CurrentCell;
+        IAction action = null;
         // flag capture
         if (nextCell.IsFree() && nextCell.currentFlag != null)
         {
-            FlagCaptureAction action = new FlagCaptureAction(currentCell, nextCell, thisUnit);
-            thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
-            return;
+            action = new FlagCaptureAction(currentCell, nextCell, unit);
         }
         // group union
-        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction == thisUnit.fraction)
+        else if (unit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == unit.Fraction)
         {
-            GroupAction action = new GroupAction(currentCell, nextCell, thisUnit);
-            thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
-            return;
+           action = new GroupAction(currentCell, nextCell, unit);
         }
         // fight
-        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().fraction != thisUnit.fraction)
+        else if (unit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction != unit.Fraction)
         {
-            FightAction action = new(currentCell, nextCell, thisUnit, nextCell.GetUnit());
-            thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
-
+            action = new FightAction(currentCell, nextCell, unit, nextCell.GetUnit());
         }
         // just move
-        else if (thisUnit != null)
+        else if (unit != null)
         {
-            BaseMoveAction action = new(currentCell, nextCell, thisUnit);
-            thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
-            return;
+            action = new BaseMoveAction(currentCell, nextCell, unit);
         }
-        // interrupt flag capture
-        if (interruptedCell != null && interruptedCell.currentFlag != null)
-            interruptedCell.currentFlag.GetComponent<Flag>().InterruptCapture();
+        unit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
     }
 
 }

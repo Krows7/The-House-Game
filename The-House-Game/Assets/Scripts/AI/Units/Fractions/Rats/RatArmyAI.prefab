@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2670737471876249323}
   - component: {fileID: 7486794299122929694}
   - component: {fileID: 6568158218524753447}
-  - component: {fileID: 686676433117910410}
   m_Layer: 0
   m_Name: RatArmyAI
   m_TagString: Untagged
@@ -62,18 +61,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4c9be40602fa3b45b2380cfe672a46a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &686676433117910410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1264154734397936932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c763839415f62d641b272bebacb2c09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7130809713905089829

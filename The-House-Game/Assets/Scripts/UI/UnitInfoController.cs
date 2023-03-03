@@ -11,7 +11,7 @@ public class UnitInfoController : MonoBehaviour
 
     void Start()
     {
-        infoField.transform.Find("Fraction").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.gamerFractionName;
+        infoField.transform.Find("Fraction").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.gamerFractionName.ToString();
         HideUnitInfo();
     }
 
@@ -28,7 +28,7 @@ public class UnitInfoController : MonoBehaviour
         DeleteGroupInfo();
         infoField.transform.Find("UnitField/Health/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetHealth()).ToString();
         infoField.transform.Find("UnitField/Strength/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.CalculateTrueDamage()).ToString();
-        infoField.transform.Find("UnitField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.getSpeed()).ToString();
+        infoField.transform.Find("UnitField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetSpeed()).ToString();
         infoField.transform.Find("UnitField").gameObject.SetActive(true);
         int i = 0;
         foreach (float hp in unit.GetAllHealths())
