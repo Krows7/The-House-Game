@@ -39,11 +39,14 @@ namespace Units.Settings
             return r;
         }
 
-        public override void GiveDamage(float Damage)
+        public override bool GiveDamage(float Damage)
         {
-            if (!WillSurvive(Damage)) { Die(); return; };
+            units.RemoveAll(x => x == null);
+            if (!WillSurvive(Damage)) { Die(); return false; };
             float dmg = Damage / units.Count;
             units.ForEach(x => x.GiveDamage(dmg));
+            //UpdateMoveSpeed(GetSpeed());
+            return true;
         }
 
         // Max Health

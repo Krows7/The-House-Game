@@ -8,6 +8,8 @@ public class FlagRevealSystem : MonoBehaviour
     private Map Map;
     private GameManager gameManager;
 
+    public bool isSomeoneInCafe;
+
     void Start()
     {
         Map = GameObject.Find("Map").GetComponent<Map>();
@@ -20,17 +22,21 @@ public class FlagRevealSystem : MonoBehaviour
         if (FlagController.flags == null) return;
         foreach (var flag in FlagController.flags)
         {
-            bool isSomeoneIn = false;
-            Room room = flag.GetComponent<Flag>().cell.GetRoom();
-            foreach (var unit in GameManager.gamerFraction.Units)
+            bool isSomeoneIn = isSomeoneInCafe;
+            if (!isSomeoneIn)
             {
-                if (unit != null && room == unit.GetComponent<Unit>().CurrentCell.GetRoom())
+                Room room = flag.GetComponent<Flag>().cell.GetRoom();
+                foreach (var unit in GameManager.gamerFraction.Units)
                 {
-                    isSomeoneIn = true;
-                    break;
+                    if (unit != null && room == unit.GetComponent<Unit>().CurrentCell.GetRoom())
+                    {
+                        isSomeoneIn = true;
+                        break;
+                    }
                 }
             }
             flag.GetComponent<Flag>().SetVisible(isSomeoneIn);
+            isSomeoneInCafe = false;
         }
     }
 }

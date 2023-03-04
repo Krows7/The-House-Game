@@ -18,7 +18,7 @@ public class BaseMoveAction : IAction
 	{
 		Debug.LogWarning(from);
 		Debug.LogWarning(from.GetUnit());
-		from.GetUnit().MoveTo(to);
+		unit.MoveTo(to);
 		if (from.currentFlag != null) from.currentFlag.GetComponent<Flag>().InterruptCapture();
 		IsDone = true;
 	}

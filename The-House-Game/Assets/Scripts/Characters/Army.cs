@@ -40,10 +40,15 @@ namespace Units.Settings
             return speed;
         }
 
-        public override void GiveDamage(float Damage)
+        public override bool GiveDamage(float Damage)
         {
             health -= Damage;
-            if (health <= 0) Die();
+            if (health <= 0)
+            {
+                Die();
+                return false;
+            }
+            return true;
         }
 
         public override bool WillSurvive(float Damage)

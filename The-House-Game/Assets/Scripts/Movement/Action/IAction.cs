@@ -22,4 +22,9 @@ public abstract class IAction
     {
 		return true;
     }
+
+	public virtual void OnInterrupted()
+    {
+
+    }
 }

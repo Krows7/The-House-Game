@@ -22,7 +22,12 @@ public class MovementComponent : MonoBehaviour
     {
         var action = GetLastAnimation();
         if (action == null) return;
-        if (!action.Item3.IsValid()) unitAnimator.SetTrigger("Interrupt");
+        if (!action.Item3.IsValid())
+        {
+            unitAnimator.SetTrigger("Interrupt");
+            action.Item3.OnInterrupted();
+            Strategy.MoveUnitToCell(action.Item2, action.Item3.unit);
+        }
         else GetAnimations().Enqueue(action);
     }
 
@@ -39,7 +44,7 @@ public class MovementComponent : MonoBehaviour
         if (action == null) return;
         action.Item3.Execute();
         //TODO
-        if (action.Item3 is BaseMoveAction) Strategy.MoveUnitToCell(action.Item2, action.Item3.unit);
+        Strategy.MoveUnitToCell(action.Item2, action.Item3.unit);
     }
 
     public Tuple<Cell, Cell, IAction> GetLastAnimation()

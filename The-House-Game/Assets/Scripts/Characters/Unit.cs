@@ -21,7 +21,7 @@ namespace Units.Settings
 
         public abstract float CalculateTrueDamage();
 
-        public abstract void GiveDamage(float Damage);
+        public abstract bool GiveDamage(float Damage);
 
         public abstract float GetHealth();
 
@@ -47,7 +47,8 @@ namespace Units.Settings
 
         public void Die()
         {
-            Destroy(transform.gameObject);
+            Destroy(gameObject);
+            MoveTo(null);
         }
 
         public bool MoveTo(Cell cell)

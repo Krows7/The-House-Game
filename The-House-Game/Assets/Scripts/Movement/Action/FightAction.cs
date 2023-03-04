@@ -46,8 +46,25 @@ public class FightAction : IAction
 		Enemy.GiveDamage(trueDamage);
 		unit.GiveDamage(enemyTrueDamage);
 
-		//TODO Apply Follow
-		//OnAnimationInterrupt();
+		FollowIfPossible();
+	}
+
+	public override void OnInterrupted()
+	{
+		FollowIfPossible();
+	}
+
+	private void FollowIfPossible()
+    {
+		var strategy = unit.GetComponent<MovementComponent>().Strategy;
+		if (strategy is FollowEnemyStrategy strategy1 && Enemy != null)
+		{
+			strategy.MoveUnitToCell(strategy1.Enemy.CurrentCell, unit);
+		}
+		else
+		{
+			Debug.LogWarning("Follow imposible");
+		}
 	}
 
 	private void ShowDamage(Unit unit, float dmg)

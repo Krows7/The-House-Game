@@ -136,14 +136,14 @@ public class InputController : MonoBehaviour
             Debug.Log("Base movement");
             foreach (Unit unit in units)
             {
-                unit.transform.GetChild(0).GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
+                unit.GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
             }
         } else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("Follow movement");
             foreach (Unit unit in units)
             {
-                unit.transform.GetChild(0).GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
+                unit.GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
             }
         }
     }
