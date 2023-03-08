@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public float time;
     public float roundTime;
     public GameObject BaseUnit;
+    public GameObject DamageParticlePrefab;
 
     public static Fraction.Name gamerFractionName = Fraction.Name.FOURTH;
     public static Units.Settings.Fraction gamerFraction;

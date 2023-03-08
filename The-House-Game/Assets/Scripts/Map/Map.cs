@@ -128,8 +128,8 @@ public class Map : MonoBehaviour
         {
             for (int j = 0; j < mapGraph[i].Count; ++j) 
             {
-                Vector3 start = new Vector3(cells[i].GetPositionX(), cells[i].GetPositionY(), -0.5f);
-                Vector3 finish = new Vector3(mapGraph[i][j].GetPositionX(), mapGraph[i][j].GetPositionY(), -0.5f);
+                Vector3 start = new(cells[i].GetPositionX(), cells[i].GetPositionY(), -0.5f);
+                Vector3 finish = new(mapGraph[i][j].GetPositionX(), mapGraph[i][j].GetPositionY(), -0.5f);
                 Debug.DrawLine(start, finish, Color.red);
             }
         }

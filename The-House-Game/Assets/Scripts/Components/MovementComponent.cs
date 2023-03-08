@@ -8,15 +8,10 @@ using UnityEngine;
 public class MovementComponent : MonoBehaviour
 {
     public IMovementStrategy Strategy { get; set; } = new SafeMovementStrategy();
-    AnimationSystem animationSystem;
-	Queue<Tuple<Cell, Cell, IAction>> queue = new();
+
+    private readonly Queue<Tuple<Cell, Cell, IAction>> queue = new();
     public Animator unitAnimator;
 
-	void Start()
-    {
-		animationSystem = GameObject.Find("MasterController").GetComponent<AnimationSystem>();
-        animationSystem.Add(this);
-    }
 
     void Update()
     {
@@ -62,7 +57,6 @@ public class MovementComponent : MonoBehaviour
     public void Delete()
     {
         queue.Clear();
-        animationSystem.Remove(this);
     }
 
 	private void OnDestroy()

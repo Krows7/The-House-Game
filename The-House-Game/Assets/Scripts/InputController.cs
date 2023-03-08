@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
@@ -7,30 +6,14 @@ public class InputController : MonoBehaviour
 {
     private Cell currentCell;
     private Cell finishCell;
-    private List<Unit> units;
-    bool inRectMode = false;
+    private Unit unit;
 
     public GameObject uiControllerObject;
-
-    void Start() {
-        units = new List<Unit>();
-    }
 
     void Update()
     {
         UpdateCurrentCell();
         UpdateStrategy();
-
-        if (Input.GetKeyUp(KeyCode.LeftAlt))
-        {
-            inRectMode = false;
-            uiControllerObject.GetComponent<SelectionRectController>().HideRect();
-        }
-        else if (Input.GetKey(KeyCode.LeftAlt))
-        {
-            UpdateRectangleMode();
-            return;
-        }
 
         if (currentCell != null)
         {
@@ -39,81 +22,55 @@ public class InputController : MonoBehaviour
                 currentCell.onPressDebug();
                 if (!currentCell.IsFree())
                 {
-                    if (units.Count == 1)
-                    {
-                        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
-                    }
-                    foreach (Unit unit in units)
-                    {
-                        unit.CurrentCell.onReleaseDebug();
-                    }
+                    uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+                    if (unit != null) unit.CurrentCell.onReleaseDebug();
                     ChooseUnit(currentCell.GetUnit());
                 }
             } else if (Input.GetKeyDown(KeyCode.Mouse1))
             {
 				Debug.LogWarning("MOVE!");
-				if (units.Count != 0)
+				if (unit != null)
                 {
                     finishCell = currentCell;
-                    ResetAll();
-                    MoveUnits();
+                    ResetAllCells();
+                    MoveUnit();
                     finishCell = null;
                 }
-            } else if (units.Count != 0)
-            {
-                RenderCells();
-            }
+            } else if (unit != null) RenderCells();
             
-            if (units.Count == 1)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    if (units[0] is Leader) (units[0] as Leader).UseSkill();
-                }
+                if (unit is Leader u) u.UseSkill();
             }
         }
     }
 
     public void ChooseUnit(Unit Unit)
     {
-        units.Clear();
-        units.Add(Unit);
+        unit = Unit;
         uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(Unit);
         Unit.CurrentCell.onChosenDebug();
     }
 
     private void RenderCells()
     {
-        foreach (Unit unit in units)
-        {
-            unit.CurrentCell.onPressDebug();
-        }
+        unit.CurrentCell.onPressDebug();
     }
 
-    void MoveUnits() 
+    void MoveUnit() 
     {
         uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
-        foreach (Unit unit in units)
-        {
-            IMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
-            strategy.MoveUnitToCell(finishCell, unit, true);
-        }
-        if (units.Count > 1)
-        {
-            units.Clear();
-        }
+        IMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
+        strategy.MoveUnitToCell(finishCell, unit, true);
     }
 
-    void ResetAll()
+    void ResetAllCells()
     {
-        foreach (Unit unit in units)
-        {
-            Reset(unit.CurrentCell);
-        }
-        Reset(finishCell);
+        ResetCell(unit.CurrentCell);
+        ResetCell(finishCell);
     }
 
-    void Reset(Cell cell)
+    void ResetCell(Cell cell)
     {
         cell.onReleaseDebug();
     }
@@ -131,42 +88,14 @@ public class InputController : MonoBehaviour
 
     private void UpdateStrategy()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             Debug.Log("Base movement");
-            foreach (Unit unit in units)
-            {
-                unit.GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
-            }
-        } else if (Input.GetKeyDown(KeyCode.Alpha2))
+            unit.GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
+        } else if (Input.GetKeyDown(KeyCode.F2))
         {
             Debug.Log("Follow movement");
-            foreach (Unit unit in units)
-            {
-                unit.GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
-            }
-        }
-    }
-
-    private void UpdateRectangleMode()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            uiControllerObject.GetComponent<SelectionRectController>().InitializeRect(Input.mousePosition);
-            inRectMode = true;
-        }
-        else if (inRectMode)
-        {
-            if (Input.GetKeyUp(KeyCode.Mouse0))
-            {
-                uiControllerObject.GetComponent<SelectionRectController>().HideRect();
-                ChooseUnitsRect(uiControllerObject.GetComponent<SelectionRectController>().firstCorner, Input.mousePosition);
-                inRectMode = false;
-            }
-            else if (Input.GetKey(KeyCode.Mouse0))
-            {
-                uiControllerObject.GetComponent<SelectionRectController>().SetSecondCorner(Input.mousePosition);
-            }
+            unit.GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
         }
     }
 
@@ -179,40 +108,6 @@ public class InputController : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    private void ChooseUnitsRect(Vector3 corner1, Vector3 corner2)
-    {
-        if (units.Count == 1)
-        {
-            foreach (Unit unit in units) Reset(unit.CurrentCell);
-            uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
-        }
-        units.Clear();
-        if (!GetRayhit(corner1, out RaycastHit rayHit)) return;
-        corner1 = rayHit.point;
-        if (!GetRayhit(corner2, out rayHit)) return;
-        corner2 = rayHit.point;
-        if (corner1.x > corner2.x)
-        {
-            float buf = corner1.x;
-            corner1.x = corner2.x;
-            corner2.x = buf;
-        }
-        if (corner1.y > corner2.y)
-        {
-            float buf = corner1.y;
-            corner1.y = corner2.y;
-            corner2.y = buf;
-        }
-        Rect box = new(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y);
-        foreach (GameObject unitObject in GameManager.gamerFraction.Units)
-        {
-            if (box.Contains(new Vector2(unitObject.transform.position.x, unitObject.transform.position.y)))
-            {
-                units.Add(unitObject.GetComponent<Unit>());
-            }
-        }
     }
 }
 

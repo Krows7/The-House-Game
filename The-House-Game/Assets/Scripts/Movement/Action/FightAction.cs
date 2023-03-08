@@ -69,13 +69,8 @@ public class FightAction : IAction
 
 	private void ShowDamage(Unit unit, float dmg)
 	{
-		var particle = Object.Instantiate(FightAnimationSystem.instance.DamageParticlePrefab, unit.transform.position, Quaternion.identity);
+		var particle = Object.Instantiate(GameManager.instance.DamageParticlePrefab, unit.transform.position, Quaternion.identity);
 		particle.transform.GetChild(0).GetComponent<TextMeshPro>().SetText((int)(dmg + 0.5f) + "");
-	}
-
-	private FightingComponent AsFightingComponent(Unit unit)
-	{
-		return unit.transform.GetChild(0).GetComponent<FightingComponent>();
 	}
 
 	public override bool IsValid()

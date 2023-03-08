@@ -5,18 +5,8 @@ using Units.Settings;
 
 public class FlagRevealSystem : MonoBehaviour
 {
-    private Map Map;
-    private GameManager gameManager;
-
     public bool isSomeoneInCafe;
 
-    void Start()
-    {
-        Map = GameObject.Find("Map").GetComponent<Map>();
-        gameManager = GameObject.Find("/MasterController").GetComponent<GameManager>();
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (FlagController.flags == null) return;
