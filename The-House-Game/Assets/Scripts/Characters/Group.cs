@@ -107,5 +107,10 @@ namespace Units.Settings
             }
             */
         }
+
+        public override string GetType()
+        {
+            return "Group";
+        }
     }
 }

@@ -31,6 +31,8 @@ namespace Units.Settings
 
         public abstract List<float> GetAllHealths();
 
+        public abstract string GetType();
+
         public void Update()
         {
             if (gameObject.GetComponent<Group>() != null) return;

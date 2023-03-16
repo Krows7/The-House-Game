@@ -35,6 +35,9 @@ public class GroupAction : IAction
 			AsGroup.transform.SetPositionAndRotation(Add.transform.position, Add.transform.rotation);
 		}
 		AsGroup.Add(Add);
+
+		Add.fraction.RemoveUnit(Add);
+
 		from.DellUnit();
 		cell.SetUnit(AsGroup);
 	}
@@ -76,6 +79,11 @@ public class GroupAction : IAction
 		}
 
 		group.GetComponent<Group>().fraction = Base.fraction;
+
+		Add.fraction.RemoveUnit(Add);
+		Base.fraction.RemoveUnit(Base);
+		Base.fraction.AddUnit(group);
+
 		from.DellUnit();
 		nextCell.SetUnit(group.GetComponent<Group>());
 	}

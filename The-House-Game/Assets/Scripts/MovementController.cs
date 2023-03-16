@@ -41,7 +41,7 @@ public class MovementController : MonoBehaviour
                 {
                     if (units.Count == 1)
                     {
-                        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+                        uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
                     }
                     foreach (Unit unit in units)
                     {
@@ -78,7 +78,7 @@ public class MovementController : MonoBehaviour
     {
         units.Clear();
         units.Add(Unit);
-        uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(Unit);
+        uiControllerObject.GetComponent<InfoController>().ShowUnitInfo(Unit);
         Unit.CurrentCell.onChosenDebug();
     }
 
@@ -92,7 +92,7 @@ public class MovementController : MonoBehaviour
 
     void MoveUnits() 
     {
-        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+        uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
         foreach (Unit unit in units)
         {
             IMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
@@ -197,7 +197,7 @@ public class MovementController : MonoBehaviour
             {
                 Reset(unit.CurrentCell);
             }
-            uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+            uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
         }
         units.Clear();
         RaycastHit rayHit;

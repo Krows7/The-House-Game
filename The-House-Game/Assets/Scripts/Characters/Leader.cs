@@ -43,5 +43,10 @@ namespace Units.Settings
             Debug.Log("Local Scale: " + transform.localScale);
             Debug.Log(Visible);
         }
+
+        public override string GetType()
+        {
+            return "Leader";
+        }
     }
 }

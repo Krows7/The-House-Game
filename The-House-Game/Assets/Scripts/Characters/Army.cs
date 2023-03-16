@@ -61,5 +61,10 @@ namespace Units.Settings
         {
             health = Mathf.Min(health + Health, maxHealth);
         }
+
+        public override string GetType()
+        {
+            return "Army";
+        }
     }
 }

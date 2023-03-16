@@ -10,7 +10,7 @@ namespace Units.Settings
     {
 
         public int influence = 0;
-        public GameObject[] units;
+        public List<GameObject> units;
         public Room spawnRoom;
         public string fractionName;
 
@@ -20,11 +20,11 @@ namespace Units.Settings
             Spawn(units);
         }
 
-        private void Spawn(params GameObject[] units)
+        private void Spawn(List<GameObject> units)
         {
             var cells = spawnRoom.transform;
             var range = Enumerable.Range(0, cells.childCount).ToList().OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
-            for (int i = 0; i < units.Length; i++)
+            for (int i = 0; i < units.Count(); i++)
             {
                 Cell cell = cells.GetChild(range[i]).GetComponent<Cell>();
                 GameObject unitObject = Instantiate(units[i], cell.transform.position, Quaternion.identity);
@@ -32,6 +32,24 @@ namespace Units.Settings
 				cell.SetUnit(unitObject.GetComponent<Unit>());
                 units[i] = unitObject;
             }
+        }
+
+        public void RemoveUnit(Unit toRemove)
+        {
+            GameObject objectToRemove = null;
+            foreach (GameObject unitObject in units)
+            {
+                if (unitObject.GetComponent<Unit>() == toRemove)
+                {
+                    objectToRemove = unitObject;
+                }
+            }
+            units.Remove(objectToRemove);
+        }
+
+        public void AddUnit(GameObject toAdd)
+        {
+            units.Add(toAdd);
         }
     }
 }
