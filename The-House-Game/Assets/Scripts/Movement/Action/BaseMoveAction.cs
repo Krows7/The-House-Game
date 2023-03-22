@@ -16,8 +16,7 @@ public class BaseMoveAction : IAction
 
 	public override void Execute()
 	{
-		Debug.LogWarning(from);
-		Debug.LogWarning(from.GetUnit());
+		Debug.Log("BaseMoveAction[From: " + from + "; Unit: " + unit + "]");
 		unit.MoveTo(to);
 		if (from.currentFlag != null) from.currentFlag.GetComponent<Flag>().InterruptCapture();
 		IsDone = true;

@@ -61,10 +61,6 @@ public class FightAction : IAction
 		{
 			strategy.MoveUnitToCell(strategy1.Enemy.CurrentCell, unit);
 		}
-		else
-		{
-			Debug.LogWarning("Follow imposible");
-		}
 	}
 
 	private void ShowDamage(Unit unit, float dmg)

@@ -46,7 +46,6 @@ namespace Units.Settings
             {
                 Cell cell = cells.GetChild(range[i]).GetComponent<Cell>();
                 // FUCK ME REFACTOR ZIS
-                Debug.LogWarning(GameManager.instance);
                 GameObject unitObject = Instantiate(GameManager.instance.BaseUnit, cell.transform.position + GameManager.instance.BaseUnit.transform.position, Quaternion.identity);
                 var c = unitObject.AddComponent(UnitStats.GetUnitType(unitStats[i].type));
                 (c as Unit).stats = unitStats[i];

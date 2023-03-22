@@ -27,7 +27,7 @@ public class InputController : MonoBehaviour
                 }
             } else if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-				Debug.LogWarning("MOVE!");
+                Debug.LogFormat("[InputCotroller] Player Unit {0} started movement", unit);
 				if (unit != null)
                 {
                     finishCell = currentCell;
@@ -89,11 +89,11 @@ public class InputController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            Debug.Log("Base movement");
+            Debug.Log("[InputController] <Base Movement> Stradegy Selected for {0}", unit);
             unit.GetComponent<MovementComponent>().Strategy = new SafeMovementStrategy();
         } else if (Input.GetKeyDown(KeyCode.F2))
         {
-            Debug.Log("Follow movement");
+            Debug.LogFormat("[InputController] <Follow Enemy> Stradegy Selected for {0}", unit);
             unit.GetComponent<MovementComponent>().Strategy = new FollowEnemyStrategy();
         }
     }

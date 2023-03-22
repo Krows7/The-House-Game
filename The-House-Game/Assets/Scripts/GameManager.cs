@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
             }
             fractions.Add(frac.name, frac);
         }
-        Debug.Log(gamerFractionName);
+        Debug.LogFormat("[GameManager] Player Fraction: {0}", gamerFractionName);
     }
 
     void Update()

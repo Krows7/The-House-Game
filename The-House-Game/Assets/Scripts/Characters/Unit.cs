@@ -38,7 +38,7 @@ namespace Units.Settings
             if (stats != null) stats.OnCreate(gameObject);
         }
 
-        public abstract string GetType();
+        public abstract string GetUnitType();
 
         public void Update()
         {
@@ -51,11 +51,12 @@ namespace Units.Settings
         {
             Destroy(gameObject);
             MoveTo(null);
+            Fraction.RemoveUnit(this);
         }
 
         public bool MoveTo(Cell cell)
         { 
-            if (CurrentCell == null) Debug.LogWarning("Fix [Current Cell == null]: " + this);
+            if (CurrentCell == null) Debug.LogWarning("User " + this + " is moving from nowhere");
             else CurrentCell.DellUnit();
             // Do something better
             if (cell == null) return true;
@@ -70,7 +71,6 @@ namespace Units.Settings
         //DO NOT SET VALUES EQUALS OR GREATER THAN 4
         public void UpdateMoveSpeed(float speed)
         {
-            float TRANSITION_SPEED = 0.25F;
             //GetAnimator().SetFloat("Move Speed", speed * 0.25F / (1 - TRANSITION_SPEED * speed));
             GetAnimator().SetFloat("Move Speed", 1);
         }

@@ -66,6 +66,7 @@ public class Cell : MonoBehaviour
     {
         currentUnit = null;
         onReleaseDebug();
+        if (currentFlag != null) currentFlag.GetComponent<Flag>().InterruptCapture();
     }
 
     private Color darker(Color color)
@@ -111,6 +112,7 @@ public class Cell : MonoBehaviour
     {
         if (!IsFree()) return false;
         currentUnit = unit;
+        if (unit != null && currentFlag != null) currentFlag.GetComponent<Flag>().StartCapture();
         return true;
     }
 }

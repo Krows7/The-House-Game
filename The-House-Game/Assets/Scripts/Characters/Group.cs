@@ -78,7 +78,7 @@ namespace Units.Settings
             units.ForEach(x => x.Heal(Health));
         }
 
-        public override string GetType()
+        public override string GetUnitType()
         {
             return "Group";
         }

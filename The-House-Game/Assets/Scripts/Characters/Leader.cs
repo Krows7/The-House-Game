@@ -48,7 +48,7 @@ namespace Units.Settings
             Debug.Log(Visible);
         }
 
-        public override string GetType()
+        public override string GetUnitType()
         {
             return "Leader";
         }

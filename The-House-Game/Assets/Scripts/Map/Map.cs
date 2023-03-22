@@ -16,7 +16,7 @@ public class Map : MonoBehaviour
 		foreach (Transform child in transform) 
         {
             Room r = child.gameObject.GetComponent<Room>();
-            Debug.Log(r.name);
+            //Debug.Log(r.name);
             r.roomId = counter++;
 			rooms.Add(r);
 		}
@@ -29,7 +29,7 @@ public class Map : MonoBehaviour
         for (int i = 0; i < rooms.Count; ++i) 
         {
             List<Cell> roomCells = rooms[i].GetCells();
-            Debug.Log(rooms[i].name + " " +  roomCells.Count);
+            //Debug.Log(rooms[i].name + " " +  roomCells.Count);
             for (int j = 0; j < roomCells.Count; ++j)
             {
                 cells.Add(roomCells[j]);
@@ -90,14 +90,14 @@ public class Map : MonoBehaviour
         ApplyPath(34, 49, cells);
         ApplyPath(29, 68, cells);
 
-        Debug.Log("Map Graph: ");
-        for (int i = 0; i < mapGraph.Count; i++) 
-        {
-            for (int j = 0; j < mapGraph[i].Count; j++)
-            {
-                Debug.LogFormat("({0}; {1})", i, mapGraph[i][j]);
-            }
-        }
+        //Debug.Log("Map Graph: ");
+        //for (int i = 0; i < mapGraph.Count; i++) 
+        //{
+        //    for (int j = 0; j < mapGraph[i].Count; j++)
+        //    {
+        //        Debug.LogFormat("({0}; {1})", i, mapGraph[i][j]);
+        //    }
+        //}
     }
     
     private void ApplyPath(int x, int y, List<Cell> cells)
