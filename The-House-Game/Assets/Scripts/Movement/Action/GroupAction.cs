@@ -29,7 +29,8 @@ public class GroupAction : IAction
 	{
 		if (Add == null || AsGroup == null || cell == null) return;
 		AsGroup.Add(Add);
-	}
+        Add.fraction.RemoveUnit(Add);
+    }
 
 	public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
 	{
@@ -58,6 +59,10 @@ public class GroupAction : IAction
         //		field.SetValue(group.GetComponent(script.GetType()), field.GetValue(script));
         //	}
         //}
+
+        Add.fraction.RemoveUnit(Add);
+        Base.fraction.RemoveUnit(Base);
+        Base.fraction.AddUnit(group);
     }
 
 	public override void PreAnimation(Animator animator)

@@ -18,7 +18,7 @@ namespace Units.Settings
         }
 
         public int influence = 0;
-        public UnitStats[] unitStats;
+        public List<GameObject> units;
         public Room spawnRoom;
         public Name FractionName;
         public GameObject[] Units { set; get; } = null;
@@ -37,12 +37,12 @@ namespace Units.Settings
             }
         }
 
-        private void Spawn(params UnitStats[] unitStats)
+        private void Spawn(List<GameObject> units)
         {
             Units = new GameObject[unitStats.Length];
             var cells = spawnRoom.transform;
             var range = Enumerable.Range(0, cells.childCount).ToList().OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
-            for (int i = 0; i < Units.Length; i++)
+            for (int i = 0; i < units.Count(); i++)
             {
                 Cell cell = cells.GetChild(range[i]).GetComponent<Cell>();
                 // FUCK ME REFACTOR ZIS
@@ -57,6 +57,24 @@ namespace Units.Settings
                 // REFACTOR
                 ApplyAI(FractionName, unitStats[i].type, unitObject);
             }
+        }
+
+        public void RemoveUnit(Unit toRemove)
+        {
+            GameObject objectToRemove = null;
+            foreach (GameObject unitObject in units)
+            {
+                if (unitObject.GetComponent<Unit>() == toRemove)
+                {
+                    objectToRemove = unitObject;
+                }
+            }
+            units.Remove(objectToRemove);
+        }
+
+        public void AddUnit(GameObject toAdd)
+        {
+            units.Add(toAdd);
         }
     }
 }

@@ -38,6 +38,8 @@ namespace Units.Settings
             if (stats != null) stats.OnCreate(gameObject);
         }
 
+        public abstract string GetType();
+
         public void Update()
         {
             if (gameObject.GetComponent<Group>() != null) return;

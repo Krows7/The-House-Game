@@ -359,6 +359,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1669136487235739059}
   - component: {fileID: 5476254755726183389}
+  - component: {fileID: -3180196416070887996}
+  - component: {fileID: -7121801386734329465}
+  - component: {fileID: -2089182041413109340}
+  - component: {fileID: -8714804067874409895}
+  - component: {fileID: -9016509896255858941}
+  - component: {fileID: 700178349639057899}
   m_Layer: 0
   m_Name: BaseUnit
   m_TagString: Untagged
