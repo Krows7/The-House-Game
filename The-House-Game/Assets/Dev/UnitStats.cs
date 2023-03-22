@@ -14,6 +14,9 @@ public class UnitStats : ScriptableObject
     public float Buff_c;
     public Type type;
 
+    // TODO For Development Use Only
+    public Color SpriteColor;
+
     public enum Type
     {
         ARMY,
@@ -34,6 +37,7 @@ public class UnitStats : ScriptableObject
 
     public virtual void OnCreate(GameObject obj)
     {
-        //obj.AddComponent(GetUnitType(type));
+        //TODO Refactor
+        obj.GetComponentInChildren<SpriteRenderer>().color = SpriteColor;
     }
 }

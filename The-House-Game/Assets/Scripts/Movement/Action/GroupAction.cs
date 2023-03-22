@@ -44,6 +44,9 @@ public class GroupAction : IAction
         g.Fraction = Base.Fraction;
         g.MoveTo(nextCell);
 
+        //TODO Refactor
+        g.stats = Base.stats;
+
         Fraction.ApplyAI(g.Fraction.FractionName, UnitStats.Type.GROUP, group);
         //      MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
         //foreach (MonoBehaviour script in scriptList)
