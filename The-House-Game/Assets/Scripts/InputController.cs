@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
 
@@ -22,7 +21,7 @@ public class InputController : MonoBehaviour
                 currentCell.onPressDebug();
                 if (!currentCell.IsFree())
                 {
-                    uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+                    uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
                     if (unit != null) unit.CurrentCell.onReleaseDebug();
                     ChooseUnit(currentCell.GetUnit());
                 }
@@ -48,7 +47,7 @@ public class InputController : MonoBehaviour
     public void ChooseUnit(Unit Unit)
     {
         unit = Unit;
-        uiControllerObject.GetComponent<UnitInfoController>().ShowUnitInfo(Unit);
+        uiControllerObject.GetComponent<InfoController>().ShowUnitInfo(Unit);
         Unit.CurrentCell.onChosenDebug();
     }
 
@@ -59,7 +58,7 @@ public class InputController : MonoBehaviour
 
     void MoveUnit() 
     {
-        uiControllerObject.GetComponent<UnitInfoController>().HideUnitInfo();
+        uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
         IMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
         strategy.MoveUnitToCell(finishCell, unit, true);
     }

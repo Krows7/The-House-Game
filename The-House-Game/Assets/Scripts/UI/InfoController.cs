@@ -25,7 +25,7 @@ public class InfoController : MonoBehaviour
         uiCanvas.transform.Find("UnitInfoField/UnitType").GetComponent<TMPro.TextMeshProUGUI>().text = unit.GetType();
         uiCanvas.transform.Find("UnitInfoField/Health/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetHealth()).ToString();
         uiCanvas.transform.Find("UnitInfoField/Strength/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.CalculateTrueDamage()).ToString();
-        uiCanvas.transform.Find("UnitInfoField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.getSpeed()).ToString();
+        uiCanvas.transform.Find("UnitInfoField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetSpeed()).ToString();
         uiCanvas.transform.Find("UnitInfoField").gameObject.SetActive(true);
     }
 

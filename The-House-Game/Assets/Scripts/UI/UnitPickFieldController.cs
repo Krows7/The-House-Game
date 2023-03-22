@@ -16,7 +16,7 @@ public class UnitPickFieldController : MonoBehaviour
     void Start()
     {
         int buttonId = 0;
-        foreach (GameObject unitObject in GameManager.gamerFraction.units)
+        foreach (GameObject unitObject in GameManager.gamerFraction.Units)
         {
             var unit = unitObject.GetComponent<Unit>();
             unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>().unit = unit;
@@ -29,11 +29,11 @@ public class UnitPickFieldController : MonoBehaviour
                 continue;
             }
             var ss = button.spriteState;
-            if (GameManager.gamerFractionName == "Rats")
+            if (GameManager.gamerFractionName == Fraction.Name.RATS)
             {
                 ss.highlightedSprite = ratsActiveButton;
             }
-            else if (GameManager.gamerFractionName == "Fourth")
+            else if (GameManager.gamerFractionName == Fraction.Name.FOURTH)
             {
                 ss.highlightedSprite = fourthActiveButton;
             }
@@ -44,7 +44,7 @@ public class UnitPickFieldController : MonoBehaviour
     void Update()
     {
         int buttonId = 0;
-        foreach (GameObject unitObject in GameManager.gamerFraction.units)
+        foreach (GameObject unitObject in GameManager.gamerFraction.Units)
         {
             var unit = unitObject.GetComponent<Unit>();
             unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>().unit = unit;
@@ -65,11 +65,11 @@ public class UnitPickFieldController : MonoBehaviour
             var ss = button.spriteState;
             if (button.GetComponent<UnitPickController>().unit != null)
             {
-                if (GameManager.gamerFractionName == "Rats")
+                if (GameManager.gamerFractionName == Fraction.Name.RATS)
                 {
                     ss.highlightedSprite = ratsActiveButton;
                 }
-                else if (GameManager.gamerFractionName == "Fourth")
+                else if (GameManager.gamerFractionName == Fraction.Name.FOURTH)
                 {
                     ss.highlightedSprite = fourthActiveButton;
                 }

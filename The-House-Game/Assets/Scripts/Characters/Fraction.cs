@@ -18,10 +18,10 @@ namespace Units.Settings
         }
 
         public int influence = 0;
-        public List<GameObject> units;
+        public UnitStats[] unitStats;
         public Room spawnRoom;
         public Name FractionName;
-        public GameObject[] Units { set; get; } = null;
+        public List<GameObject> Units { set; get; } = null;
 
         void Start()
         {
@@ -37,12 +37,12 @@ namespace Units.Settings
             }
         }
 
-        private void Spawn(List<GameObject> units)
+        private void Spawn(UnitStats[] unitStats)
         {
-            Units = new GameObject[unitStats.Length];
+            Units = new();
             var cells = spawnRoom.transform;
             var range = Enumerable.Range(0, cells.childCount).ToList().OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
-            for (int i = 0; i < units.Count(); i++)
+            for (int i = 0; i < unitStats.Length; i++)
             {
                 Cell cell = cells.GetChild(range[i]).GetComponent<Cell>();
                 // FUCK ME REFACTOR ZIS
@@ -52,7 +52,8 @@ namespace Units.Settings
                 (c as Unit).stats = unitStats[i];
                 unitObject.GetComponent<Unit>().Fraction = this;
                 unitObject.GetComponent<Unit>().MoveTo(cell);
-                Units[i] = unitObject;
+
+                AddUnit(unitObject);
 
                 // REFACTOR
                 ApplyAI(FractionName, unitStats[i].type, unitObject);
@@ -61,20 +62,12 @@ namespace Units.Settings
 
         public void RemoveUnit(Unit toRemove)
         {
-            GameObject objectToRemove = null;
-            foreach (GameObject unitObject in units)
-            {
-                if (unitObject.GetComponent<Unit>() == toRemove)
-                {
-                    objectToRemove = unitObject;
-                }
-            }
-            units.Remove(objectToRemove);
+            Units.Remove(toRemove.gameObject);
         }
 
         public void AddUnit(GameObject toAdd)
         {
-            units.Add(toAdd);
+            Units.Add(toAdd);
         }
     }
 }
