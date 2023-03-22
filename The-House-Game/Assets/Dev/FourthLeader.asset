@@ -17,3 +17,4 @@ MonoBehaviour:
   Speed: 2
   Buff_c: 1.5
   type: 1
+  SpriteColor: {r: 0.38294998, g: 0.575, b: 0.40855667, a: 1}
