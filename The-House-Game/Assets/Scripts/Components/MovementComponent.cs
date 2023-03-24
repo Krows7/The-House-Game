@@ -15,7 +15,7 @@ public class MovementComponent : MonoBehaviour
 
     void Update()
     {
-        var action = GetLastAnimation();
+        var action = PopLastAnimation();
         if (action == null) return;
         if (!action.Item3.IsValid())
         {
@@ -34,7 +34,7 @@ public class MovementComponent : MonoBehaviour
 
     public void PostAnimation()
     {
-        var action = GetLastAnimation();
+        var action = PopLastAnimation();
         //TODO
         if (action == null) return;
         action.Item3.Execute();
@@ -42,7 +42,7 @@ public class MovementComponent : MonoBehaviour
         Strategy.MoveUnitToCell(action.Item2, action.Item3.unit);
     }
 
-    public Tuple<Cell, Cell, IAction> GetLastAnimation()
+    public Tuple<Cell, Cell, IAction> PopLastAnimation()
     {
         if (GetAnimations().Count == 0) return null;
         while (GetAnimations().Count > 1) GetAnimations().Dequeue();

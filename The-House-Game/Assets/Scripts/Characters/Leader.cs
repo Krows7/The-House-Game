@@ -15,7 +15,7 @@ namespace Units.Settings
         {
             skillTimer = 0;
             SetVisible(false);
-            CurrentCell.DellUnit();
+            Cell.DellUnit();
         }
 
         public new void Update()
@@ -24,14 +24,14 @@ namespace Units.Settings
             if (skillTimer == -1) return;
             if(skillTimer >= skillTeleportDelay)
             {
-                if (CurrentCell.IsFree())
+                if (Cell.IsFree())
                 {
                     if (Random.insideUnitCircle.x <= skillSuccessChance)
                     {
                         Fraction.influence += skillInfluence;
                     }
                     // Cringe
-                    MoveTo(CurrentCell);
+                    MoveTo(Cell);
                     SetVisible(true);
                     skillTimer = -1;
                     return;

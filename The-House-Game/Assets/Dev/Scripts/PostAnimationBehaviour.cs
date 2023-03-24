@@ -31,7 +31,7 @@ public class PostAnimationBehaviour : MonoBehaviour
     public void OnUnitTransition()
     {
         Unit unit = parent.GetComponent<Unit>();
-        parent.transform.position = SetXY(parent.transform.position, unit.CurrentCell.transform.position);
+        parent.transform.position = SetXY(parent.transform.position, unit.Cell.transform.position);
     }
 
     public void OnUnitAttacked()

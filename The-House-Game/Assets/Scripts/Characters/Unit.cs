@@ -13,7 +13,7 @@ namespace Units.Settings
 
         public UnitStats stats;
 
-        public Cell CurrentCell { set; get; } = null;
+        public Cell Cell { set; get; } = null;
 
         public bool CanMove { get; set; } = true;
 
@@ -56,13 +56,13 @@ namespace Units.Settings
 
         public bool MoveTo(Cell cell)
         { 
-            if (CurrentCell == null) Debug.LogWarning("User " + this + " is moving from nowhere");
-            else CurrentCell.DellUnit();
+            if (Cell == null) Debug.LogWarning("User " + this + " is moving from nowhere");
+            else Cell.DellUnit();
             // Do something better
             if (cell == null) return true;
             if (cell.PlaceUnit0(this))
             {
-                CurrentCell = cell;
+                Cell = cell;
                 return true;
             }
             return false;
@@ -82,7 +82,7 @@ namespace Units.Settings
 
         public bool IsActive()
         {
-            return CurrentCell != null;
+            return Cell != null;
         }
     }
 }

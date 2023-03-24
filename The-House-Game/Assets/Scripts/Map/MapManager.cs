@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class Map : MonoBehaviour
+public class MapManager : MonoBehaviour
 {
     [SerializeField] private float CellsEps;
     [SerializeField] private List<Room> rooms;
     private List<Cell> cells;
     private List<List<Cell>> mapGraph;
+
+    public static MapManager instance;
 
     void FillRoomsArray() 
     {
@@ -108,6 +111,7 @@ public class Map : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         FillRoomsArray();
         SetIdForRooms();
     }
@@ -120,6 +124,35 @@ public class Map : MonoBehaviour
         {
             DisplayGraph();
         }
+    }
+
+    // Return corner neighbors as well 
+    public List<Cell> GetNeighbors(Cell cell)
+    {
+        var directNeighbors = mapGraph[cell.GetId()];
+        List<Cell> c = new();
+
+        foreach (var x in directNeighbors)
+        {
+            foreach (var y in directNeighbors)
+            {
+                if (x == y) continue;
+                
+                foreach (var toAdd in GetIntersection(x, y))
+                {
+                    if (toAdd != cell) c.Add(toAdd);
+                }
+            }
+        }
+
+        c.AddRange(directNeighbors);
+
+        return c;
+    }
+
+    public IEnumerable<Cell> GetIntersection(Cell x, Cell y)
+    {
+        return mapGraph[x.GetId()].Intersect(mapGraph[y.GetId()]);
     }
 
     void DisplayGraph() 

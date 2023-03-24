@@ -13,7 +13,7 @@ public class Cell : MonoBehaviour
 
     public GameObject currentFlag = null;
 
-    public Map gameMap { get; set; }
+    public MapManager gameMap { get; set; }
     public int roomId { get; set; }
 
     void Start()
@@ -59,7 +59,7 @@ public class Cell : MonoBehaviour
     private void SetUnit(Unit unit)
     {
         currentUnit = unit;
-        if (unit != null) currentUnit.CurrentCell = this;
+        if (unit != null) currentUnit.Cell = this;
     }
 
     public void DellUnit()

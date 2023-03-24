@@ -16,13 +16,13 @@ public class FlagController : MonoBehaviour
     float time;
     float chosenDelay;
     List<Cell> freeFlagPoles;
-    Map map;
+    MapManager map;
 
     void Start()
     {
         flags = new();
         chosenDelay = Random.Range(minDelay, maxDelay);
-        map = GameObject.Find("Map").GetComponent<Map>();
+        map = GameObject.Find("Map").GetComponent<MapManager>();
     }
 
     void Update()

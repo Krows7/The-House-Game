@@ -20,15 +20,8 @@ public class FightAction : IAction
 
 	public override void Execute()
 	{
-		//Debug.LogWarning("Start Fight");
-		//if (Enemy != null && AsFightingComponent(unit) != null)
-		//{
-		//	AsFightingComponent(Enemy).StartAnimation(Enemy);
-		//}
-
 		var trueDamage = unit.CalculateTrueDamage();
 		var enemyTrueDamage = Enemy.CalculateTrueDamage();
-		//if (from.GetUnit() != unit || to.GetUnit() != Enemy) return;
 		if (trueDamage >= enemyTrueDamage || !Enemy.WillSurvive(trueDamage))
 		{
 			if (unit.WillSurvive(enemyTrueDamage))
@@ -59,7 +52,7 @@ public class FightAction : IAction
 		var strategy = unit.GetComponent<MovementComponent>().Strategy;
 		if (strategy is FollowEnemyStrategy strategy1 && Enemy.IsActive())
 		{
-			strategy.MoveUnitToCell(strategy1.Enemy.CurrentCell, unit);
+			strategy.MoveUnitToCell(strategy1.Enemy.Cell, unit);
 		}
 	}
 
@@ -71,7 +64,7 @@ public class FightAction : IAction
 
 	public override bool IsValid()
 	{
-		var dt = from.transform.position - Enemy.CurrentCell.transform.position;
+		var dt = from.transform.position - Enemy.Cell.transform.position;
 		return dt.magnitude < 2;
 	}
 

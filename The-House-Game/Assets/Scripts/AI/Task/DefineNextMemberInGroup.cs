@@ -20,13 +20,13 @@ public class DefineNextMemberInGroup : Node
 
 	public override NodeState Evaluate()
 	{
-		List<Cell> cells = _unit.CurrentCell.gameMap.GetCells();
+		List<Cell> cells = _unit.Cell.gameMap.GetCells();
 		foreach (Cell cell in cells)
 		{
 			Unit nextUnit = cell.GetUnit();
 			if (nextUnit != null && nextUnit != _unit && nextUnit.Fraction == _unit.Fraction && !(nextUnit is Group))
 			{
-				parent.SetData("nextUnitCell", nextUnit.CurrentCell);
+				parent.SetData("nextUnitCell", nextUnit.Cell);
 				state = NodeState.SUCCESS;
 				return state;
 			}

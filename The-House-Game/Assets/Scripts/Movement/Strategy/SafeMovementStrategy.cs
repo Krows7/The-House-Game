@@ -7,7 +7,7 @@ public class SafeMovementStrategy : IMovementStrategy
 {
     public void MoveUnitToCell(Cell finishCell, Unit unit, bool reset = false)
     {
-        Cell startCell = unit.CurrentCell;
+        Cell startCell = unit.Cell;
         Queue<Cell> queue = new Queue<Cell>();
         List<int> visited = new List<int>();
 
@@ -56,15 +56,10 @@ public class SafeMovementStrategy : IMovementStrategy
 
     public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
     {
-        Cell currentCell = unit.CurrentCell;
+        Cell currentCell = unit.Cell;
         IAction action = null;
-        // flag capture
-        if (nextCell.IsFree() && nextCell.currentFlag != null)
-        {
-            action = new FlagCaptureAction(currentCell, nextCell, unit);
-        }
         // group union
-        else if (unit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == unit.Fraction)
+        if (unit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == unit.Fraction)
         {
            action = new GroupAction(currentCell, nextCell, unit);
         }

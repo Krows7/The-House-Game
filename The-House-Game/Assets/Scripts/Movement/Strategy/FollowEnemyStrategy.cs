@@ -27,7 +27,7 @@ public class FollowEnemyStrategy : IMovementStrategy
 
         if (Enemy != null)
         {
-            finishCell = Enemy.CurrentCell;
+            finishCell = Enemy.Cell;
         }
 
         if (finishCell == null)
@@ -35,7 +35,7 @@ public class FollowEnemyStrategy : IMovementStrategy
             return;
         }
 
-        Cell startCell = unit.CurrentCell;
+        Cell startCell = unit.Cell;
         Queue<Cell> queue = new Queue<Cell>();
         List<int> visited = new List<int>();
 
@@ -85,15 +85,7 @@ public class FollowEnemyStrategy : IMovementStrategy
     {
         Cell interruptedCell = null;
         var thisUnit = unit;
-        // flag capture
-        if (nextCell.IsFree() && nextCell.currentFlag != null)
-        {
-            FlagCaptureAction action = new FlagCaptureAction(currentCell, nextCell, thisUnit);
-            thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
-            return;
-        }
-        // group union
-        else if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == thisUnit.Fraction)
+        if (thisUnit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == thisUnit.Fraction)
         {
             GroupAction action = new GroupAction(currentCell, nextCell, thisUnit);
             thisUnit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);

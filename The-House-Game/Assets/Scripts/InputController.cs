@@ -22,7 +22,7 @@ public class InputController : MonoBehaviour
                 if (!currentCell.IsFree())
                 {
                     uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
-                    if (unit != null) unit.CurrentCell.onReleaseDebug();
+                    if (unit != null) unit.Cell.onReleaseDebug();
                     ChooseUnit(currentCell.GetUnit());
                 }
             } else if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -48,12 +48,12 @@ public class InputController : MonoBehaviour
     {
         unit = Unit;
         uiControllerObject.GetComponent<InfoController>().ShowUnitInfo(Unit);
-        Unit.CurrentCell.onChosenDebug();
+        Unit.Cell.onChosenDebug();
     }
 
     private void RenderCells()
     {
-        unit.CurrentCell.onPressDebug();
+        unit.Cell.onPressDebug();
     }
 
     void MoveUnit() 
@@ -65,7 +65,7 @@ public class InputController : MonoBehaviour
 
     void ResetAllCells()
     {
-        ResetCell(unit.CurrentCell);
+        ResetCell(unit.Cell);
         ResetCell(finishCell);
     }
 
