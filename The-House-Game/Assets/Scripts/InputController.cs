@@ -59,7 +59,7 @@ public class InputController : MonoBehaviour
     void MoveUnit() 
     {
         uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
-        IMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
+        AbstractMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
         strategy.MoveUnitToCell(finishCell, unit, true);
     }
 

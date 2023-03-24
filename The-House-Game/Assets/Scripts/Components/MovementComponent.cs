@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MovementComponent : MonoBehaviour
 {
-    public IMovementStrategy Strategy { get; set; } = new SafeMovementStrategy();
+    public AbstractMovementStrategy Strategy { get; set; } = new SafeMovementStrategy();
 
     private readonly Queue<Tuple<Cell, Cell, IAction>> queue = new();
     public Animator unitAnimator;

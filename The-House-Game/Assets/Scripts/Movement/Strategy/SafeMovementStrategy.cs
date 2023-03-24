@@ -3,77 +3,11 @@ using System.Collections.Generic;
 using Units.Settings;
 using UnityEngine;
 
-public class SafeMovementStrategy : IMovementStrategy
+public class SafeMovementStrategy : AbstractMovementStrategy
 {
-    public void MoveUnitToCell(Cell finishCell, Unit unit, bool reset = false)
+    public override void MoveUnitToCell(Cell finishCell, Unit unit, bool reset = false)
     {
-        Cell startCell = unit.Cell;
-        Queue<Cell> queue = new Queue<Cell>();
-        List<int> visited = new List<int>();
-
-        for (int i = 0; i < startCell.gameMap.GetCells().Count; ++i)
-        {
-            visited.Add(-1);
-        }
-
-        queue.Enqueue(startCell);
-
-        while (queue.Count > 0)
-        {
-            Cell cell = queue.Dequeue();
-            if (finishCell.GetId() == cell.GetId())
-            {
-                break;
-            }
-            foreach (Cell c in startCell.gameMap.GetGraph()[cell.GetId()])
-            {
-                if (visited[c.GetId()] == -1)
-                {
-                    visited[c.GetId()] = cell.GetId();
-                    if (c.IsFree())
-                    {
-                        queue.Enqueue(c);
-                    }
-                }
-            }
-
-        }
-
-        if (visited[finishCell.GetId()] != -1)
-        {
-
-            int prevId = finishCell.GetId();
-            int nextCellId = -1;
-            while (prevId != startCell.GetId())
-            {
-                nextCellId = prevId;
-                prevId = visited[prevId];
-            }
-            var nextCell = startCell.gameMap.GetCells()[nextCellId];
-            TryMoveTo(nextCell, finishCell, unit);
-        }
+        var nextCell = DFS_Next(finishCell, unit);
+        if(nextCell != null) TryMoveTo(nextCell, finishCell, unit);
     }
-
-    public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
-    {
-        Cell currentCell = unit.Cell;
-        IAction action = null;
-        // group union
-        if (unit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == unit.Fraction)
-        {
-           action = new GroupAction(currentCell, nextCell, unit);
-        }
-        // fight
-        else if (unit != null && nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction != unit.Fraction)
-        {
-            action = new FightAction(currentCell, nextCell, unit, nextCell.GetUnit());
-        }
-        // just move
-        else if (unit != null)
-        {
-            action = new BaseMoveAction(currentCell, nextCell, unit);
-        }
-        unit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
-    }
-
 }
