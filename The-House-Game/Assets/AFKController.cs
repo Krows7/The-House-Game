@@ -18,7 +18,7 @@ public class AFKController : MonoBehaviour
         {
             if(!cell.IsFree() && cell.GetUnit().Fraction != unit.Fraction)
             {
-                movementComponent.AddMovement(unit.Cell, cell, new FightAction(unit.Cell, cell, unit, cell.GetUnit()));
+                movementComponent.AddMovement(new FightAction(cell, unit, cell.GetUnit()));
 
                 break;
             }

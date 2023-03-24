@@ -5,24 +5,18 @@ using Units.Settings;
 
 public class GroupAction : IAction
 {
-	public GroupAction(Cell from, Cell to, Unit unit)
+	public GroupAction(Cell to, Unit unit)
 	{
-		this.from = from;
-		this.to = to;
-		this.unit = unit;
-		IsDone = false;
-		StopAfterDone = true;
+		this.TargetCell = to;
+		this.Unit = unit;
 	}
 
 	public override void Execute()
 	{
-        if (to.GetUnit() is Group && unit is Group) return;
-        if (to.GetUnit() is Group) CombineTo(to.GetUnit() as Group, unit, to);
-        else if (unit is Group) CombineTo(unit as Group, to.GetUnit(), to);
-        else CreateGroup(to.GetUnit(), unit, to);
-        if (from.currentFlag != null)
-            from.currentFlag.GetComponent<Flag>().InterruptCapture();
-        IsDone = true;
+        if (TargetCell.GetUnit() is Group && Unit is Group) return;
+        if (TargetCell.GetUnit() is Group) CombineTo(TargetCell.GetUnit() as Group, Unit, TargetCell);
+        else if (Unit is Group) CombineTo(Unit as Group, TargetCell.GetUnit(), TargetCell);
+        else CreateGroup(TargetCell.GetUnit(), Unit, TargetCell);
     }
 
 	public void CombineTo(Group AsGroup, Unit Add, Cell cell)

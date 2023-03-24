@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 150
   Strength: 70
-  Speed: 2
+  Speed: 1.1
   Buff_c: 1.5
   type: 1
   SpriteColor: {r: 0.6117647, g: 0.15110588, b: 0.15110588, a: 1}

@@ -76,7 +76,7 @@ namespace Units.Settings
         public void UpdateMoveSpeed(float speed)
         {
             //GetAnimator().SetFloat("Move Speed", speed * 0.25F / (1 - TRANSITION_SPEED * speed));
-            GetAnimator().SetFloat("Move Speed", 1);
+            GetAnimator().SetFloat("Move Speed", speed);
         }
 
         public Animator GetAnimator()
@@ -84,6 +84,7 @@ namespace Units.Settings
             return transform.Find("HeroKnight").GetComponent<Animator>();
         }
 
+        //This isn't about checking whether the unit is dead (It can be in group at the moment)
         public bool IsActive()
         {
             return Cell != null;

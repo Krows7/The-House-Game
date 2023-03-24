@@ -67,7 +67,9 @@ public class InputController : MonoBehaviour
     {
         uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
         AbstractMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
-        strategy.MoveUnitToCell(finishCell, unit, true);
+
+        if (Input.GetKey(KeyCode.LeftShift)) strategy.AddDestination(finishCell, unit);
+        else strategy.SetDestination(finishCell, unit);
     }
 
     void ResetAllCells()

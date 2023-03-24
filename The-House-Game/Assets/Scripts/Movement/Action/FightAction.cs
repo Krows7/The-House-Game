@@ -8,37 +8,41 @@ public class FightAction : IAction
 {
 	public Unit Enemy { get; set; }
 
-	public FightAction(Cell from, Cell to, Unit unit, Unit enemy)
+	public FightAction(Cell to, Unit unit, Unit enemy)
 	{
-		this.from = from;
-		this.to = to;
-		this.unit = unit;
-		IsDone = false;
-		StopAfterDone = true;
+		this.TargetCell = to;
+		this.Unit = unit;
 		Enemy = enemy;
 	}
 
 	public override void Execute()
 	{
-		Debug.LogFormat("[FightAction] Unit: {0}; Enemy: {1}", unit, Enemy);
-		var trueDamage = unit.CalculateTrueDamage();
+		Debug.LogFormat("[FightAction] Unit: {0}; Enemy: {1}", Unit, Enemy);
+		var trueDamage = Unit.CalculateTrueDamage();
 		var enemyTrueDamage = Enemy.CalculateTrueDamage();
 		if (trueDamage >= enemyTrueDamage || !Enemy.WillSurvive(trueDamage))
 		{
-			if (unit.WillSurvive(enemyTrueDamage))
-			{
-				if (from.currentFlag != null)
-				{
-					to.currentFlag.GetComponent<Flag>().StartCapture();
-				}
-			}
+			//the hell is zis?
+
+			//if (unit.WillSurvive(enemyTrueDamage))
+			//{
+			//	if (from.currentFlag != null)
+			//	{
+			//		to.currentFlag.GetComponent<Flag>().StartCapture();
+			//	}
+			//}
+
 			//Fix Influence
-			unit.Fraction.influence += 100;
+			Unit.Fraction.influence += 100;
 		}
-		ShowDamage(unit, enemyTrueDamage);
+		ShowDamage(Unit, enemyTrueDamage);
 		ShowDamage(Enemy, trueDamage);
 		Enemy.GiveDamage(trueDamage);
-		unit.GiveDamage(enemyTrueDamage);
+		Unit.GiveDamage(enemyTrueDamage);
+
+		//TODO Refactor
+		Unit.GetAnimator().ResetTrigger("Attack");
+		Enemy.GetAnimator().ResetTrigger("Attack");
 
 		FollowIfPossible();
 	}
@@ -50,10 +54,12 @@ public class FightAction : IAction
 
 	private void FollowIfPossible()
     {
-		var strategy = unit.GetComponent<MovementComponent>().Strategy;
-		if (strategy is FollowEnemyStrategy strategy1 && Enemy.IsActive())
+		if (!Unit.IsActive()) return;
+		var strategy = Unit.GetComponent<MovementComponent>().Strategy;
+		if (strategy is FollowEnemyStrategy && Enemy.IsActive())
 		{
-			strategy.MoveUnitToCell(strategy1.Enemy.Cell, unit);
+			strategy.MoveUnit(Unit);
+			//strategy.MoveUnitToCell(strategy1.Enemy.Cell, unit);
 		}
 	}
 
@@ -66,7 +72,7 @@ public class FightAction : IAction
 	public override bool IsValid()
 	{
 		if (Enemy == null) return false;
-		var dt = from.transform.position - Enemy.Cell.transform.position;
+		var dt = Unit.Cell.transform.position - Enemy.Cell.transform.position;
 		return dt.magnitude < 2;
 	}
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Units.Settings;
 
@@ -10,12 +8,6 @@ public class PostAnimationBehaviour : MonoBehaviour
     void Start()
     {
         parent = transform.parent.gameObject;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void PostAnimation()

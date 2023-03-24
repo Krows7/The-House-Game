@@ -1,40 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
+using System;
 using Units.Settings;
-using UnityEngine;
 
 public class FollowEnemyStrategy : AbstractMovementStrategy
 {
 
-    public Unit Enemy { get; set;}
-
-    public override void MoveUnitToCell(Cell finishCell, Unit unit, bool reset = false)
+    public override Func<Cell> GetDestinationSupplier(Cell destination, Unit unit)
     {
-        if (reset)
-        {
-            Unit possibleEnemy = finishCell.GetUnit();
-            if (possibleEnemy != null && possibleEnemy.Fraction != unit.Fraction)
-            {
-                Enemy = possibleEnemy;
-            }
-            else
-            {
-                Enemy = null;
-            }
-        }
-
-        if (Enemy != null)
-        {
-            finishCell = Enemy.Cell;
-        }
-
-        if (finishCell == null)
-        {
-            return;
-        }
-
-        var nextCell = DFS_Next(finishCell, unit);
-        if (nextCell != null) TryMoveTo(nextCell, finishCell, unit);
+        var enemy = destination.GetUnit();
+        if (enemy == null || enemy.Fraction == unit.Fraction) return () => destination;
+        return () => enemy.IsActive() ? enemy.Cell : null;
     }
 }

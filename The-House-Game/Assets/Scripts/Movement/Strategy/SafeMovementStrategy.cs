@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using Units.Settings;
-using UnityEngine;
 
 public class SafeMovementStrategy : AbstractMovementStrategy
 {
-    public override void MoveUnitToCell(Cell finishCell, Unit unit, bool reset = false)
+
+    public override Func<Cell> GetDestinationSupplier(Cell destination, Unit unit)
     {
-        var nextCell = DFS_Next(finishCell, unit);
-        if(nextCell != null) TryMoveTo(nextCell, finishCell, unit);
+        return () => unit.Cell == destination ? null : destination;
     }
 }

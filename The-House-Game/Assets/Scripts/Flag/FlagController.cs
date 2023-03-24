@@ -45,8 +45,7 @@ public class FlagController : MonoBehaviour
     {
 		// Plz fix zis
 		Debug.Log("OK000");
-        if (cell.GetUnit() != null)
-		    cell.GetUnit().Fraction.influence += 100;
+        cell.GetUnit().Fraction.influence += 100;
         Debug.Log("OK111");
         flags.Remove(cell.currentFlag);
         Destroy(cell.currentFlag);

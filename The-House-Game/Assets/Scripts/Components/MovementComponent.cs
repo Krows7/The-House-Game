@@ -9,24 +9,24 @@ public class MovementComponent : MonoBehaviour
 {
     public AbstractMovementStrategy Strategy { get; set; } = new SafeMovementStrategy();
 
-    private readonly Queue<Tuple<Cell, Cell, IAction>> queue = new();
+    private readonly Queue<IAction> queue = new();
     public Animator unitAnimator;
 
     void Update()
     {
         var action = PopLastAnimation();
         if (action == null) return;
-        if (!action.Item3.IsValid())
+        if (!action.IsValid())
         {
             unitAnimator.SetTrigger("Interrupt");
-            action.Item3.OnInterrupted();
+            action.OnInterrupted();
         }
         else GetAnimations().Enqueue(action);
     }
 
-    public void AddMovement(Cell from, Cell to, IAction action)
+    public void AddMovement(IAction action)
     {
-        queue.Enqueue(new(from, to, action));
+        queue.Enqueue(action);
         action.PreAnimation(unitAnimator);
     }
 
@@ -35,17 +35,17 @@ public class MovementComponent : MonoBehaviour
         var action = PopLastAnimation();
         //TODO
         if (action == null) return;
-        action.Item3.Execute();
+        action.Execute();
     }
 
-    public Tuple<Cell, Cell, IAction> PopLastAnimation()
+    public IAction PopLastAnimation()
     {
         if (GetAnimations().Count == 0) return null;
         while (GetAnimations().Count > 1) GetAnimations().Dequeue();
         return GetAnimations().Dequeue();
     }
 
-    public Queue<Tuple<Cell, Cell, IAction>> GetAnimations()
+    public Queue<IAction> GetAnimations()
     {
         return queue;
     }

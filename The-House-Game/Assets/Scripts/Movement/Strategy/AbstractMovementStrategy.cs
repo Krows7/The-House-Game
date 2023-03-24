@@ -1,33 +1,86 @@
 using System.Collections.Generic;
 using Units.Settings;
+using System;
 
 public abstract class AbstractMovementStrategy
 {
-    public abstract void MoveUnitToCell(Cell finishCell, Unit unit, bool reset = false);
+    public Queue<Func<Cell>> destinationQueue = new();
+
+    public void AddDestination(Cell destination, Unit unit)
+    {
+        destinationQueue.Enqueue(GetDestinationSupplier(destination, unit));
+
+        if (destinationQueue.Count == 1) MoveUnit(unit);
+    }
+
+    public void SetDestination(Cell destination, Unit unit)
+    {
+        destinationQueue.Clear();
+
+        AddDestination(destination, unit);
+    }
+
+    public abstract Func<Cell> GetDestinationSupplier(Cell destination, Unit unit);
+
+    public void MoveUnit(Unit unit)
+    {
+        while (TryPeekNonNullDestination(out Cell finishCell))
+        {
+            if (TryDFS_Next(finishCell, unit, out Cell nextCell))
+            {
+                TryMoveTo(nextCell, finishCell, unit);
+                break;
+            }
+            else PopFirstDestination();
+        }
+
+        //if (!TryPeekNonNullDestination(out Cell finishCell)) return;
+
+        //var nextCell = TryDFS_Next(finishCell, unit);
+        //if (nextCell != null) TryMoveTo(nextCell, finishCell, unit);
+    }
+
+    private bool TryPeekNonNullDestination(out Cell destination)
+    {
+        destination = null;
+        while (destinationQueue.Count > 0)
+        {
+            destination = destinationQueue.Peek()();
+
+            if (destination != null) return true;
+
+            destinationQueue.Dequeue();
+        }
+        return false;
+    }
+
+    private void PopFirstDestination()
+    {
+        destinationQueue.Dequeue();
+    }
 
     public void TryMoveTo(Cell nextCell, Cell finishCell, Unit unit)
     {
         // TODO
         if (unit == null) return;
         IAction action;
-        Cell currentCell = unit.Cell;
         // group
         if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == unit.Fraction)
         {
-            action = new GroupAction(currentCell, nextCell, unit);
+            action = new GroupAction(nextCell, unit);
         }
         // fight
         else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction != unit.Fraction)
         {
-            action = new FightAction(currentCell, nextCell, unit, nextCell.GetUnit());
+            action = new FightAction(nextCell, unit, nextCell.GetUnit());
         }
         // just move
-        else action = new BaseMoveAction(currentCell, nextCell, unit, finishCell);
-        unit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
+        else action = new BaseMoveAction(nextCell, unit);
+        unit.GetComponent<MovementComponent>().AddMovement(action);
     }
 
     //SACRED PIECE OF CODE
-    public Cell DFS_Next(Cell finishCell, Unit unit)
+    public bool TryDFS_Next(Cell finishCell, Unit unit, out Cell nextCell)
     {
         Cell startCell = unit.Cell;
         Queue<Cell> queue = new();
@@ -70,8 +123,10 @@ public abstract class AbstractMovementStrategy
                 nextCellId = prevId;
                 prevId = visited[prevId];
             }
-            return startCell.gameMap.GetCells()[nextCellId];
+            nextCell = startCell.gameMap.GetCells()[nextCellId];
+            return true;
         }
-        return null;
+        nextCell = null;
+        return false;
     }
 }

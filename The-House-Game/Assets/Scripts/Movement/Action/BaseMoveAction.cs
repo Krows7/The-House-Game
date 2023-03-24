@@ -4,23 +4,18 @@ using UnityEngine;
 public class BaseMoveAction : IAction
 {
 
-	private Cell finishCell;
-
-	public BaseMoveAction(Cell from, Cell to, Unit unit, Cell finishCell) 
+	public BaseMoveAction(Cell to, Unit unit) 
 	{
-		this.from = from;
-		this.to = to;
-		this.unit = unit;
-		this.finishCell = finishCell;
-		IsDone = false;
+		this.TargetCell = to;
+		this.Unit = unit;
 	}
 
 	public override void Execute()
 	{
-		Debug.LogFormat("[BaseMoveAction] From: {0}; Unit: {1}", from, unit);
-		unit.MoveTo(to);
-		var strategy = unit.GetComponent<MovementComponent>().Strategy;
-		strategy.MoveUnitToCell(finishCell, unit);
+		Debug.LogFormat("[BaseMoveAction] Unit: {0}", Unit);
+		Unit.MoveTo(TargetCell);
+		var strategy = Unit.GetComponent<MovementComponent>().Strategy;
+		strategy.MoveUnit(Unit);
 	}
 
 	public override void PreAnimation(Animator animator)
@@ -30,6 +25,6 @@ public class BaseMoveAction : IAction
 
     public override bool IsValid()
     {
-		return to.IsFree();
+		return TargetCell.IsFree();
     }
 }
