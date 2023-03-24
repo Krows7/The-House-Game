@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60905e3bfff71884e96baf27b1188147, type: 3}
   m_Name: FourthArmy
   m_EditorClassIdentifier: 
-  Health: 100
+  Health: 250
   Strength: 40
   Speed: 1.5
   Buff_c: 1

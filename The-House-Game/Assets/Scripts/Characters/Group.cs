@@ -59,13 +59,6 @@ namespace Units.Settings
             return GetHealth() > Damage / units.Count;
         }
 
-        public override List<float> GetAllHealths()
-        {
-            List<float> result = new();
-            units.ForEach(x => result.Add(x.GetHealth()));
-            return result;
-        }
-
         public override float GetMaxHealth()
         {
             float hp = 0;

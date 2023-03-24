@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60905e3bfff71884e96baf27b1188147, type: 3}
   m_Name: RatLeader
   m_EditorClassIdentifier: 
-  Health: 150
+  Health: 240
   Strength: 70
   Speed: 1.1
   Buff_c: 1.5

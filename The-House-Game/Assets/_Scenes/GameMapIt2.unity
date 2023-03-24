@@ -2542,7 +2542,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: c4fe1c0835854cf4f852ae0521ae5fcd, type: 2}
     - target: {fileID: 4046632087518041448, guid: 4d5de607619b4dc409cde6e31d81dc46, type: 3}
       propertyPath: m_Name
-      value: SpawnRats
+      value: SpawnRATS
       objectReference: {fileID: 0}
     - target: {fileID: 9091467427540306680, guid: 4d5de607619b4dc409cde6e31d81dc46, type: 3}
       propertyPath: m_RootOrder
@@ -4253,7 +4253,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: f16bbcc839a4fea4ebf81272718d32aa, type: 2}
     - target: {fileID: 4046632087518041448, guid: 4d5de607619b4dc409cde6e31d81dc46, type: 3}
       propertyPath: m_Name
-      value: SpawnFourth
+      value: SpawnFOURTH
       objectReference: {fileID: 0}
     - target: {fileID: 9091467427540306680, guid: 4d5de607619b4dc409cde6e31d81dc46, type: 3}
       propertyPath: m_RootOrder
@@ -5602,6 +5602,7 @@ MonoBehaviour:
   influence: 0
   unitStats:
   - {fileID: 11400000, guid: 1f888ffc4c3093348b9518cc44228a8c, type: 2}
+  - {fileID: 11400000, guid: 866d4df3b0d37354484dd4dc7f811ed1, type: 2}
   - {fileID: 11400000, guid: 866d4df3b0d37354484dd4dc7f811ed1, type: 2}
   spawnRoom: {fileID: 681830242}
   FractionName: 0

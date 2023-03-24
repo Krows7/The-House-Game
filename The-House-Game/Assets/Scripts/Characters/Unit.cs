@@ -31,8 +31,6 @@ namespace Units.Settings
 
         public abstract bool WillSurvive(float Damage);
 
-        public abstract List<float> GetAllHealths();
-
         public void Start()
         {
             if (stats != null) stats.OnCreate(gameObject);
@@ -42,7 +40,6 @@ namespace Units.Settings
 
         public void Update()
         {
-            if (gameObject.GetComponent<Group>() != null) return;
             var progressBar = transform.Find("ProgressBar").transform.GetChild(0).GetChild(0).GetComponent<Image>();
             progressBar.fillAmount = GetHealth() / GetMaxHealth();
         }

@@ -150,6 +150,11 @@ public class MapManager : MonoBehaviour
         return c;
     }
 
+    public bool AreNeighbors(Cell a, Cell b)
+    {
+        return GetNeighbors(a).IndexOf(b) > - 1;
+    }
+
     public IEnumerable<Cell> GetIntersection(Cell x, Cell y)
     {
         return mapGraph[x.GetId()].Intersect(mapGraph[y.GetId()]);

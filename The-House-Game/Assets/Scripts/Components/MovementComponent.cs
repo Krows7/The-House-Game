@@ -27,7 +27,8 @@ public class MovementComponent : MonoBehaviour
     public void AddMovement(IAction action)
     {
         queue.Enqueue(action);
-        action.PreAnimation(unitAnimator);
+        //TODO Maybe
+        if (action.IsValid()) action.PreAnimation(unitAnimator);
     }
 
     public void PostAnimation()

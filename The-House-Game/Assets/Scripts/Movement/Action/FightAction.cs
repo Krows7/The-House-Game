@@ -41,8 +41,8 @@ public class FightAction : IAction
 		Unit.GiveDamage(enemyTrueDamage);
 
 		//TODO Refactor
-		Unit.GetAnimator().ResetTrigger("Attack");
-		Enemy.GetAnimator().ResetTrigger("Attack");
+		//Unit.GetAnimator().ResetTrigger("Attack");
+		//Enemy.GetAnimator().ResetTrigger("Attack");
 
 		FollowIfPossible();
 	}
@@ -72,12 +72,15 @@ public class FightAction : IAction
 	public override bool IsValid()
 	{
 		if (Enemy == null) return false;
-		var dt = Unit.Cell.transform.position - Enemy.Cell.transform.position;
-		return dt.magnitude < 2;
+		return MapManager.instance.AreNeighbors(Unit.Cell, Enemy.Cell);
 	}
 
 	public override void PreAnimation(Animator animator)
 	{
+		//TODO Refactor
+		//animator.SetTrigger("Interrupt");
+		//Enemy.GetAnimator().SetTrigger("Interrupt");
+
 		animator.SetTrigger("Attack");
 		//TODO Tak ne dolzhno rabotaty
 		Enemy.GetAnimator().SetTrigger("Attack");

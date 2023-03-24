@@ -52,6 +52,9 @@ public class UnitPickController : MonoBehaviour
             var afkController = Unit.GetComponent<AFKController>();
             afkController.enabled = !afkController.enabled;
         }
+
+        var progressBar = GetPreview().Find("ProgressBar").transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        progressBar.fillAmount = Unit.GetHealth() / Unit.GetMaxHealth();
     }
 
     private void UpdateStradegyIcon()
