@@ -20,6 +20,7 @@ public class FightAction : IAction
 
 	public override void Execute()
 	{
+		Debug.LogFormat("[FightAction] Unit: {0}; Enemy: {1}", unit, Enemy);
 		var trueDamage = unit.CalculateTrueDamage();
 		var enemyTrueDamage = Enemy.CalculateTrueDamage();
 		if (trueDamage >= enemyTrueDamage || !Enemy.WillSurvive(trueDamage))
@@ -64,6 +65,7 @@ public class FightAction : IAction
 
 	public override bool IsValid()
 	{
+		if (Enemy == null) return false;
 		var dt = from.transform.position - Enemy.Cell.transform.position;
 		return dt.magnitude < 2;
 	}

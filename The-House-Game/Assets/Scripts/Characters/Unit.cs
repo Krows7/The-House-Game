@@ -59,7 +59,11 @@ namespace Units.Settings
             if (Cell == null) Debug.LogWarning("User " + this + " is moving from nowhere");
             else Cell.DellUnit();
             // Do something better
-            if (cell == null) return true;
+            if (cell == null)
+            {
+                Cell = null;
+                return true;
+            }
             if (cell.PlaceUnit0(this))
             {
                 Cell = cell;

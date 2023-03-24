@@ -3,20 +3,24 @@ using UnityEngine;
 
 public class BaseMoveAction : IAction
 {
-	public BaseMoveAction(Cell from, Cell to, Unit unit) 
+
+	private Cell finishCell;
+
+	public BaseMoveAction(Cell from, Cell to, Unit unit, Cell finishCell) 
 	{
 		this.from = from;
 		this.to = to;
 		this.unit = unit;
+		this.finishCell = finishCell;
 		IsDone = false;
 	}
 
 	public override void Execute()
 	{
-		Debug.Log("BaseMoveAction[From: " + from + "; Unit: " + unit + "]");
+		Debug.LogFormat("[BaseMoveAction] From: {0}; Unit: {1}", from, unit);
 		unit.MoveTo(to);
-		if (from.currentFlag != null) from.currentFlag.GetComponent<Flag>().InterruptCapture();
-		IsDone = true;
+		var strategy = unit.GetComponent<MovementComponent>().Strategy;
+		strategy.MoveUnitToCell(finishCell, unit);
 	}
 
 	public override void PreAnimation(Animator animator)

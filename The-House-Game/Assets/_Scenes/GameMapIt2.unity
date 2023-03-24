@@ -2024,6 +2024,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseMovementStradegyIcon: {fileID: 21300000, guid: ddcc5c5ab5fda024c8fe4b570c7c3263, type: 3}
   followEnemyStradegyIcon: {fileID: 21300000, guid: 9e416a8b905f8754ebb7a974b9a37c9b, type: 3}
+  preventAutoAttackIcon: {fileID: 21300000, guid: 9f4bad673d36a0042a38a530d1c06532, type: 3}
+  CycleMovementModeIcon: {fileID: 21300000, guid: c42fb1941c92efe42b8d9a6f2c99e22b, type: 3}
 --- !u!1001 &403945749
 PrefabInstance:
   m_ObjectHideFlags: 0

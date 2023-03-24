@@ -22,7 +22,7 @@ public abstract class AbstractMovementStrategy
             action = new FightAction(currentCell, nextCell, unit, nextCell.GetUnit());
         }
         // just move
-        else action = new BaseMoveAction(currentCell, nextCell, unit);
+        else action = new BaseMoveAction(currentCell, nextCell, unit, finishCell);
         unit.GetComponent<MovementComponent>().AddMovement(currentCell, finishCell, action);
     }
 

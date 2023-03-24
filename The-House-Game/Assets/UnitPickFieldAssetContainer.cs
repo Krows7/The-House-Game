@@ -6,6 +6,8 @@ public class UnitPickFieldAssetContainer : MonoBehaviour
 
     public Sprite baseMovementStradegyIcon;
     public Sprite followEnemyStradegyIcon;
+    public Sprite preventAutoAttackIcon;
+    public Sprite CycleMovementModeIcon;
 
     void Start()
     {

@@ -5,9 +5,16 @@ public class InputController : MonoBehaviour
 {
     private Cell currentCell;
     private Cell finishCell;
-    private Unit unit;
+    public Unit unit;
 
     public GameObject uiControllerObject;
+
+    public static InputController instance;
+
+    public void Start()
+    {
+        instance = this;
+    }
 
     void Update()
     {
@@ -22,7 +29,7 @@ public class InputController : MonoBehaviour
                 if (!currentCell.IsFree())
                 {
                     uiControllerObject.GetComponent<InfoController>().HideUnitInfo();
-                    if (unit != null) unit.Cell.onReleaseDebug();
+                    if (unit != null && unit.IsActive()) unit.Cell.onReleaseDebug();
                     ChooseUnit(currentCell.GetUnit());
                 }
             } else if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -35,7 +42,7 @@ public class InputController : MonoBehaviour
                     MoveUnit();
                     finishCell = null;
                 }
-            } else if (unit != null) RenderCells();
+            } else if (unit != null && unit.IsActive()) RenderCells();
             
             if (Input.GetKeyDown(KeyCode.Q))
             {

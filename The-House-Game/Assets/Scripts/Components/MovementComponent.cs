@@ -12,7 +12,6 @@ public class MovementComponent : MonoBehaviour
     private readonly Queue<Tuple<Cell, Cell, IAction>> queue = new();
     public Animator unitAnimator;
 
-
     void Update()
     {
         var action = PopLastAnimation();
@@ -21,14 +20,13 @@ public class MovementComponent : MonoBehaviour
         {
             unitAnimator.SetTrigger("Interrupt");
             action.Item3.OnInterrupted();
-            Strategy.MoveUnitToCell(action.Item2, action.Item3.unit);
         }
         else GetAnimations().Enqueue(action);
     }
 
     public void AddMovement(Cell from, Cell to, IAction action)
     {
-        queue.Enqueue(new Tuple<Cell, Cell, IAction>(from, to, action));
+        queue.Enqueue(new(from, to, action));
         action.PreAnimation(unitAnimator);
     }
 
@@ -38,8 +36,6 @@ public class MovementComponent : MonoBehaviour
         //TODO
         if (action == null) return;
         action.Item3.Execute();
-        //TODO
-        Strategy.MoveUnitToCell(action.Item2, action.Item3.unit);
     }
 
     public Tuple<Cell, Cell, IAction> PopLastAnimation()

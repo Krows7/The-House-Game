@@ -43,6 +43,15 @@ public class UnitPickController : MonoBehaviour
         var unitRenderer = Unit.GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = unitRenderer.sprite;
         spriteRenderer.color = unitRenderer.color;
+
+        //This is not right, i know
+        if (Unit == InputController.instance.unit && Input.GetKeyDown(KeyCode.F))
+        {
+            var preventIcon = GetPreview().Find("PreventAutoAttack").GetComponent<Image>();
+            preventIcon.enabled = !preventIcon.enabled;
+            var afkController = Unit.GetComponent<AFKController>();
+            afkController.enabled = !afkController.enabled;
+        }
     }
 
     private void UpdateStradegyIcon()
