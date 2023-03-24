@@ -57,7 +57,7 @@ public class FightAction : IAction
 	private void FollowIfPossible()
     {
 		var strategy = unit.GetComponent<MovementComponent>().Strategy;
-		if (strategy is FollowEnemyStrategy strategy1 && Enemy != null)
+		if (strategy is FollowEnemyStrategy strategy1 && Enemy.IsActive())
 		{
 			strategy.MoveUnitToCell(strategy1.Enemy.CurrentCell, unit);
 		}
@@ -79,6 +79,6 @@ public class FightAction : IAction
 	{
 		animator.SetTrigger("Attack");
 		//TODO Tak ne dolzhno rabotaty
-		Enemy.transform.Find("HeroKnight").GetComponent<Animator>().SetTrigger("Attack");
+		Enemy.GetAnimator().SetTrigger("Attack");
 	}
 }

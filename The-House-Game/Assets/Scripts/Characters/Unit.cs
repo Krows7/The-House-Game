@@ -79,5 +79,10 @@ namespace Units.Settings
         {
             return transform.Find("HeroKnight").GetComponent<Animator>();
         }
+
+        public bool IsActive()
+        {
+            return CurrentCell != null;
+        }
     }
 }

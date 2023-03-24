@@ -58,7 +58,7 @@ namespace Units.Settings
 
         public override List<float> GetAllHealths()
         {
-            List<float> result = new List<float>();
+            List<float> result = new();
             result.Add(health);
             return result;
         }

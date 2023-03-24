@@ -19,12 +19,14 @@ public class UnitPickFieldController : MonoBehaviour
         foreach (GameObject unitObject in GameManager.gamerFraction.Units)
         {
             var unit = unitObject.GetComponent<Unit>();
-            unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>().unit = unit;
+            var child = unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>();
+            child.Unit = unit;
+            child.Id = buttonId;
         }
         foreach (Transform buttonObject in unitPickField.transform)
         {
             var button = buttonObject.GetComponent<Button>();
-            if (button.GetComponent<UnitPickController>().unit == null)
+            if (button.GetComponent<UnitPickController>().Unit == null)
             {
                 continue;
             }
@@ -47,11 +49,11 @@ public class UnitPickFieldController : MonoBehaviour
         foreach (GameObject unitObject in GameManager.gamerFraction.Units)
         {
             var unit = unitObject.GetComponent<Unit>();
-            unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>().unit = unit;
+            unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>().Unit = unit;
         }
         for (; buttonId < 4; ++buttonId)
         {
-            unitPickField.transform.GetChild(buttonId).GetComponent<UnitPickController>().unit = null;
+            unitPickField.transform.GetChild(buttonId).GetComponent<UnitPickController>().Unit = null;
         }
         for (int i = 0; i < 9; ++i) {
             if (Input.GetKeyDown(NUM0_KEYCODE + i))
@@ -63,7 +65,7 @@ public class UnitPickFieldController : MonoBehaviour
         {
             var button = buttonObject.GetComponent<Button>();
             var ss = button.spriteState;
-            if (button.GetComponent<UnitPickController>().unit != null)
+            if (button.GetComponent<UnitPickController>().Unit != null)
             {
                 if (GameManager.gamerFractionName == Fraction.Name.RATS)
                 {
