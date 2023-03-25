@@ -1736,7 +1736,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b089f128b30aa21488542bf1580ab95e, type: 2}
   spawnRoom: {fileID: 422432214}
   FractionName: 1
-  disableAI: 1
+  disableAI: 0
 --- !u!1001 &309224932
 PrefabInstance:
   m_ObjectHideFlags: 0
