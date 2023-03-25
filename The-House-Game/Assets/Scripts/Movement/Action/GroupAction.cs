@@ -42,7 +42,7 @@ public class GroupAction : IAction
         //TODO Refactor
         g.stats = Base.stats;
 
-        Fraction.ApplyAI(g.Fraction.FractionName, UnitStats.Type.GROUP, group);
+        Fraction.TryApplyAI(g.Fraction.FractionName, UnitStats.Type.GROUP, group);
         //      MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
         //foreach (MonoBehaviour script in scriptList)
         //{

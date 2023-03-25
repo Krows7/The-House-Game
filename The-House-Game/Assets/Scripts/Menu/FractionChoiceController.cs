@@ -1,21 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Units.Settings;
 
 public class FractionChoiceController : MonoBehaviour
 {
     public void ChooseRats()
     {
-        GameManager.gamerFractionName = Units.Settings.Fraction.Name.RATS;
-        SceneManager.LoadScene("GameMapIt2");
-        Time.timeScale = 1f;
+        LoadScene(Fraction.Name.RATS);
     }
 
     public void ChooseFourth()
     {
-        GameManager.gamerFractionName = Units.Settings.Fraction.Name.FOURTH;
-        SceneManager.LoadScene("GameMapIt2");
+        LoadScene(Fraction.Name.FOURTH);
+    }
+
+    private void LoadScene(Fraction.Name fraction)
+    {
+        GameManager.gamerFractionName = fraction;
+        SceneManager.LoadScene("GameMap");
         Time.timeScale = 1f;
     }
 }

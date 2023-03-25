@@ -23,14 +23,16 @@ namespace Units.Settings
         public Name FractionName;
         public List<GameObject> Units { set; get; } = null;
 
+        public bool disableAI;
+
         void Start()
         {
             Spawn(unitStats);
         }
 
-        public static void ApplyAI(Fraction.Name FractionName, Type type, GameObject unitObject)
+        public static void TryApplyAI(Fraction.Name FractionName, Type type, GameObject unitObject)
         {
-            if (FractionName == Name.RATS)
+            if (!unitObject.GetComponent<Unit>().Fraction.disableAI && FractionName != GameManager.gamerFractionName)
             {
                 if (type == Type.ARMY || type == Type.GROUP) unitObject.AddComponent<BT_Simple>();
                 else unitObject.AddComponent<BT_Group>();
@@ -53,9 +55,7 @@ namespace Units.Settings
                 unitObject.GetComponent<Unit>().MoveTo(cell);
 
                 AddUnit(unitObject);
-
-                // REFACTOR
-                ApplyAI(FractionName, unitStats[i].type, unitObject);
+                TryApplyAI(FractionName, unitStats[i].type, unitObject);
             }
         }
 

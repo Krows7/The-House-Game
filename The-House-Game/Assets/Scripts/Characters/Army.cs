@@ -10,18 +10,15 @@ namespace Units.Settings
         public float health;
         float maxHealth;
         public float strength;
-        // Cells per second
-        public float speed;
         public float buff_c = 1;
 
         new void Start()
         {
             health = stats.Health;
             strength = stats.Strength;
-            speed = stats.Speed;
             buff_c = stats.Buff_c;
             maxHealth = health;
-            UpdateMoveSpeed(speed);
+            UpdateMoveSpeed(stats.Speed);
             base.Start();
         }
 
@@ -37,7 +34,7 @@ namespace Units.Settings
 
         public override float GetSpeed()
         {
-            return speed;
+            return GetAnimator().GetFloat("Move Speed");
         }
 
         public override bool GiveDamage(float Damage)

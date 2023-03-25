@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour
     public GameObject DamageParticlePrefab;
 
     public static Fraction.Name gamerFractionName = Fraction.Name.FOURTH;
-    public static Units.Settings.Fraction gamerFraction;
-    public static Units.Settings.Fraction winner;
+    public static Fraction gamerFraction;
+    public static Fraction winner;
     public static Dictionary<string, Fraction> fractions = new();
     public static GameManager instance;
 
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         instance = this;
         foreach (Transform fracTransform in GameObject.Find("Fractions").transform)
         {
-            var frac = fracTransform.GetComponent<Units.Settings.Fraction>();
+            var frac = fracTransform.GetComponent<Fraction>();
             if (frac.FractionName == gamerFractionName)
             {
                 gamerFraction = frac;
@@ -34,30 +34,58 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (winner != null) return;
-        if (time >= roundTime)
+        if (time >= roundTime) ShowGameOverScene(GetWinner());
+        else if (CheckForWinner(out Fraction fraction)) ShowGameOverScene(fraction);
+        else time += Time.deltaTime;
+    }
+
+    private bool CheckForWinner(out Fraction winner)
+    {
+        winner = null;
+        Fraction left = null;
+        foreach (Transform fraction in GetFractions())
         {
-            int maxInfluence = - 1;
-            Units.Settings.Fraction mx = null;
-            foreach(Transform fraction in GameObject.Find("Fractions").transform)
+            var ffraction = fraction.GetComponent<Fraction>();
+            if (ffraction.Units.Count == 0)
             {
-                Debug.Log("111");
-                var f = fraction.GetComponent<Units.Settings.Fraction>();
-                if(f.influence > maxInfluence)
-                {
-                    maxInfluence = f.influence;
-                    mx = f;
-                }
+                if (left == null) left = ffraction;
+                else return false;
             }
-            winner = mx;
-            SceneManager.LoadScene("GameOver");
-            Time.timeScale = 1f;
-            return;
         }
-        time += Time.deltaTime;
+        winner = GetWinner();
+        return left == winner;
+    }
+
+    private Transform GetFractions()
+    {
+        return GameObject.Find("Fractions").transform;
+    }
+
+    private Fraction GetWinner()
+    {
+        int maxInfluence = -1;
+        Fraction mx = null;
+        foreach (Transform fraction in GetFractions())
+        {
+            var f = fraction.GetComponent<Fraction>();
+            if (f.influence > maxInfluence)
+            {
+                maxInfluence = f.influence;
+                mx = f;
+            }
+        }
+        return mx;
+    }
+
+    private void ShowGameOverScene(Fraction fracWinner)
+    {
+        winner = fracWinner;
+        SceneManager.LoadScene("GameOver");
+        Time.timeScale = 1f;
     }
 
     //Time in seconds
-    public float timeLeft()
+    public float GetTimeLeft()
     {
         return roundTime - time;
     }

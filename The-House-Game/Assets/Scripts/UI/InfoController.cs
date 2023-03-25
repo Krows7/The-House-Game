@@ -16,7 +16,7 @@ public class InfoController : MonoBehaviour
 
     void Update()
     {
-        var ts = System.TimeSpan.FromSeconds((int)GameObject.Find("/MasterController").GetComponent<GameManager>().timeLeft());
+        var ts = System.TimeSpan.FromSeconds((int)GameObject.Find("/MasterController").GetComponent<GameManager>().GetTimeLeft());
         var timerStr = ts.ToString(@"mm\:ss");
         uiCanvas.transform.Find("Timer/Value").GetComponent<TMPro.TextMeshProUGUI>().text = timerStr;
         uiCanvas.transform.Find("Influence/Value").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.gamerFraction.influence.ToString();
@@ -28,7 +28,7 @@ public class InfoController : MonoBehaviour
             uiCanvas.transform.Find("UnitInfoField/UnitType").GetComponent<TMPro.TextMeshProUGUI>().text = unit.GetUnitType();
             uiCanvas.transform.Find("UnitInfoField/Health/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetHealth()).ToString();
             uiCanvas.transform.Find("UnitInfoField/Strength/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.CalculateTrueDamage()).ToString();
-            uiCanvas.transform.Find("UnitInfoField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetSpeed()).ToString();
+            uiCanvas.transform.Find("UnitInfoField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.GetSpeed().ToString();
         }
     }
 

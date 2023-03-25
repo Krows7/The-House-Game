@@ -1,43 +1,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 namespace Units.Settings
 {
 
     public class Group : Unit
     {
-        int count = 0;
         public List<Unit> units = new();
         public void Add(Unit unit)
         {
             units.Add(unit);
             unit.MoveTo(null);
             unit.gameObject.SetActive(false);
-            count++;
             // Know-how
             var canvas = transform.Find("GroupCount");
             canvas.gameObject.SetActive(true);
-            canvas.GetComponent<TextMeshPro>().SetText(count.ToString());
+            canvas.GetComponent<TextMeshPro>().SetText(units.Count.ToString());
+
             UpdateMoveSpeed(GetSpeed());
         }
 
         public override float CalculateTrueDamage()
         {
-            float r = 0;
-            units.ForEach(x => r += x.CalculateTrueDamage());
-            return r;
+            return units.Sum(x => x.CalculateTrueDamage());
         }
 
         public override float GetSpeed()
         {
-            float r = float.MaxValue;
-            units.ForEach(x => r = Mathf.Min(r, x.GetSpeed()));
-            return r;
+            return units.Min(x => x.GetSpeed());
         }
 
         public override bool GiveDamage(float Damage)
         {
+            // TODO Fix
             units.RemoveAll(x => x == null);
             if (!WillSurvive(Damage)) { Die(); return false; };
             float dmg = Damage / units.Count;
@@ -49,9 +46,7 @@ namespace Units.Settings
         // Max Health
         public override float GetHealth()
         {
-            float hp = 0;
-            units.ForEach(x => hp = Mathf.Max(hp, x.GetHealth()));
-            return hp;
+            return units.Max(x => x.GetHealth());
         }
 
         public override bool WillSurvive(float Damage)
@@ -61,9 +56,7 @@ namespace Units.Settings
 
         public override float GetMaxHealth()
         {
-            float hp = 0;
-            units.ForEach(x => hp = Mathf.Max(hp, x.GetMaxHealth()));
-            return hp;
+            return units.Max(x => x.GetMaxHealth());
         }
 
         public override void Heal(float Health)

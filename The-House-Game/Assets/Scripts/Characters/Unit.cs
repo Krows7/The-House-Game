@@ -33,6 +33,10 @@ namespace Units.Settings
 
         public void Start()
         {
+            // Fuccing Cringe https://forum.unity.com/threads/losing-animator-state.307667/#post-3283576
+            // DO NOT EDIT THE LINE BELOW
+            GetAnimator().keepAnimatorControllerStateOnDisable = true;
+
             if (stats != null) stats.OnCreate(gameObject);
         }
 
@@ -67,6 +71,12 @@ namespace Units.Settings
                 return true;
             }
             return false;
+        }
+
+        public void UpdateTransform()
+        {
+            var cellPos = Cell.transform.position;
+            transform.position = new(cellPos.x, cellPos.y, transform.position.z);
         }
 
         //DO NOT SET VALUES EQUALS OR GREATER THAN 4

@@ -34,9 +34,9 @@ public class InputController : MonoBehaviour
                 }
             } else if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Debug.LogFormat("[InputCotroller] Player Unit {0} started movement", unit);
-				if (unit != null)
+				if (unit != null && IsPlayableUnit(unit))
                 {
+                    Debug.LogFormat("[InputCotroller] Player Unit {0} started movement", unit);
                     finishCell = currentCell;
                     ResetAllCells();
                     MoveUnit();
@@ -44,11 +44,21 @@ public class InputController : MonoBehaviour
                 }
             } else if (unit != null && unit.IsActive()) RenderCells();
             
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q) && IsPlayableUnit(unit))
             {
                 if (unit is Leader u) u.UseSkill();
             }
+
+            if (Input.GetKeyDown(KeyCode.G) && IsPlayableUnit(unit) && unit is Group group)
+            {
+                group.GetComponent<MovementComponent>().AddMovement(new DisbandAction(group));
+            }
         }
+    }
+
+    private bool IsPlayableUnit(Unit unit)
+    {
+        return unit.Fraction == GameManager.gamerFraction;
     }
 
     public void ChooseUnit(Unit Unit)
@@ -95,6 +105,7 @@ public class InputController : MonoBehaviour
 
     private void UpdateStrategy()
     {
+        if (unit == null || !IsPlayableUnit(unit)) return;
         if (Input.GetKeyDown(KeyCode.F1))
         {
             Debug.Log("[InputController] <Base Movement> Stradegy Selected for {0}", unit);
