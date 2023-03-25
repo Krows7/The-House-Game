@@ -24,7 +24,7 @@ public class MoveToRandomRoom : Node
 			state = NodeState.SUCCESS;
 			return state;
 		}
-		List<Room> rooms = _unit.CurrentCell.gameMap.GetRooms();
+		List<Room> rooms = _unit.Cell.gameMap.GetRooms();
 		Room r = rooms[Random.Range(0, rooms.Count)];
 		Cell c = r.GetCells()[Random.Range(0, r.GetCells().Count)];
 

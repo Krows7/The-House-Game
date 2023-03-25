@@ -13,7 +13,7 @@ public class Cell : MonoBehaviour
 
     public GameObject currentFlag = null;
 
-    public Map gameMap { get; set; }
+    public MapManager gameMap { get; set; }
     public int roomId { get; set; }
 
     void Start()
@@ -56,16 +56,17 @@ public class Cell : MonoBehaviour
         return currentUnit;
     }
 
-    public void SetUnit(Unit unit)
+    private void SetUnit(Unit unit)
     {
         currentUnit = unit;
-        if (unit != null) currentUnit.CurrentCell = this;
+        if (unit != null) currentUnit.Cell = this;
     }
 
     public void DellUnit()
     {
         currentUnit = null;
         onReleaseDebug();
+        if (currentFlag != null) currentFlag.GetComponent<Flag>().InterruptCapture();
     }
 
     private Color darker(Color color)
@@ -97,12 +98,21 @@ public class Cell : MonoBehaviour
     void Update()
     {
         if (transform.parent.name.Equals("MedRoom") && currentUnit != null) currentUnit.Heal(15 * Time.deltaTime);
-        else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.fraction.fractionName)) currentUnit.Heal(5 * Time.deltaTime);
-        else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.fraction.fractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
+        else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.Fraction.FractionName)) currentUnit.Heal(5 * Time.deltaTime);
+        //else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.Fraction.FractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
+        else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.Fraction.FractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagRevealSystem>().isSomeoneInCafe = true;
     }
 
     public Room GetRoom()
     {
         return transform.parent.GetComponent<Room>();
+    }
+
+    public bool PlaceUnit0(Unit unit)
+    {
+        if (!IsFree()) return false;
+        currentUnit = unit;
+        if (unit != null && currentFlag != null) currentFlag.GetComponent<Flag>().StartCapture();
+        return true;
     }
 }

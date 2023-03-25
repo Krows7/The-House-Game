@@ -15,7 +15,7 @@ namespace Units.Settings
         {
             skillTimer = 0;
             SetVisible(false);
-            CurrentCell.DellUnit();
+            Cell.DellUnit();
         }
 
         public new void Update()
@@ -24,14 +24,18 @@ namespace Units.Settings
             if (skillTimer == -1) return;
             if(skillTimer >= skillTeleportDelay)
             {
-                if(Random.insideUnitCircle.x <= skillSuccessChance)
+                if (Cell.IsFree())
                 {
-                    fraction.influence += skillInfluence;
+                    if (Random.insideUnitCircle.x <= skillSuccessChance)
+                    {
+                        Fraction.influence += skillInfluence;
+                    }
+                    // Cringe
+                    MoveTo(Cell);
+                    SetVisible(true);
+                    skillTimer = -1;
+                    return;
                 }
-                CurrentCell.SetUnit(this);
-                SetVisible(true);
-                skillTimer = -1;
-                return;
             }
             skillTimer += Time.deltaTime;
         }
@@ -42,6 +46,11 @@ namespace Units.Settings
             Debug.Log(transform);
             Debug.Log("Local Scale: " + transform.localScale);
             Debug.Log(Visible);
+        }
+
+        public override string GetUnitType()
+        {
+            return "Leader";
         }
     }
 }

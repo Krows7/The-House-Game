@@ -10,18 +10,21 @@ namespace Units.Settings
         public float health;
         float maxHealth;
         public float strength;
-        // Cells per second
-        public float speed;
         public float buff_c = 1;
 
-        void Start()
+        new void Start()
         {
+            health = stats.Health;
+            strength = stats.Strength;
+            buff_c = stats.Buff_c;
             maxHealth = health;
+            UpdateMoveSpeed(stats.Speed);
+            base.Start();
         }
 
         public override float CalculateTrueDamage()
         {
-            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log10(Mathf.Max(fraction.influence, 10));
+            return strength * (buff_c == 0 ? 1 : buff_c) / Mathf.Log10(Mathf.Max(Fraction.influence, 10));
         }
 
         public override float GetHealth()
@@ -29,27 +32,25 @@ namespace Units.Settings
             return health;
         }
 
-        public override float getSpeed()
+        public override float GetSpeed()
         {
-            return speed;
+            return GetAnimator().GetFloat("Move Speed");
         }
 
-        public override void GiveDamage(float Damage)
+        public override bool GiveDamage(float Damage)
         {
             health -= Damage;
-            if (health <= 0) Die();
+            if (health <= 0)
+            {
+                Die();
+                return false;
+            }
+            return true;
         }
 
         public override bool WillSurvive(float Damage)
         {
             return GetHealth() > Damage;
-        }
-
-        public override List<float> GetAllHealths()
-        {
-            List<float> result = new List<float>();
-            result.Add(health);
-            return result;
         }
 
         public override float GetMaxHealth()
@@ -60,6 +61,11 @@ namespace Units.Settings
         public override void Heal(float Health)
         {
             health = Mathf.Min(health + Health, maxHealth);
+        }
+
+        public override string GetUnitType()
+        {
+            return "Army";
         }
     }
 }

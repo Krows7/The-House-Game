@@ -7,27 +7,46 @@ using UnityEngine;
 
 public class MovementComponent : MonoBehaviour
 {
-    public IMovementStrategy Strategy { get; set; } = new SafeMovementStrategy();
-    AnimationSystem animationSystem;
-	Queue<Tuple<Cell, Cell, IAction>> queue = new();
+    public AbstractMovementStrategy Strategy { get; set; } = new SafeMovementStrategy();
 
-	void Start()
-    {
-		animationSystem = GameObject.Find("MasterController").GetComponent<AnimationSystem>();
-        animationSystem.Add(this);
-    }
+    private readonly Queue<IAction> queue = new();
+    public Animator unitAnimator;
 
     void Update()
     {
-        
+        var action = PopLastAnimation();
+        if (action == null) return;
+        if (!action.IsValid())
+        {
+            unitAnimator.SetTrigger("Interrupt");
+            action.OnInterrupted();
+        }
+        else GetAnimations().Enqueue(action);
     }
 
-    public void AddMovement(Cell from, Cell to, IAction action)
+    public void AddMovement(IAction action)
     {
-        queue.Enqueue(new Tuple<Cell, Cell, IAction>(from, to, action));
+        queue.Enqueue(action);
+        //TODO Maybe
+        if (action.IsValid()) action.PreAnimation(unitAnimator);
     }
 
-    public Queue<Tuple<Cell, Cell, IAction>> GetAnimations()
+    public void PostAnimation()
+    {
+        var action = PopLastAnimation();
+        //TODO
+        if (action == null) return;
+        action.Execute();
+    }
+
+    public IAction PopLastAnimation()
+    {
+        if (GetAnimations().Count == 0) return null;
+        while (GetAnimations().Count > 1) GetAnimations().Dequeue();
+        return GetAnimations().Dequeue();
+    }
+
+    public Queue<IAction> GetAnimations()
     {
         return queue;
     }
@@ -35,7 +54,6 @@ public class MovementComponent : MonoBehaviour
     public void Delete()
     {
         queue.Clear();
-        animationSystem.Remove(this);
     }
 
 	private void OnDestroy()

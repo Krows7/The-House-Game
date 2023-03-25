@@ -27,7 +27,7 @@ public class Flag : MonoBehaviour
     {
         InterruptCapture();
 		captureDelay = flags.captureDelay;
-        Debug.Log(captureDelay);
+        Debug.LogFormat("[Flag] Unit {0} started capturing", cell.GetUnit());
     }
 
     public void InterruptCapture()

@@ -1,25 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using Units.Settings;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BaseMoveAction : IAction
 {
-	public BaseMoveAction(Cell from, Cell to, Unit unit) 
+
+	public BaseMoveAction(Cell to, Unit unit) 
 	{
-		this.from = from;
-		this.to = to;
-		this.unit = unit;
-		IsDone = false;
+		this.TargetCell = to;
+		this.Unit = unit;
 	}
 
 	public override void Execute()
 	{
-		to.SetUnit(from.GetUnit());
-		from.DellUnit();
-		if (from.currentFlag != null)
-			from.currentFlag.GetComponent<Flag>().InterruptCapture();
-		IsDone = true;
+		Debug.LogFormat("[BaseMoveAction] Unit: {0}", Unit);
+		Unit.MoveTo(TargetCell);
+		var strategy = Unit.GetComponent<MovementComponent>().Strategy;
+		strategy.MoveUnit(Unit);
 	}
+
+	public override void PreAnimation(Animator animator)
+    {
+		animator.SetTrigger("Move");
+    }
+
+    public override bool IsValid()
+    {
+		return TargetCell.IsFree();
+    }
 }
