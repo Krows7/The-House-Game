@@ -98,7 +98,7 @@ public class Cell : MonoBehaviour
     void Update()
     {
         if (transform.parent.name.Equals("MedRoom") && currentUnit != null) currentUnit.Heal(15 * Time.deltaTime);
-        else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.Fraction.FractionName)) currentUnit.Heal(5 * Time.deltaTime);
+        else if (currentUnit != null && currentUnit.Fraction.FractionSpawn == GetComponentInParent<Room>()) currentUnit.Heal(5 * Time.deltaTime);
         //else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.Fraction.FractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
         else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.Fraction.FractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagRevealSystem>().isSomeoneInCafe = true;
     }

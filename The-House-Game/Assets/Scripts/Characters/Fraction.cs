@@ -21,6 +21,7 @@ namespace Units.Settings
         public UnitStats[] unitStats;
         public Room spawnRoom;
         public Name FractionName;
+        public Room FractionSpawn;
         public List<GameObject> Units { set; get; } = null;
 
         public bool disableAI;
