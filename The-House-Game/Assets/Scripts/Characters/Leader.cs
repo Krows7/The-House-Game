@@ -6,9 +6,10 @@ namespace Units.Settings
 {
     public class Leader : Army
     {
-        public float skillTeleportDelay;
-        public int skillInfluence;
-        public float skillSuccessChance;
+        // TODO Refactor
+        public float skillTeleportDelay = 3;
+        public int skillInfluence = 30;
+        public float skillSuccessChance = 0.75F;
         float skillTimer = -1;
 
         public void UseSkill()
@@ -42,10 +43,7 @@ namespace Units.Settings
 
         private void SetVisible(bool Visible)
         {
-            transform.localScale = Vector3.one * (Visible ? 0.25F : 0);
-            Debug.Log(transform);
-            Debug.Log("Local Scale: " + transform.localScale);
-            Debug.Log(Visible);
+            transform.localScale = Vector3.one * (Visible ? 1 : 0);
         }
 
         public override string GetUnitType()

@@ -19,7 +19,6 @@ namespace Units.Settings
 
         public int influence = 0;
         public UnitStats[] unitStats;
-        public Room spawnRoom;
         public Name FractionName;
         public Room FractionSpawn;
         public List<GameObject> Units { set; get; } = null;
@@ -43,7 +42,7 @@ namespace Units.Settings
         private void Spawn(UnitStats[] unitStats)
         {
             Units = new();
-            var cells = spawnRoom.transform;
+            var cells = FractionSpawn.transform;
             var range = Enumerable.Range(0, cells.childCount).ToList().OrderBy(a => Random.Range(0, int.MaxValue)).ToList();
             for (int i = 0; i < unitStats.Length; i++)
             {
