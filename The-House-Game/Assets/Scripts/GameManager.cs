@@ -46,14 +46,14 @@ public class GameManager : MonoBehaviour
         foreach (Transform fraction in GetFractions())
         {
             var ffraction = fraction.GetComponent<Fraction>();
-            if (ffraction.Units.Count == 0)
+            if (ffraction.Units.Count > 0)
             {
                 if (left == null) left = ffraction;
                 else return false;
             }
         }
         winner = GetWinner();
-        return left == winner;
+        return left == null || left == winner;
     }
 
     private Transform GetFractions()
