@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour
     public GameObject BaseUnit;
     public GameObject DamageParticlePrefab;
 
+    //TODO Refactor Add Null Value
     public static Fraction.Name gamerFractionName = Fraction.Name.FOURTH;
+    //TODO Refactor Remove
     public static Fraction gamerFraction;
     public static Fraction winner;
     public static Dictionary<string, Fraction> fractions = new();
@@ -29,6 +31,15 @@ public class GameManager : MonoBehaviour
             fractions.Add(frac.name, frac);
         }
         Debug.LogFormat("[GameManager] Player Fraction: {0}", gamerFractionName);
+    }
+
+    private void OnDestroy()
+    {
+        gamerFractionName = Fraction.Name.FOURTH;
+        gamerFraction = null;
+        winner = null;
+        fractions.Clear();
+        instance = null;
     }
 
     void Update()
