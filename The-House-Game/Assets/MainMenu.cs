@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        GameOverSound.Play();
+        //GameOverSound.Play();
         GameOverText.text = string.Format(GameOverText.text,
                                           GameManager.fractions["Rats"].influence,
                                           GameManager.fractions["Fourth"].influence,
