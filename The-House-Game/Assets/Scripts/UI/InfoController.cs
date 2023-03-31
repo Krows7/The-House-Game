@@ -29,7 +29,10 @@ public class InfoController : MonoBehaviour
             uiCanvas.transform.Find("UnitInfoField/Health/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.GetHealth()).ToString();
             uiCanvas.transform.Find("UnitInfoField/Strength/Value").GetComponent<TMPro.TextMeshProUGUI>().text = ((int)unit.CalculateTrueDamage()).ToString();
             uiCanvas.transform.Find("UnitInfoField/Speed/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.GetSpeed().ToString();
-            uiCanvas.transform.Find("UnitInfoField/CurrentRoom/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.Cell.GetRoom().name;
+            if (unit.IsActive())
+            {
+                uiCanvas.transform.Find("UnitInfoField/CurrentRoom/Value").GetComponent<TMPro.TextMeshProUGUI>().text = unit.Cell.GetRoom().name;
+            }
         }
     }
 

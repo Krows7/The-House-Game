@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        fractions.Clear();
         instance = this;
         foreach (Transform fracTransform in GameObject.Find("Fractions").transform)
         {
@@ -38,7 +39,6 @@ public class GameManager : MonoBehaviour
         gamerFractionName = Fraction.Name.FOURTH;
         gamerFraction = null;
         winner = null;
-        fractions.Clear();
         instance = null;
     }
 

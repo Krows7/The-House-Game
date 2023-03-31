@@ -14,6 +14,7 @@ namespace Units.Settings
             units.Add(unit);
             unit.MoveTo(null);
             unit.gameObject.SetActive(false);
+            UpdateGroup();
         }
 
         public override float CalculateTrueDamage()

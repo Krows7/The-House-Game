@@ -10,6 +10,9 @@ public class MapManager : MonoBehaviour
     private List<Cell> cells;
     private List<List<Cell>> mapGraph;
 
+    public Room medRoom;
+    public Room cafeRoom;
+
     public static MapManager instance;
 
     void FillRoomsArray() 
