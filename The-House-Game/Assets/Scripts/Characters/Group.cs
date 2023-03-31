@@ -14,12 +14,6 @@ namespace Units.Settings
             units.Add(unit);
             unit.MoveTo(null);
             unit.gameObject.SetActive(false);
-            // Know-how
-            var canvas = transform.Find("GroupCount");
-            canvas.gameObject.SetActive(true);
-            canvas.GetComponent<TextMeshPro>().SetText(units.Count.ToString());
-
-            UpdateMoveSpeed(GetSpeed());
         }
 
         public override float CalculateTrueDamage()
@@ -32,14 +26,20 @@ namespace Units.Settings
             return units.Min(x => x.GetSpeed());
         }
 
+        private void UpdateGroup()
+        {
+            var canvas = transform.Find("GroupCount");
+            canvas.gameObject.SetActive(true);
+            canvas.GetComponent<TextMeshPro>().SetText(units.Count.ToString());
+
+            UpdateMoveSpeed(GetSpeed());
+        }
+
         public override bool GiveDamage(float Damage)
         {
-            // TODO Fix
-            units.RemoveAll(x => x == null);
             if (!WillSurvive(Damage)) { Die(); return false; };
             float dmg = Damage / units.Count;
-            units.ForEach(x => x.GiveDamage(dmg));
-            //UpdateMoveSpeed(GetSpeed());
+            if (units.RemoveAll(x => !x.GiveDamage(dmg)) > 0) UpdateGroup();
             return true;
         }
 
