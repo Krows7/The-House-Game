@@ -9,12 +9,11 @@ public class Room : MonoBehaviour
     public int roomId { get; set; } = -1;
 
 
-	void FillCellsArray() 
+	public void FillCellsArray() 
     {
         cells = new List<Cell>();
         foreach (Transform child in transform) 
         {
-
             Cell c = child.gameObject.GetComponent<Cell>();
 			cells.Add(c);
             if (color != null) c.transform.GetChild(0).GetComponent<MeshRenderer>().material.color = color.color;
@@ -46,8 +45,7 @@ public class Room : MonoBehaviour
 
     void Awake()
     {
-        FillCellsArray();
-	
+        //FillCellsArray();
 	}
 
 	void Start()

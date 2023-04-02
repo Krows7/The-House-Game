@@ -8,6 +8,44 @@ public class Map : MonoBehaviour
     [SerializeField] private List<Room> rooms;
     private List<Cell> cells;
     private List<List<Cell>> mapGraph;
+    private GameObject Walls;
+
+    [SerializeField] private bool showGraph;
+
+
+    void FillAreas() 
+    {
+        List<Transform> areaCellChildrens = new List<Transform>();
+        List<Transform> areaWallChildrens = new List<Transform>();
+
+        foreach (Transform child in transform) {
+            if (child.gameObject.name.Substring(0, Mathf.Min(8, child.gameObject.name.Length)) == "AreaCell") {
+                areaCellChildrens.Add(child);
+            }
+            if (child.gameObject.name.Substring(0, Mathf.Min(8, child.gameObject.name.Length)) == "AreaWall") {
+                areaWallChildrens.Add(child);
+            }
+		}
+
+        for (int i = 0; i < areaCellChildrens.Count; ++i) {
+            areaCellChildrens[i].gameObject.GetComponent<AreaCell>().FillArea(gameObject);
+            areaCellChildrens[i].parent = null;
+        }
+
+        Walls = new GameObject();
+        Walls.transform.parent = gameObject.transform.parent;
+        Walls.name = "Walls";
+
+        for (int i = 0; i < areaWallChildrens.Count; ++i) {
+            areaWallChildrens[i].gameObject.GetComponent<AreaWall>().FillArea(Walls);
+            areaWallChildrens[i].parent = null;
+        }
+    }
+
+    void BuildEnvironment() 
+    {
+        
+    }
 
     void FillRoomsArray() 
     {
@@ -16,9 +54,16 @@ public class Map : MonoBehaviour
 		foreach (Transform child in transform) 
         {
             Room r = child.gameObject.GetComponent<Room>();
-            Debug.Log(r.name);
             r.roomId = counter++;
 			rooms.Add(r);
+		}
+    }
+
+    void FillCellsArrayForRooms() {
+        foreach (Transform child in transform) 
+        {
+            Room room = child.gameObject.GetComponent<Room>();
+            room.FillCellsArray();
 		}
     }
 
@@ -29,7 +74,6 @@ public class Map : MonoBehaviour
         for (int i = 0; i < rooms.Count; ++i) 
         {
             List<Cell> roomCells = rooms[i].GetCells();
-            Debug.Log(rooms[i].name + " " +  roomCells.Count);
             for (int j = 0; j < roomCells.Count; ++j)
             {
                 cells.Add(roomCells[j]);
@@ -39,7 +83,7 @@ public class Map : MonoBehaviour
             }
         }
         // SKIP
-        /*
+        
         mapGraph = new List<List<Cell>>();
         for (int i = 0; i < cells.Count; ++i) 
         {
@@ -54,8 +98,9 @@ public class Map : MonoBehaviour
                 }
             }
         }
-        */
+        
         // TODO Graph Hardcode
+        /*
         mapGraph = new();
         for (int i = 0; i < cells.Count; ++i) mapGraph.Add(new());
         foreach (var room in rooms)
@@ -74,6 +119,8 @@ public class Map : MonoBehaviour
                 }
             }
         }
+        */
+        /*
         ApplyPath(40, 81, cells);
         ApplyPath(36, 0, cells);
         ApplyPath(38, 74, cells);
@@ -89,6 +136,7 @@ public class Map : MonoBehaviour
         ApplyPath(3, 48, cells);
         ApplyPath(34, 49, cells);
         ApplyPath(29, 68, cells);
+        */
     }
     
     private void ApplyPath(int x, int y, List<Cell> cells)
@@ -97,13 +145,18 @@ public class Map : MonoBehaviour
         mapGraph[y].Add(cells[x]);
     }
 
+
     void Start()
     {
+        bool buffer = showGraph;
+        showGraph = false;
+        FillAreas();
+        BuildEnvironment();
+        FillCellsArrayForRooms();
         FillRoomsArray();
         SetIdForRooms();
+        showGraph = buffer;
     }
-
-    [SerializeField] private bool showGraph;
 
     void Update()
     {
