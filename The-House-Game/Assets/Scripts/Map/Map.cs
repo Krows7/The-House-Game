@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] private float CellsEps;
-    [SerializeField] private List<Room> rooms;
+    [SerializeField] private bool showGraph;
+    [SerializeField] private float AccurasyEPS;
+    [SerializeField] private GameObject WallPrefab;
+
+    public bool Ready = false;
+
+    private List<Room> rooms;
     private List<Cell> cells;
     private List<List<Cell>> mapGraph;
-    private GameObject Walls;
-
-    [SerializeField] private bool showGraph;
+    private GameObject WallsParentObject;
+    private List<Transform> WallsTransform;
+    private List<Transform> CellsTransform;
 
 
     void FillAreas() 
@@ -32,162 +38,259 @@ public class Map : MonoBehaviour
             areaCellChildrens[i].parent = null;
         }
 
-        Walls = new GameObject();
-        Walls.transform.parent = gameObject.transform.parent;
-        Walls.name = "Walls";
+        WallsParentObject = new GameObject();
+        WallsParentObject.transform.parent = gameObject.transform.parent;
+        WallsParentObject.name = "Walls";
 
         for (int i = 0; i < areaWallChildrens.Count; ++i) {
-            areaWallChildrens[i].gameObject.GetComponent<AreaWall>().FillArea(Walls);
+            areaWallChildrens[i].gameObject.GetComponent<AreaWall>().FillArea(WallsParentObject);
             areaWallChildrens[i].parent = null;
         }
     }
 
+
+    int FitCellId(int cellId, float positionX, float positionY) {
+        while (cellId < CellsTransform.Count && (CellsTransform[cellId].position.x < positionX || (Mathf.Abs(CellsTransform[cellId].position.x - positionX) <= AccurasyEPS && CellsTransform[cellId].position.y < positionY))) {
+            cellId++;
+        }
+        return cellId;
+    }
+    int FitWallId(int wallId, float positionX, float positionY) {
+        while (wallId < WallsTransform.Count && (WallsTransform[wallId].position.x < positionX || (Mathf.Abs(WallsTransform[wallId].position.x - positionX) <= AccurasyEPS && WallsTransform[wallId].position.y < positionY))) {
+            wallId++;
+        }
+        return wallId;
+    }
+
+
+    bool EqualPositions(Vector3 PositionA, Vector3 PositionB) {
+        return Mathf.Abs(PositionA.x - PositionB.x) <= AccurasyEPS && Mathf.Abs(PositionA.y - PositionB.y) <= AccurasyEPS;
+    }
+
+
+
+
+
     void BuildEnvironment() 
     {
-        
-    }
+        WallsTransform = new List<Transform>();
+        foreach (Transform wallTransform in WallsParentObject.transform) {
+            WallsTransform.Add(wallTransform);
+        }
 
-    void FillRoomsArray() 
-    {
-        rooms = new List<Room>();
-		int counter = 0;
-		foreach (Transform child in transform) 
-        {
-            Room r = child.gameObject.GetComponent<Room>();
-            r.roomId = counter++;
-			rooms.Add(r);
-		}
-    }
-
-    void FillCellsArrayForRooms() {
-        foreach (Transform child in transform) 
-        {
-            Room room = child.gameObject.GetComponent<Room>();
-            room.FillCellsArray();
-		}
-    }
-
-    void SetIdForRooms()
-    {
-        cells = new List<Cell>();
-        int counter = 0;
-        for (int i = 0; i < rooms.Count; ++i) 
-        {
-            List<Cell> roomCells = rooms[i].GetCells();
-            for (int j = 0; j < roomCells.Count; ++j)
-            {
-                cells.Add(roomCells[j]);
-                roomCells[j].roomId = rooms[i].roomId;
-                roomCells[j].SetId(counter);
-                counter++;
+        CellsTransform = new List<Transform>();
+        foreach (Transform roomTransform in gameObject.transform) {
+            foreach (Transform cellTransform in roomTransform) {
+                CellsTransform.Add(cellTransform);
             }
         }
-        // SKIP
-        
+
+        CellsTransform = CellsTransform.OrderBy(x => (x.position.x, x.position.y)).ToList();
+        WallsTransform = WallsTransform.OrderBy(x => (x.position.x, x.position.y)).ToList();
+
+        List<int> CellsToDestroy = new List<int>();
+        List<int> WallsToDestroy = new List<int>();
+
+        for (int i = 1; i < CellsTransform.Count; ++i) {
+            if (CellsTransform[i].position == CellsTransform[i-1].position) {
+                CellsToDestroy.Add(i);
+            }
+        }
+        for (int i = 1; i < WallsTransform.Count; ++i) {
+            if (WallsTransform[i].position == WallsTransform[i-1].position) {
+                WallsToDestroy.Add(i);
+            }
+        }
+        for (int i = 0; i < CellsToDestroy.Count; ++i) {
+            int index = CellsToDestroy[i] - i;
+            CellsTransform[index].parent = null;
+            GameObject.Destroy(CellsTransform[index].gameObject);
+            CellsTransform.RemoveAt(index);
+        }
+        for (int i = 0; i < WallsToDestroy.Count; ++i) {
+            int index = WallsToDestroy[i] - i;
+            WallsTransform[index].parent = null;
+            GameObject.Destroy(WallsTransform[index].gameObject);
+            WallsTransform.RemoveAt(index);
+        }
+
+        cells = new List<Cell>();
         mapGraph = new List<List<Cell>>();
-        for (int i = 0; i < cells.Count; ++i) 
-        {
+        for (int currentCellId = 0; currentCellId < CellsTransform.Count; ++currentCellId) {
+            cells.Add(CellsTransform[currentCellId].gameObject.GetComponent<Cell>());
             mapGraph.Add(new List<Cell>());
-            for (int j = 0; j < cells.Count; ++j) 
-            {
+            cells[currentCellId].SetId(currentCellId);
+            cells[currentCellId].gameMap = this;
+        }
+
+        List<Vector3> HorizontalWallsToAdd = new List<Vector3>();
+        List<Vector3> VerticalWallsToAdd = new List<Vector3>();
+
+        /*
+                  upperCell
+                  upperWall
+leftCell leftWall currentCell rightWall rightCell
+                  lowerWall
+                  lowerCell
+        */
+
+        int lowerCellId = 0, leftCellId = 0, rightCellId = 0, upperCellId = 0, lowerWallId = 0, leftWallId = 0, rightWallId = 0, upperWallId = 0;
+/*
+        mapGraph = new List<List<Cell>>();
+        for (int i = 0; i < cells.Count; ++i) {
+            mapGraph.Add(new List<Cell>());
+            for (int j = 0; j < cells.Count; ++j) {
                 float distance = Mathf.Abs(cells[i].GetPositionX() - cells[j].GetPositionX()) + Mathf.Abs(cells[i].GetPositionY() - cells[j].GetPositionY());
-                if (cells[i].GetCellSize() - CellsEps <= distance && distance <= cells[i].GetCellSize() + CellsEps) 
-                {
+                if (cells[i].GetCellSize() - CellsEps <= distance && distance <= cells[i].GetCellSize() + CellsEps) {
                     mapGraph[i].Add(cells[j]);
                     cells[j].gameMap = this;
                 }
             }
         }
-        
-        // TODO Graph Hardcode
-        /*
-        mapGraph = new();
-        for (int i = 0; i < cells.Count; ++i) mapGraph.Add(new());
-        foreach (var room in rooms)
-        {
-            foreach (var i in room.GetCells())
-            {
-                foreach (var j in room.GetCells())
-                {
-                    float distance = Mathf.Abs(i.GetPositionX() - j.GetPositionX()) + Mathf.Abs(i.GetPositionY() - j.GetPositionY());
-                    if (i.GetCellSize() - CellsEps <= distance && distance <= i.GetCellSize() + CellsEps)
-                    {
-                        mapGraph[i.GetId()].Add(j);
-                        j.gameMap = this;
-                    }
-                        
+*/
+        for (int currentCellId = 0; currentCellId < CellsTransform.Count; ++currentCellId) {
+            Transform currentCell = CellsTransform[currentCellId];
+
+            lowerCellId = FitCellId(lowerCellId, currentCell.position.x, currentCell.position.y - 1);
+            leftCellId  = FitCellId(leftCellId,  currentCell.position.x - 1, currentCell.position.y);
+            rightCellId = FitCellId(rightCellId, currentCell.position.x + 1, currentCell.position.y);
+            upperCellId = FitCellId(upperCellId, currentCell.position.x, currentCell.position.y + 1);
+            lowerWallId = FitWallId(lowerWallId, currentCell.position.x, currentCell.position.y - 0.5f);
+            leftWallId  = FitWallId(leftWallId,  currentCell.position.x - 0.5f, currentCell.position.y);
+            rightWallId = FitWallId(rightWallId, currentCell.position.x + 0.5f, currentCell.position.y);
+            upperWallId = FitWallId(upperWallId, currentCell.position.x, currentCell.position.y + 0.5f);
+
+            //Debug.Log(currentCellId.ToString() + " " + lowerCellId.ToString() + " " + leftCellId.ToString() + " " + rightCellId.ToString() + " " + upperCellId.ToString());
+
+            /*
+            если нет верхней стенки
+                если есть верхняя клетка
+                    соединить туда-сюда ребром
+                иначе
+                    поставить сверху стенку
+            если нет правой стенки
+                если есть правая клетка
+                    создать связь туда-сюда
+                иначе
+                    поставить справа стенку
+            если нет левой стенки
+                если нет слева клетки
+                    поставить слева стенку
+            если нет нижний стенки
+                если нет снизу клетки
+                    поставить снизу стенку
+            */
+            if (upperWallId >= WallsTransform.Count || !EqualPositions(WallsTransform[upperWallId].position, currentCell.position + new Vector3(0, 0.5f, 0))) {
+                if (upperCellId < CellsTransform.Count && EqualPositions(CellsTransform[upperCellId].position, currentCell.position + new Vector3(0, 1, 0))) {
+                    mapGraph[currentCellId].Add(cells[upperCellId]);
+                    mapGraph[upperCellId].Add(cells[currentCellId]);
+                }
+                else {
+                    HorizontalWallsToAdd.Add(currentCell.position + new Vector3(0, 0.5f, 0));
                 }
             }
+            if (rightWallId >= WallsTransform.Count || !EqualPositions(WallsTransform[rightWallId].position, currentCell.position + new Vector3(0.5f, 0, 0))) {
+                if (rightCellId < CellsTransform.Count && EqualPositions(CellsTransform[rightCellId].position, currentCell.position + new Vector3(1, 0, 0))) {
+                    mapGraph[currentCellId].Add(cells[rightCellId]);
+                    mapGraph[rightCellId].Add(cells[currentCellId]);
+                }
+                else {
+                    VerticalWallsToAdd.Add(currentCell.position + new Vector3(0.5f, 0, 0));
+                }
+            }
+            if (leftWallId >= WallsTransform.Count || !EqualPositions(WallsTransform[leftWallId].position, currentCell.position + new Vector3(-0.5f, 0, 0))) {
+                if (leftCellId >= CellsTransform.Count || !EqualPositions(CellsTransform[leftCellId].position, currentCell.position + new Vector3(-1, 0, 0))) {
+                    VerticalWallsToAdd.Add(currentCell.position + new Vector3(-0.5f, 0, 0));
+                }
+            }
+            if (lowerWallId >= WallsTransform.Count || !EqualPositions(WallsTransform[lowerWallId].position, currentCell.position + new Vector3(0, -0.5f, 0))) {
+                if (lowerCellId >= CellsTransform.Count || !EqualPositions(CellsTransform[lowerCellId].position, currentCell.position + new Vector3(0, -1, 0))) {
+                    HorizontalWallsToAdd.Add(currentCell.position + new Vector3(0, -0.5f, 0));
+                }
+            }   
         }
-        */
-        /*
-        ApplyPath(40, 81, cells);
-        ApplyPath(36, 0, cells);
-        ApplyPath(38, 74, cells);
-        ApplyPath(15, 4, cells);
-        ApplyPath(12, 47, cells);
-        ApplyPath(50, 11, cells);
-        ApplyPath(16, 53, cells);
-        ApplyPath(52, 84, cells);
-        ApplyPath(23, 57, cells);
-        ApplyPath(21, 70, cells);
-        ApplyPath(75, 66, cells);
-        ApplyPath(78, 60, cells);
-        ApplyPath(3, 48, cells);
-        ApplyPath(34, 49, cells);
-        ApplyPath(29, 68, cells);
-        */
-    }
-    
-    private void ApplyPath(int x, int y, List<Cell> cells)
-    {
-        mapGraph[x].Add(cells[y]);
-        mapGraph[y].Add(cells[x]);
+        // выставить новые стенки   
+        SetOuterWalls(HorizontalWallsToAdd, VerticalWallsToAdd);
     }
 
 
-    void Start()
+    void SetOuterWalls(List<Vector3> HorizontalWallsToAdd, List<Vector3> VerticalWallsToAdd) {
+        AreaWall OuterWallsGenerator = new AreaWall();
+        foreach (Vector3 wallPosition in HorizontalWallsToAdd) {
+            OuterWallsGenerator.SetWall(wallPosition, "horizontal", WallsParentObject, WallPrefab);
+        }
+        foreach (Vector3 wallPosition in VerticalWallsToAdd) {
+            OuterWallsGenerator.SetWall(wallPosition, "vertical", WallsParentObject, WallPrefab);
+        }
+        GameObject.Destroy(OuterWallsGenerator);
+    }
+
+
+    void FillCellsArrayForRooms() 
     {
-        bool buffer = showGraph;
-        showGraph = false;
+        foreach (Transform child in transform) {
+            Room room = child.gameObject.GetComponent<Room>();
+            room.FillCellsArray();
+		}
+    }
+
+
+    void FillRoomsArray() 
+    {
+        rooms = new List<Room>();
+        int currentRoomId = 0;
+        foreach (Transform roomTransform in transform) {
+            rooms.Add(roomTransform.gameObject.GetComponent<Room>());
+            rooms[currentRoomId].roomId = currentRoomId;
+            foreach (Transform cellTransform in roomTransform) {
+                cellTransform.gameObject.GetComponent<Cell>().roomId = currentRoomId;
+            }
+            currentRoomId++;
+        }
+    }
+
+
+    void Start()    
+    {
         FillAreas();
         BuildEnvironment();
         FillCellsArrayForRooms();
         FillRoomsArray();
-        SetIdForRooms();
-        showGraph = buffer;
+        Ready = true;
     }
+
 
     void Update()
     {
-        if (showGraph) 
-        {
+        if (Ready && showGraph) {
             DisplayGraph();
         }
     }
 
+
     void DisplayGraph() 
     {
-        for (int i = 0; i < mapGraph.Count; ++i) 
-        {
-            for (int j = 0; j < mapGraph[i].Count; ++j) 
-            {
-                Vector3 start = new Vector3(cells[i].GetPositionX(), cells[i].GetPositionY(), -0.5f);
+        for (int i = 0; i < mapGraph.Count; ++i) {
+            for (int j = 0; j < mapGraph[i].Count; ++j) {
+                Vector3 start  = new Vector3(cells[i].GetPositionX(), cells[i].GetPositionY(), -0.5f);
                 Vector3 finish = new Vector3(mapGraph[i][j].GetPositionX(), mapGraph[i][j].GetPositionY(), -0.5f);
                 Debug.DrawLine(start, finish, Color.red);
             }
         }
     }
 
+
     public List<List<Cell>> GetGraph() 
     {
         return mapGraph;
     }
 
+
     public List<Cell> GetCells() 
     {
         return cells;
     }
+
 
     public List<Room> GetRooms()
     {

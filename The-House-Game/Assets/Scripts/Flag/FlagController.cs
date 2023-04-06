@@ -27,6 +27,9 @@ public class FlagController : MonoBehaviour
 
     void Update()
     {
+        if (!map.Ready) {
+            return;
+        }
         freeFlagPoles = map.GetCells().Where(x => x.currentFlag == null && x.IsFree() && exceptions.Where(y => y.roomId == x.roomId).Count() == 0).ToList();
         if (flags.Count < maxFlags && freeFlagPoles.Count > 0)
         {

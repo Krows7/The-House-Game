@@ -9,6 +9,11 @@ public class AreaCell : MonoBehaviour
 
     public void FillArea(GameObject MapObject = null) 
     {
+        if (Mathf.Abs(transform.rotation.eulerAngles.z - 90) < 15 || Mathf.Abs(transform.rotation.eulerAngles.z - 270) < 15) {
+            transform.rotation = Quaternion.identity;
+            transform.localScale = new Vector3(transform.localScale.y, transform.localScale.x, transform.localScale.z);
+        }
+
         GameObject RoomObject = new GameObject();
         RoomObject.transform.position = transform.position;
         RoomObject.AddComponent<Room>();

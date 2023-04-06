@@ -23,6 +23,9 @@ public class FindFlagInCurrentRoom : Node
 	public override NodeState Evaluate()
 	{
 		var a = GameObject.Find("TemporaryDebugObjects/TemporaryFixedMap/Map").GetComponent<Map>();
+		if (!a.Ready) {
+			return NodeState.FAIL;
+		}
 		foreach (Cell f in a.GetRooms()[_unit.CurrentCell.roomId].GetCells())
         {
 			if(f.currentFlag != null)
