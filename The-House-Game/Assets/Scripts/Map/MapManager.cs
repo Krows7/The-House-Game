@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using InspectorTools;
 
 public class MapManager : MonoBehaviour
 {
@@ -120,6 +121,8 @@ public class MapManager : MonoBehaviour
     }
 
     [SerializeField] private bool showGraph;
+    [ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(showGraph))]
+    public bool useArrows;
 
     void Update()
     {
@@ -171,7 +174,8 @@ public class MapManager : MonoBehaviour
             {
                 Vector3 start = new(cells[i].GetPositionX(), cells[i].GetPositionY(), -0.5f);
                 Vector3 finish = new(mapGraph[i][j].GetPositionX(), mapGraph[i][j].GetPositionY(), -0.5f);
-                Debug.DrawLine(start, finish, Color.red);
+                if (useArrows) DrawArrow.ForDebug(start, finish - start, Color.red);
+                else Debug.DrawLine(start, finish, Color.red);
             }
         }
     }

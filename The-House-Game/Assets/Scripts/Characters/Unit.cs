@@ -19,7 +19,11 @@ namespace Units.Settings
 
         public abstract float CalculateTrueDamage();
 
-        public abstract bool GiveDamage(float Damage);
+        /// <summary>
+        /// Takes damage and reduces current HP. If damage is larger than current HP then unit dies.
+        /// Returns true if unit could survive damage, false otherwise.
+        /// </summary>
+        public abstract bool TakeDamage(float Damage);
 
         public abstract float GetHealth();
 
@@ -77,6 +81,7 @@ namespace Units.Settings
             transform.position = new(cellPos.x, cellPos.y, transform.position.z);
         }
 
+        //TODO Refactor
         //DO NOT SET VALUES EQUALS OR GREATER THAN 4
         public void UpdateMoveSpeed(float speed)
         {
@@ -89,10 +94,72 @@ namespace Units.Settings
             return transform.Find("HeroKnight").GetComponent<Animator>();
         }
 
-        //This isn't about checking whether the unit is dead (It can be in group at the moment)
+        /// <summary>
+        /// Returns whether unit belongs to any cell in the map. Features like death, joining to a group or Leader's skill removes unit from map.
+        /// <para>
+        /// Note that joining the unit to a group triggers this method to true. Please, check unit's group for activity.
+        /// </para>
+        /// </summary>
         public bool IsActive()
         {
-            return Cell != null;
+            return Cell != null && Cell.GetUnit() == this;
+        }
+
+        /// <summary>
+        /// Returns whether the unit is animating the movement from one cell to another.
+        /// <para>
+        /// Method is not trigger to true if the unit is playing "Move Prepare".
+        /// </para>
+        /// </summary>
+        public bool IsMoving()
+        {
+            return GetAnimator().GetCurrentAnimatorStateInfo(0).IsName("Cell Switch");
+        }
+
+        //TODO Refactor
+        public bool IsAttacking()
+        {
+            var state = GetAnimator().GetCurrentAnimatorStateInfo(0);
+            return state.IsName("Attack") || state.IsName("Lose HP");
+        }
+
+        public bool IsBleeding()
+        {
+            return GetAnimator().GetCurrentAnimatorStateInfo(1).IsName("Bleed");
+        }
+
+        public bool TryBleed()
+        {
+            if (!IsActive()) return false;
+            var animator = GetAnimator();
+            animator.SetTrigger("Stop Bleed");
+            animator.SetTrigger("Bleed");
+            return true;
+        }
+
+        public bool IsEnemy(Unit unit)
+        {
+            return Fraction != unit.Fraction;
+        }
+
+        public bool IsIdle()
+        {
+            return GetAnimator().GetCurrentAnimatorStateInfo(0).IsName("Idle");
+        }
+
+        public void Interrupt()
+        {
+            GetAnimator().SetTrigger("Interrupt");
+        }
+
+        public bool RequireInterruptAnimations()
+        {
+            if (!IsIdle())
+            {
+                Interrupt();
+                return true;
+            }
+            return false;
         }
     }
 }

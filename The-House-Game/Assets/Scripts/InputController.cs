@@ -46,7 +46,8 @@ public class InputController : MonoBehaviour
             
             if (Input.GetKeyDown(KeyCode.Q) && IsPlayableUnit(unit))
             {
-                if (unit is Leader u) u.UseSkill();
+                // TODO Add Interruption
+                if (unit is Leader u && u.IsSkillUsed()) u.UseSkill();
             }
 
             if (Input.GetKeyDown(KeyCode.G) && IsPlayableUnit(unit) && unit is Group group)
@@ -58,7 +59,7 @@ public class InputController : MonoBehaviour
 
     private bool IsPlayableUnit(Unit unit)
     {
-        return unit.Fraction == GameManager.gamerFraction;
+        return unit.Fraction == GameManager.gamerFraction || DebugTools.instance.isDebug;
     }
 
     public void ChooseUnit(Unit Unit)
@@ -75,6 +76,8 @@ public class InputController : MonoBehaviour
 
     void MoveUnit() 
     {
+        unit.RequireInterruptAnimations();
+
         AbstractMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
 
         if (Input.GetKey(KeyCode.LeftShift)) strategy.AddDestination(finishCell, unit);

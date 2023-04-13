@@ -15,39 +15,55 @@ public class FightAction : IAction
 		Enemy = enemy;
 	}
 
-	public override void Execute()
-	{
+    //public override void Execute()
+    //{
+    //	Debug.LogFormat("[FightAction] Unit: {0}; Enemy: {1}", Unit, Enemy);
+    //	var trueDamage = Unit.CalculateTrueDamage();
+    //	var enemyTrueDamage = Enemy.CalculateTrueDamage();
+    //	if (trueDamage >= enemyTrueDamage || !Enemy.WillSurvive(trueDamage))
+    //	{
+    //		//the hell is zis?
+
+    //		//if (unit.WillSurvive(enemyTrueDamage))
+    //		//{
+    //		//	if (from.currentFlag != null)
+    //		//	{
+    //		//		to.currentFlag.GetComponent<Flag>().StartCapture();
+    //		//	}
+    //		//}
+
+    //		//Fix Influence
+    //		Unit.Fraction.influence += 100;
+    //	}
+    //	ShowDamage(Unit, enemyTrueDamage);
+    //	ShowDamage(Enemy, trueDamage);
+    //	Enemy.GiveDamage(trueDamage);
+    //	Unit.GiveDamage(enemyTrueDamage);
+
+    //	//TODO Refactor
+    //	//Unit.GetAnimator().ResetTrigger("Attack");
+    //	//Enemy.GetAnimator().ResetTrigger("Attack");
+
+    //	FollowIfPossible();
+    //}
+
+    public override void Execute()
+    {
 		Debug.LogFormat("[FightAction] Unit: {0}; Enemy: {1}", Unit, Enemy);
 		var trueDamage = Unit.CalculateTrueDamage();
-		var enemyTrueDamage = Enemy.CalculateTrueDamage();
-		if (trueDamage >= enemyTrueDamage || !Enemy.WillSurvive(trueDamage))
-		{
-			//the hell is zis?
-
-			//if (unit.WillSurvive(enemyTrueDamage))
-			//{
-			//	if (from.currentFlag != null)
-			//	{
-			//		to.currentFlag.GetComponent<Flag>().StartCapture();
-			//	}
-			//}
-
-			//Fix Influence
-			Unit.Fraction.influence += 100;
-		}
-		ShowDamage(Unit, enemyTrueDamage);
+		Enemy.TryBleed();
 		ShowDamage(Enemy, trueDamage);
-		Enemy.GiveDamage(trueDamage);
-		Unit.GiveDamage(enemyTrueDamage);
-
-		//TODO Refactor
-		//Unit.GetAnimator().ResetTrigger("Attack");
-		//Enemy.GetAnimator().ResetTrigger("Attack");
-
+		if (!Enemy.TakeDamage(trueDamage)) Unit.Fraction.influence += GetFightInfluence();
 		FollowIfPossible();
 	}
 
-	public override void OnInterrupted()
+	//TODO Refactor
+	private int GetFightInfluence()
+    {
+		return 100;
+    }
+
+    public override void OnInterrupted()
 	{
 		FollowIfPossible();
 	}
@@ -59,7 +75,6 @@ public class FightAction : IAction
 		if (strategy is FollowEnemyStrategy && Enemy.IsActive())
 		{
 			strategy.MoveUnit(Unit);
-			//strategy.MoveUnitToCell(strategy1.Enemy.Cell, unit);
 		}
 	}
 
@@ -69,20 +84,16 @@ public class FightAction : IAction
 		particle.transform.GetChild(0).GetComponent<TextMeshPro>().SetText((int)(dmg + 0.5f) + "");
 	}
 
+	// TODO Refactor
 	public override bool IsValid()
 	{
-		if (Enemy == null) return false;
+		if (Enemy == null || !Enemy.IsActive()) return false;
+		if (Enemy.IsMoving()) return false;
 		return MapManager.instance.AreNeighbors(Unit.Cell, Enemy.Cell);
 	}
 
 	public override void PreAnimation(Animator animator)
 	{
-		//TODO Refactor
-		//animator.SetTrigger("Interrupt");
-		//Enemy.GetAnimator().SetTrigger("Interrupt");
-
 		animator.SetTrigger("Attack");
-		//TODO Tak ne dolzhno rabotaty
-		Enemy.GetAnimator().SetTrigger("Attack");
 	}
 }

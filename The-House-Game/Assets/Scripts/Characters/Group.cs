@@ -36,11 +36,11 @@ namespace Units.Settings
             UpdateMoveSpeed(GetSpeed());
         }
 
-        public override bool GiveDamage(float Damage)
+        public override bool TakeDamage(float Damage)
         {
             if (!WillSurvive(Damage)) { Die(); return false; };
             float dmg = Damage / units.Count;
-            if (units.RemoveAll(x => !x.GiveDamage(dmg)) > 0) UpdateGroup();
+            if (units.RemoveAll(x => !x.TakeDamage(dmg)) > 0) UpdateGroup();
             return true;
         }
 

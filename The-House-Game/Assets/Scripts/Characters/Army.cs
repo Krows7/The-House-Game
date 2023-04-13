@@ -37,7 +37,7 @@ namespace Units.Settings
             return GetAnimator().GetFloat("Move Speed");
         }
 
-        public override bool GiveDamage(float Damage)
+        public override bool TakeDamage(float Damage)
         {
             health -= Damage;
             if (health <= 0)

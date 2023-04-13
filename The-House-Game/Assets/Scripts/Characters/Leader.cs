@@ -46,6 +46,16 @@ namespace Units.Settings
             transform.localScale = Vector3.one * (Visible ? 1 : 0);
         }
 
+        public bool IsVisible()
+        {
+            return transform.localScale != Vector3.zero;
+        }
+
+        public bool IsSkillUsed()
+        {
+            return skillTimer != -1;
+        }
+
         public override string GetUnitType()
         {
             return "Leader";

@@ -65,12 +65,12 @@ public abstract class AbstractMovementStrategy
         if (unit == null) return;
         IAction action;
         // group
-        if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction == unit.Fraction)
+        if (nextCell == finishCell && !nextCell.IsFree() && !unit.IsEnemy(nextCell.GetUnit()))
         {
             action = new GroupAction(nextCell, unit);
         }
         // fight
-        else if (nextCell == finishCell && !nextCell.IsFree() && nextCell.GetUnit().Fraction != unit.Fraction)
+        else if (nextCell == finishCell && !nextCell.IsFree() && unit.IsEnemy(nextCell.GetUnit()))
         {
             action = new FightAction(nextCell, unit, nextCell.GetUnit());
         }

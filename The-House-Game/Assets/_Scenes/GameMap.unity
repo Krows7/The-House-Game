@@ -6939,6 +6939,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75d10877edafaff4dae4167dabe2d530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebug: 1
 --- !u!20 &1081450584 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2177254458554296612, guid: edde1884418fb87449fa33c7f40a1c17, type: 3}
