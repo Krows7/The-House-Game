@@ -4,6 +4,15 @@ using Units.Settings;
 
 public class FractionChoiceController : MonoBehaviour
 {
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
+
     public void ChooseRats()
     {
         LoadScene(Fraction.Name.RATS);
