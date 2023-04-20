@@ -6,8 +6,7 @@ using System.Linq;
 class MyComparer : IComparer<Transform>
 {
     public float AccurasyEPS;
-    public int Compare(Transform x, Transform y)
-    {
+    public int Compare(Transform x, Transform y) {
         if ((x.position.x < y.position.x - AccurasyEPS) || (Mathf.Abs(x.position.x - y.position.x) < AccurasyEPS && x.position.y < y.position.y - AccurasyEPS)) {
             return -1;
         } 
@@ -69,7 +68,8 @@ public class Map : MonoBehaviour
         }
     }
 
-    int FitId(int id, ref List<Transform> ListTransform, Vector3 fitPosition) {
+    int FitId(int id, ref List<Transform> ListTransform, Vector3 fitPosition) 
+    {
         Transform fitTransform = dummyEmptyTransform;
         fitTransform.position = fitPosition;
         while (id < ListTransform.Count && comparer.Compare(ListTransform[id], fitTransform) < 0) {
@@ -79,7 +79,8 @@ public class Map : MonoBehaviour
     }
 
 
-    bool EqualPositions(Vector3 PositionA, Vector3 PositionB) {
+    bool EqualPositions(Vector3 PositionA, Vector3 PositionB) 
+    {
         return Mathf.Abs(PositionA.x - PositionB.x) <= AccurasyEPS && Mathf.Abs(PositionA.y - PositionB.y) <= AccurasyEPS;
     }
 
@@ -217,11 +218,6 @@ leftCell leftWall currentCell rightWall rightCell
                 }
                 else {
                     VerticalWallsToAdd.Add(currentCell.position + new Vector3(0.5f, 0, 0));
-                    Debug.Log(currentCellId.ToString() + " " + 
-                              upperCellId.ToString() + " " + 
-                              rightCellId.ToString() + " " + 
-                              leftCellId.ToString() + " " + 
-                              lowerCellId.ToString());
                 }
             }
             if (leftWallId >= WallsTransform.Count || !EqualPositions(WallsTransform[leftWallId].position, currentCell.position + new Vector3(-0.5f, 0, 0))) {
@@ -240,7 +236,8 @@ leftCell leftWall currentCell rightWall rightCell
     }
 
 
-    void SetOuterWalls(List<Vector3> HorizontalWallsToAdd, List<Vector3> VerticalWallsToAdd) {
+    void SetOuterWalls(List<Vector3> HorizontalWallsToAdd, List<Vector3> VerticalWallsToAdd) 
+    {
         AreaWall OuterWallsGenerator = new AreaWall();
         foreach (Vector3 wallPosition in HorizontalWallsToAdd) {
             OuterWallsGenerator.SetWall(wallPosition, "horizontal", WallsParentObject, WallPrefab);
