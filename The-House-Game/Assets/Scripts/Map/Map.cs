@@ -3,6 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+class MyComparer : IComparer<Transform>
+{
+    public float AccurasyEPS;
+    public int Compare(Transform x, Transform y)
+    {
+        if ((x.position.x < y.position.x - AccurasyEPS) || (Mathf.Abs(x.position.x - y.position.x) < AccurasyEPS && x.position.y < y.position.y - AccurasyEPS)) {
+            return -1;
+        } 
+        else if (Mathf.Abs(x.position.x - y.position.x) < AccurasyEPS && Mathf.Abs(x.position.y - y.position.y) < AccurasyEPS) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+}
+
 public class Map : MonoBehaviour
 {
     [SerializeField] private bool showGraph;
@@ -17,6 +34,10 @@ public class Map : MonoBehaviour
     private GameObject WallsParentObject;
     private List<Transform> WallsTransform;
     private List<Transform> CellsTransform;
+
+    private MyComparer comparer;
+    private GameObject dummyEmptyObject;
+    private Transform dummyEmptyTransform;
 
 
     void FillAreas() 
@@ -48,27 +69,19 @@ public class Map : MonoBehaviour
         }
     }
 
-
-    int FitCellId(int cellId, float positionX, float positionY) {
-        while (cellId < CellsTransform.Count && (CellsTransform[cellId].position.x < positionX || (Mathf.Abs(CellsTransform[cellId].position.x - positionX) <= AccurasyEPS && CellsTransform[cellId].position.y < positionY))) {
-            cellId++;
+    int FitId(int id, ref List<Transform> ListTransform, Vector3 fitPosition) {
+        Transform fitTransform = dummyEmptyTransform;
+        fitTransform.position = fitPosition;
+        while (id < ListTransform.Count && comparer.Compare(ListTransform[id], fitTransform) < 0) {
+            id++;
         }
-        return cellId;
-    }
-    int FitWallId(int wallId, float positionX, float positionY) {
-        while (wallId < WallsTransform.Count && (WallsTransform[wallId].position.x < positionX || (Mathf.Abs(WallsTransform[wallId].position.x - positionX) <= AccurasyEPS && WallsTransform[wallId].position.y < positionY))) {
-            wallId++;
-        }
-        return wallId;
+        return id;
     }
 
 
     bool EqualPositions(Vector3 PositionA, Vector3 PositionB) {
         return Mathf.Abs(PositionA.x - PositionB.x) <= AccurasyEPS && Mathf.Abs(PositionA.y - PositionB.y) <= AccurasyEPS;
     }
-
-
-
 
 
     void BuildEnvironment() 
@@ -79,14 +92,36 @@ public class Map : MonoBehaviour
         }
 
         CellsTransform = new List<Transform>();
-        foreach (Transform roomTransform in gameObject.transform) {
+        List<int> uniqueRooms = new List<int>();
+        List<int> RoomsToDestroy = new List<int>();
+        for (int roomIndex = 0; roomIndex < transform.childCount; ++roomIndex) {
+            Transform roomTransform = transform.GetChild(roomIndex);
             foreach (Transform cellTransform in roomTransform) {
                 CellsTransform.Add(cellTransform);
             }
+            bool unique = true;
+            for (int anotherRoomIndex = 0; anotherRoomIndex < uniqueRooms.Count; ++anotherRoomIndex) {
+                if (roomTransform.gameObject.name == transform.GetChild(uniqueRooms[anotherRoomIndex]).gameObject.name) {
+                    while (roomTransform.childCount > 0) {
+                        roomTransform.GetChild(0).parent = transform.GetChild(uniqueRooms[anotherRoomIndex]);
+                    }
+                    unique = false;
+                    RoomsToDestroy.Add(roomIndex);
+                }
+            }
+            if (unique) {
+                uniqueRooms.Add(roomIndex);
+            }
+        }
+        for (int i = 0; i < RoomsToDestroy.Count; ++i) {
+            int roomIndex = RoomsToDestroy[i];
+            Transform roomTransform = transform.GetChild(roomIndex - i);
+            roomTransform.parent = null;
+            GameObject.Destroy(roomTransform.gameObject);
         }
 
-        CellsTransform = CellsTransform.OrderBy(x => (x.position.x, x.position.y)).ToList();
-        WallsTransform = WallsTransform.OrderBy(x => (x.position.x, x.position.y)).ToList();
+        CellsTransform.Sort(comparer);
+        WallsTransform.Sort(comparer);
 
         List<int> CellsToDestroy = new List<int>();
         List<int> WallsToDestroy = new List<int>();
@@ -135,32 +170,18 @@ leftCell leftWall currentCell rightWall rightCell
         */
 
         int lowerCellId = 0, leftCellId = 0, rightCellId = 0, upperCellId = 0, lowerWallId = 0, leftWallId = 0, rightWallId = 0, upperWallId = 0;
-/*
-        mapGraph = new List<List<Cell>>();
-        for (int i = 0; i < cells.Count; ++i) {
-            mapGraph.Add(new List<Cell>());
-            for (int j = 0; j < cells.Count; ++j) {
-                float distance = Mathf.Abs(cells[i].GetPositionX() - cells[j].GetPositionX()) + Mathf.Abs(cells[i].GetPositionY() - cells[j].GetPositionY());
-                if (cells[i].GetCellSize() - CellsEps <= distance && distance <= cells[i].GetCellSize() + CellsEps) {
-                    mapGraph[i].Add(cells[j]);
-                    cells[j].gameMap = this;
-                }
-            }
-        }
-*/
+
         for (int currentCellId = 0; currentCellId < CellsTransform.Count; ++currentCellId) {
             Transform currentCell = CellsTransform[currentCellId];
-
-            lowerCellId = FitCellId(lowerCellId, currentCell.position.x, currentCell.position.y - 1);
-            leftCellId  = FitCellId(leftCellId,  currentCell.position.x - 1, currentCell.position.y);
-            rightCellId = FitCellId(rightCellId, currentCell.position.x + 1, currentCell.position.y);
-            upperCellId = FitCellId(upperCellId, currentCell.position.x, currentCell.position.y + 1);
-            lowerWallId = FitWallId(lowerWallId, currentCell.position.x, currentCell.position.y - 0.5f);
-            leftWallId  = FitWallId(leftWallId,  currentCell.position.x - 0.5f, currentCell.position.y);
-            rightWallId = FitWallId(rightWallId, currentCell.position.x + 0.5f, currentCell.position.y);
-            upperWallId = FitWallId(upperWallId, currentCell.position.x, currentCell.position.y + 0.5f);
-
-            //Debug.Log(currentCellId.ToString() + " " + lowerCellId.ToString() + " " + leftCellId.ToString() + " " + rightCellId.ToString() + " " + upperCellId.ToString());
+            
+            lowerCellId = FitId(lowerCellId, ref CellsTransform, currentCell.position + new Vector3(0, -1, 0));
+            leftCellId  = FitId(leftCellId,  ref CellsTransform, currentCell.position + new Vector3(-1, 0, 0));
+            rightCellId = FitId(rightCellId, ref CellsTransform, currentCell.position + new Vector3(+1, 0, 0));
+            upperCellId = FitId(upperCellId, ref CellsTransform, currentCell.position + new Vector3(0, +1, 0));
+            lowerWallId = FitId(lowerWallId, ref WallsTransform, currentCell.position + new Vector3(0, -0.5f, 0));
+            leftWallId  = FitId(leftWallId,  ref WallsTransform, currentCell.position + new Vector3(-0.5f, 0, 0));
+            rightWallId = FitId(rightWallId, ref WallsTransform, currentCell.position + new Vector3(+0.5f, 0, 0));
+            upperWallId = FitId(upperWallId, ref WallsTransform, currentCell.position + new Vector3(0, +0.5f, 0));
 
             /*
             если нет верхней стенки
@@ -196,6 +217,11 @@ leftCell leftWall currentCell rightWall rightCell
                 }
                 else {
                     VerticalWallsToAdd.Add(currentCell.position + new Vector3(0.5f, 0, 0));
+                    Debug.Log(currentCellId.ToString() + " " + 
+                              upperCellId.ToString() + " " + 
+                              rightCellId.ToString() + " " + 
+                              leftCellId.ToString() + " " + 
+                              lowerCellId.ToString());
                 }
             }
             if (leftWallId >= WallsTransform.Count || !EqualPositions(WallsTransform[leftWallId].position, currentCell.position + new Vector3(-0.5f, 0, 0))) {
@@ -252,6 +278,12 @@ leftCell leftWall currentCell rightWall rightCell
 
     void Start()    
     {
+        comparer = new MyComparer();
+        comparer.AccurasyEPS = AccurasyEPS;
+        dummyEmptyObject = new GameObject();
+        dummyEmptyObject.name = "DummyObjectForMapScript";
+        dummyEmptyTransform = dummyEmptyObject.transform;
+        dummyEmptyTransform.parent = transform.parent;
         FillAreas();
         BuildEnvironment();
         FillCellsArrayForRooms();
@@ -282,18 +314,27 @@ leftCell leftWall currentCell rightWall rightCell
 
     public List<List<Cell>> GetGraph() 
     {
-        return mapGraph;
+        if (Ready)
+            return mapGraph;
+        else
+            return new List<List<Cell>>();
     }
 
 
     public List<Cell> GetCells() 
     {
-        return cells;
+        if (Ready)
+            return cells;
+        else
+            return new List<Cell>();
     }
 
 
     public List<Room> GetRooms()
     {
-        return rooms;
+        if (Ready) 
+            return rooms;
+        else
+            return new List<Room>();
     }
 }

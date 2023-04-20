@@ -18,7 +18,7 @@ public class Cell : MonoBehaviour
 
     void Start()
     {
-        id = id == 0 ? -1 : id;
+        //id = id == 0 ? -1 : id;
     }
 
     public void SetId(int _id)
@@ -75,6 +75,10 @@ public class Cell : MonoBehaviour
 
     public void MoveUnitToCell(Cell finishCell, Unit unit)
     {
+        if (!gameMap.Ready) {
+            return;
+        }
+
         if (GetEnemy(unit) != null)
         {
             finishCell = GetEnemy(unit).CurrentCell;

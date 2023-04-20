@@ -13,10 +13,25 @@ namespace Units.Settings
         public GameObject[] units;
         public Room spawnRoom;
         public string fractionName;
+        bool spawned = false;
+        Map gameMap;
 
         void Start()
         {
             foreach (var unit in units) unit.GetComponent<Unit>().fraction = this;
+            gameMap = GameObject.Find("Map").GetComponent<Map>();
+            
+        }
+
+        void Update() {
+            if (!spawned && gameMap.Ready) {
+                FindSpawnRoom();
+                spawned = true;
+            }
+        }
+
+        void FindSpawnRoom() {
+            spawnRoom = GameObject.Find(string.Concat("Spawn", fractionName)).GetComponent<Room>();
             Spawn(units);
         }
 
