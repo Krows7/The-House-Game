@@ -38,6 +38,10 @@ public class Map : MonoBehaviour
     private GameObject dummyEmptyObject;
     private Transform dummyEmptyTransform;
 
+    public float upperBorder;
+    public float lowerBorder;
+    public float leftBorder;
+    public float rightBorder;
 
     void FillAreas() 
     {
@@ -99,6 +103,10 @@ public class Map : MonoBehaviour
             Transform roomTransform = transform.GetChild(roomIndex);
             foreach (Transform cellTransform in roomTransform) {
                 CellsTransform.Add(cellTransform);
+                upperBorder = Mathf.Max(upperBorder, cellTransform.position.y);
+                lowerBorder = Mathf.Min(lowerBorder, cellTransform.position.y);
+                leftBorder  = Mathf.Min(leftBorder,  cellTransform.position.x);
+                rightBorder = Mathf.Max(rightBorder, cellTransform.position.x);
             }
             bool unique = true;
             for (int anotherRoomIndex = 0; anotherRoomIndex < uniqueRooms.Count; ++anotherRoomIndex) {
