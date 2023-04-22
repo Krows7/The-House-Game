@@ -15,28 +15,38 @@ public class AreaWall : MonoBehaviour
             transform.rotation = Quaternion.identity;
             transform.localScale = new Vector3(transform.localScale.y, transform.localScale.x, transform.localScale.z);
         }
+        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y), Mathf.Abs(transform.localScale.z));
 
-        // Vertical
-        startXCord  = Mathf.Round(transform.position.x - Mathf.Abs(transform.localScale.x) / 2 + 1.0f) - 0.5f;
-        finishXCord = Mathf.Round(transform.position.x + Mathf.Abs(transform.localScale.x) / 2 - 0.0f) - 0.5f;
-        startYCord  = Mathf.Round(transform.position.y - Mathf.Abs(transform.localScale.y) / 2 + 0.5f);
-        finishYCord = Mathf.Round(transform.position.y + Mathf.Abs(transform.localScale.y) / 2 - 0.5f);
-        for (float xCord = startXCord; xCord <= finishXCord; ++xCord) {
-            for (float yCord = startYCord; yCord <= finishYCord; ++yCord) {
-                SetWall(new Vector3(xCord, yCord, 0), "vertical", WallParent);
-            }   
-        }
-
+        if (transform.localScale.x > transform.localScale.y) {
         // Horizontal
-        startXCord  = Mathf.Round(transform.position.x - Mathf.Abs(transform.localScale.x) / 2 + 0.5f);
-        finishXCord = Mathf.Round(transform.position.x + Mathf.Abs(transform.localScale.x) / 2 - 0.5f);
-        startYCord  = Mathf.Round(transform.position.y - Mathf.Abs(transform.localScale.y) / 2 + 1.0f) - 0.5f;
-        finishYCord = Mathf.Round(transform.position.y + Mathf.Abs(transform.localScale.y) / 2 - 0.0f);
-        for (float xCord = startXCord; xCord <= finishXCord; ++xCord) {
-            for (float yCord = startYCord; yCord <= finishYCord; ++yCord) {
-                SetWall(new Vector3(xCord, yCord, 0), "horizontal", WallParent);
-            }   
+            transform.localScale = new Vector3(transform.localScale.x, 1, 0);
+            startXCord  = Mathf.Round(transform.position.x - Mathf.Abs(transform.localScale.x) / 2 + 0.5f);
+            finishXCord = Mathf.Round(transform.position.x + Mathf.Abs(transform.localScale.x) / 2 - 0.5f);
+            startYCord  = Mathf.Round(transform.position.y - Mathf.Abs(transform.localScale.y) / 2 + 1.0f) - 0.5f;
+            finishYCord = Mathf.Round(transform.position.y + Mathf.Abs(transform.localScale.y) / 2 - 0.0f);
+            for (float xCord = startXCord; xCord <= finishXCord; ++xCord) {
+                for (float yCord = startYCord; yCord <= finishYCord; ++yCord) {
+                    SetWall(new Vector3(xCord, yCord, 0), "horizontal", WallParent);
+                }   
+            }
         }
+        else {
+        // Vertical
+            transform.localScale = new Vector3(1, transform.localScale.y, 0);
+            startXCord  = Mathf.Round(transform.position.x - Mathf.Abs(transform.localScale.x) / 2 + 1.0f) - 0.5f;
+            finishXCord = Mathf.Round(transform.position.x + Mathf.Abs(transform.localScale.x) / 2 - 0.0f) - 0.5f;
+            startYCord  = Mathf.Round(transform.position.y - Mathf.Abs(transform.localScale.y) / 2 + 0.5f);
+            finishYCord = Mathf.Round(transform.position.y + Mathf.Abs(transform.localScale.y) / 2 - 0.5f);
+            for (float xCord = startXCord; xCord <= finishXCord; ++xCord) {
+                for (float yCord = startYCord; yCord <= finishYCord; ++yCord) {
+                    SetWall(new Vector3(xCord, yCord, 0), "vertical", WallParent);
+                }   
+            }
+        }
+
+
+
+
 
         GameObject.Destroy(gameObject);
     }
