@@ -11,16 +11,10 @@ public class UnitPickFieldController : MonoBehaviour
 
     private const KeyCode NUM0_KEYCODE = KeyCode.Alpha1;
 
+    private bool SawUnits = false;
+
     void Start()
     {
-        int buttonId = 0;
-        foreach (GameObject unitObject in GameManager.gamerFraction.Units)
-        {
-            var unit = unitObject.GetComponent<Unit>();
-            var child = unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>();
-            child.Unit = unit;
-            child.Id = buttonId;
-        }
         foreach (Transform buttonObject in unitPickField.transform)
         {
             var button = buttonObject.GetComponent<Button>();
@@ -44,6 +38,18 @@ public class UnitPickFieldController : MonoBehaviour
     void Update()
     {
         int buttonId = 0;
+        if (!SawUnits && GameManager.gamerFraction.Units != null) {
+            foreach (GameObject unitObject in GameManager.gamerFraction.Units)
+            {
+                var unit = unitObject.GetComponent<Unit>();
+                var child = unitPickField.transform.GetChild(buttonId++).GetComponent<UnitPickController>();
+                child.Unit = unit;
+                child.Id = buttonId;
+            }
+            SawUnits = true;
+        }
+
+        buttonId = 0;
         foreach (GameObject unitObject in GameManager.gamerFraction.Units)
         {
             var unit = unitObject.GetComponent<Unit>();

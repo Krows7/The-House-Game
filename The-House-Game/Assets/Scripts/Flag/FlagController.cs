@@ -20,15 +20,24 @@ public class FlagController : MonoBehaviour
 
     void Start()
     {
+        exceptions = null;
         flags = new();
         chosenDelay = Random.Range(minDelay, maxDelay);
         map = GameObject.Find("Map").GetComponent<MapManager>();
+    }
+
+    void FillExceptions() {
+        exceptions = map.GetRooms();
+        exceptions.RemoveAll(room => room.gameObject.name == "Flag");
     }
 
     void Update()
     {
         if (!map.Ready) {
             return;
+        }
+        if (exceptions == null) {
+            FillExceptions();
         }
         freeFlagPoles = map.GetCells().Where(x => x.currentFlag == null && x.IsFree() && exceptions.Where(y => y.roomId == x.roomId).Count() == 0).ToList();
         if (flags.Count < maxFlags && freeFlagPoles.Count > 0)

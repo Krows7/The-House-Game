@@ -44,5 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24cd3ce0cd3729442a5b3b174375125c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showGraph: 0
+  showGraph: 1
   AccurasyEPS: 0.1
+  WallPrefab: {fileID: 4289742877843962201, guid: 4fb3ccef03b0e6c41a303eac7f7ce0dc, type: 3}
+  Ready: 0
+  upperBorder: 0
+  lowerBorder: 0
+  leftBorder: 0
+  rightBorder: 0
+  medRoom: {fileID: 0}
+  cafeRoom: {fileID: 0}

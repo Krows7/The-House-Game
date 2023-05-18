@@ -11,7 +11,7 @@
 **/[Uu]ser[Ss]ettings/
 
 # Sandbox scene
-/The-House-Game/[Aa]ssets/_Scenes/Sandbox*
+/The-House-Game/[Aa]ssets/_Scenes/Sandbox_gitignore*
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
