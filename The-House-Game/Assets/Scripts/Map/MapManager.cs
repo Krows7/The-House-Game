@@ -180,6 +180,25 @@ leftCell leftWall currentCell rightWall rightCell
 
         int lowerCellId = 0, leftCellId = 0, rightCellId = 0, upperCellId = 0, lowerWallId = 0, leftWallId = 0, rightWallId = 0, upperWallId = 0;
 
+        /*
+        если нет верхней стенки
+            если есть верхняя клетка
+                соединить туда-сюда ребром
+            иначе
+                поставить сверху стенку
+        если нет правой стенки
+            если есть правая клетка
+                создать связь туда-сюда
+            иначе
+                поставить справа стенку
+        если нет левой стенки
+            если нет слева клетки
+                поставить слева стенку
+        если нет нижний стенки
+            если нет снизу клетки
+                поставить снизу стенку
+        */
+
         for (int currentCellId = 0; currentCellId < CellsTransform.Count; ++currentCellId) {
             Transform currentCell = CellsTransform[currentCellId];
             
@@ -192,24 +211,6 @@ leftCell leftWall currentCell rightWall rightCell
             rightWallId = FitId(rightWallId, ref WallsTransform, currentCell.position + new Vector3(+0.5f, 0, 0));
             upperWallId = FitId(upperWallId, ref WallsTransform, currentCell.position + new Vector3(0, +0.5f, 0));
 
-            /*
-            если нет верхней стенки
-                если есть верхняя клетка
-                    соединить туда-сюда ребром
-                иначе
-                    поставить сверху стенку
-            если нет правой стенки
-                если есть правая клетка
-                    создать связь туда-сюда
-                иначе
-                    поставить справа стенку
-            если нет левой стенки
-                если нет слева клетки
-                    поставить слева стенку
-            если нет нижний стенки
-                если нет снизу клетки
-                    поставить снизу стенку
-            */
             if (upperWallId >= WallsTransform.Count || !EqualPositions(WallsTransform[upperWallId].position, currentCell.position + new Vector3(0, 0.5f, 0))) {
                 if (upperCellId < CellsTransform.Count && EqualPositions(CellsTransform[upperCellId].position, currentCell.position + new Vector3(0, 1, 0))) {
                     mapGraph[currentCellId].Add(cells[upperCellId]);
@@ -285,7 +286,6 @@ leftCell leftWall currentCell rightWall rightCell
         }
     }
 
-
     void Start()    
     {
         instance = this;
@@ -295,17 +295,19 @@ leftCell leftWall currentCell rightWall rightCell
         dummyEmptyObject.name = "DummyObjectForMapScript";
         dummyEmptyTransform = dummyEmptyObject.transform;
         dummyEmptyTransform.parent = transform.parent;
-        FillAreas();
-        BuildEnvironment();
-        FillCellsArrayForRooms();
-        FillRoomsArray();
-        Ready = true;
     }
 
 
     void Update()
     {
-        if (Ready && showGraph) {
+        if (!Ready) {   
+            FillAreas();
+            BuildEnvironment();
+            FillCellsArrayForRooms();
+            FillRoomsArray();
+            Ready = true;
+        }
+        else if (showGraph) {
             DisplayGraph();
         }
     }
