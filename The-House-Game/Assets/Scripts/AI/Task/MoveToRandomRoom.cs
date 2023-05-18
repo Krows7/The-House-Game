@@ -9,7 +9,6 @@ public class MoveToRandomRoom : Node
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
-	AnimationController animationController = null;
 
 	public MoveToRandomRoom(Unit unit)
 	{
@@ -17,7 +16,6 @@ public class MoveToRandomRoom : Node
 		_unit = unit;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
-		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
 	}
 
 	public override NodeState Evaluate()
@@ -26,7 +24,7 @@ public class MoveToRandomRoom : Node
 			state = NodeState.SUCCESS;
 			return state;
 		}
-		List<Room> rooms = _unit.CurrentCell.gameMap.GetRooms();
+		List<Room> rooms = _unit.Cell.gameMap.GetRooms();
 		Room r = rooms[Random.Range(0, rooms.Count)];
 		Cell c = r.GetCells()[Random.Range(0, r.GetCells().Count)];
 

@@ -13,7 +13,7 @@ public class Cell : MonoBehaviour
 
     public GameObject currentFlag = null;
 
-    public Map gameMap { get; set; }
+    public MapManager gameMap { get; set; }
     public int roomId { get; set; }
 
     void Start()
@@ -56,10 +56,10 @@ public class Cell : MonoBehaviour
         return currentUnit;
     }
 
-    public void SetUnit(Unit unit)
+    private void SetUnit(Unit unit)
     {
         currentUnit = unit;
-        if (unit != null) currentUnit.CurrentCell = this;
+        if (unit != null) currentUnit.Cell = this;
     }
 
     public void DellUnit()
@@ -250,62 +250,25 @@ public class Cell : MonoBehaviour
 
     void Update()
     {
-        if (transform.parent.name.Equals("MedRoom") && currentUnit != null) currentUnit.Heal(15 * Time.deltaTime);
-        else if (currentUnit != null && transform.parent.name.Equals("Spawn" + currentUnit.fraction.fractionName)) currentUnit.Heal(5 * Time.deltaTime);
-        else if (currentUnit != null && transform.parent.name.Equals("Cafe") && currentUnit.fraction.fractionName.Equals(GameManager.gamerFractionName)) GameObject.Find("MasterController").GetComponent<FlagController>().ShowFlags();
+        if (IsFree()) return;
+        if (GetRoom() == MapManager.instance.medRoom) GetUnit().Heal(15 * Time.deltaTime);
+        else if (GetUnit().Fraction.FractionSpawn == GetRoom()) GetUnit().Heal(5 * Time.deltaTime);
+        else if (GetRoom() == MapManager.instance.cafeRoom && GetUnit().Fraction == GameManager.gamerFraction)
+        {
+            GameObject.Find("MasterController").GetComponent<FlagRevealSystem>().isSomeoneInCafe = true;
+        }
     }
 
     public Room GetRoom()
     {
-        return transform.parent.GetComponent<Room>();
+        return GetComponentInParent<Room>();
+    }
+
+    public bool PlaceUnit0(Unit unit)
+    {
+        if (!IsFree()) return false;
+        currentUnit = unit;
+        if (unit != null && currentFlag != null) currentFlag.GetComponent<Flag>().StartCapture();
+        return true;
     }
 }
-
-
-/*
- public void CombineTo(Group AsGroup, Unit Add, Cell cell, bool inUnitLocation = false)
-	{
-		if (inUnitLocation)
-		{
-			AsGroup.transform.SetPositionAndRotation(Add.transform.position, Add.transform.rotation);
-		}
-		AsGroup.Add(Add);
-		DellUnit();
-		cell.SetUnit(AsGroup);
-	}
-
-	public void CreateGroup(Unit Base, Unit Add, Cell nextCell)
-	{
-		var prefab = GameManager.instance.BaseUnit;
-		for (int i = 0; i < prefab.transform.childCount; i++)
-		{
-			var nextChild = prefab.transform.GetChild(i);
-			if (nextChild.tag != "Selection Collider")
-			{
-				nextChild.gameObject.SetActive(false);
-			}
-		}
-
-		var group = new GameObject("Group");
-		group.AddComponent<Group>();
-		group.transform.position = Base.transform.position;
-		Instantiate(prefab, group.transform.position, group.transform.rotation).transform.parent = group.transform;
-		group.GetComponent<Group>().Add(Base);
-		group.GetComponent<Group>().Add(Add);
-
-		MonoBehaviour[] scriptList = Base.GetComponents<MonoBehaviour>();
-		foreach (MonoBehaviour script in scriptList)
-		{
-			group.AddComponent(script.GetType());
-			System.Reflection.FieldInfo[] fields = script.GetType().GetFields();
-			foreach (System.Reflection.FieldInfo field in fields)
-			{
-				field.SetValue(group.GetComponent(script.GetType()), field.GetValue(script));
-			}
-		}
-
-		group.GetComponent<Group>().fraction = Base.fraction;
-		DellUnit();
-		nextCell.SetUnit(group.GetComponent<Group>());
-	}
- */

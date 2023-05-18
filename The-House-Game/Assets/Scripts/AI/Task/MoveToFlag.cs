@@ -9,7 +9,6 @@ public class MoveToFlag : Node
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
-	AnimationController animationController = null;
 
 	public MoveToFlag(Unit unit)
 	{
@@ -17,7 +16,6 @@ public class MoveToFlag : Node
 		_unit = unit;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
-		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
 	}
 
 	public override NodeState Evaluate()

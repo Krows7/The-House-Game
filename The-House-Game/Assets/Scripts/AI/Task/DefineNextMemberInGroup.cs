@@ -9,26 +9,24 @@ public class DefineNextMemberInGroup : Node
 	private Unit _unit = null;
 	AIMovementController movementController = null;
 	FlagController flagController = null;
-	AnimationController animationController = null;
 
 	public DefineNextMemberInGroup(Unit unit)
 	{
 		_unit = unit;
 		movementController = GameObject.Find("MasterController").GetComponent<AIMovementController>();
 		flagController = GameObject.Find("MasterController").GetComponent<FlagController>();
-		animationController = GameObject.Find("MasterController").GetComponent<AnimationController>();
 
 	}
 
 	public override NodeState Evaluate()
 	{
-		List<Cell> cells = _unit.CurrentCell.gameMap.GetCells();
+		List<Cell> cells = _unit.Cell.gameMap.GetCells();
 		foreach (Cell cell in cells)
 		{
 			Unit nextUnit = cell.GetUnit();
-			if (nextUnit != null && nextUnit != _unit && nextUnit.fraction == _unit.fraction && !(nextUnit is Group))
+			if (nextUnit != null && nextUnit != _unit && nextUnit.Fraction == _unit.Fraction && !(nextUnit is Group))
 			{
-				parent.SetData("nextUnitCell", nextUnit.CurrentCell);
+				parent.SetData("nextUnitCell", nextUnit.Cell);
 				state = NodeState.SUCCESS;
 				return state;
 			}

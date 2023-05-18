@@ -20,6 +20,8 @@ public class AIMovementController : MonoBehaviour
 
 	public void MoveUnit(Unit unit, Cell finishCell)
 	{
-		unit.CurrentCell.MoveUnitToCell(finishCell, unit);
-	}
+        AbstractMovementStrategy strategy = unit.GetComponent<MovementComponent>().Strategy;
+        strategy.SetDestination(finishCell, unit);
+        //strategy.MoveUnitToCell(finishCell, unit, true);
+    }
 }

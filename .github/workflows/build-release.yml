@@ -1,0 +1,54 @@
+name: Build Release
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: Create and release build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+    steps:
+      - uses: olegtarasov/get-tag@v2.1.2
+        id: tagName
+        with:
+          tagRegex: "(.*)-release"
+      - name: Create release
+        id: release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: ${{ !endsWith(github.ref, '-release') }}
+          title: ${{ format('{0}{1}', endsWith(github.ref, '-release') && 'Release ' || '', steps.tagName.outputs.tag) }}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          projectPath: The-House-Game
+      - name: Archive build
+        run: |
+          cd build/${{ matrix.targetPlatform }}; zip -r ../../Build-${{ matrix.targetPlatform }}.zip *
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: ./Build-${{ matrix.targetPlatform }}.zip
+          asset_name: ${{ format('The-House-Game {0}.zip', steps.tagName.outputs.tag) }}
+          asset_content_type: application/zip
