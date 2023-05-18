@@ -17,16 +17,32 @@ namespace Units.Settings
             RATS
         }
 
+
+
         public int influence = 0;
         public UnitStats[] unitStats;
-        public Name FractionName;
         public Room FractionSpawn;
+        public Name FractionName;
+        bool spawned = false;
+        MapManager gameMap;
         public List<GameObject> Units { set; get; } = null;
 
         public bool disableAI;
 
         void Start()
         {
+            gameMap = GameObject.Find("Map").GetComponent<MapManager>();   
+        }
+
+        void Update() {
+            if (!spawned && gameMap.Ready) {
+                FindSpawnRoom();
+                spawned = true;
+            }
+        }
+
+        void FindSpawnRoom() {
+            FractionSpawn = GameObject.Find(string.Concat("Spawn", FractionName)).GetComponent<Room>();
             Spawn(unitStats);
         }
 

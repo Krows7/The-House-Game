@@ -20,10 +20,13 @@ public class FindFlagInCurrentRoom : Node
 
 	public override NodeState Evaluate()
 	{
-		var a = GameObject.Find("Map").GetComponent<MapManager>();
+		var a = GameObject.Find("Map").GetComponent<MapManager>();;
+		if (!a.Ready) {
+			return NodeState.FAIL;
+		}
 		foreach (Cell f in a.GetRooms()[_unit.Cell.roomId].GetCells())
         {
-			if(f.currentFlag != null)
+			if (f.currentFlag != null)
             {
 				parent.SetData("flagFound", f);
 				state = NodeState.SUCCESS;

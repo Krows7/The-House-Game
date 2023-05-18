@@ -18,7 +18,7 @@ public class Cell : MonoBehaviour
 
     void Start()
     {
-        id = id == 0 ? -1 : id;
+        //id = id == 0 ? -1 : id;
     }
 
     public void SetId(int _id)
@@ -66,7 +66,6 @@ public class Cell : MonoBehaviour
     {
         currentUnit = null;
         onReleaseDebug();
-        if (currentFlag != null) currentFlag.GetComponent<Flag>().InterruptCapture();
     }
 
     private Color darker(Color color)
@@ -98,7 +97,8 @@ public class Cell : MonoBehaviour
     void Update()
     {
         if (IsFree()) return;
-        if (GetRoom() == MapManager.instance.medRoom) GetUnit().Heal(15 * Time.deltaTime);
+        if (GetRoom() == MapManager.instance.medRoom) 
+            GetUnit().Heal(15 * Time.deltaTime);
         else if (GetUnit().Fraction.FractionSpawn == GetRoom()) GetUnit().Heal(5 * Time.deltaTime);
         else if (GetRoom() == MapManager.instance.cafeRoom && GetUnit().Fraction == GameManager.gamerFraction)
         {
