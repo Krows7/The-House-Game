@@ -97,7 +97,8 @@ public class Cell : MonoBehaviour
     void Update()
     {
         if (IsFree()) return;
-        if (GetRoom() == MapManager.instance.medRoom) GetUnit().Heal(15 * Time.deltaTime);
+        if (GetRoom() == MapManager.instance.medRoom) 
+            GetUnit().Heal(15 * Time.deltaTime);
         else if (GetUnit().Fraction.FractionSpawn == GetRoom()) GetUnit().Heal(5 * Time.deltaTime);
         else if (GetRoom() == MapManager.instance.cafeRoom && GetUnit().Fraction == GameManager.gamerFraction)
         {

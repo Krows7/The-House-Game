@@ -248,7 +248,7 @@ leftCell leftWall currentCell rightWall rightCell
     {
         AreaWall OuterWallsGenerator = new AreaWall();
         foreach (Vector3 wallPosition in HorizontalWallsToAdd) {
-            OuterWallsGenerator.SetWall(wallPosition, "horizontal", WallsParentObject, WallPrefab);
+            OuterWallsGenerator.SetWall(wallPosition, "horizontal", WallsParentObject, WallPrefab); 
         }
         foreach (Vector3 wallPosition in VerticalWallsToAdd) {
             OuterWallsGenerator.SetWall(wallPosition, "vertical", WallsParentObject, WallPrefab);
@@ -288,6 +288,7 @@ leftCell leftWall currentCell rightWall rightCell
 
     void Start()    
     {
+        instance = this;
         comparer = new MyComparer();
         comparer.AccurasyEPS = AccurasyEPS;
         dummyEmptyObject = new GameObject();
