@@ -17,18 +17,21 @@ namespace Units.Settings
             RATS
         }
 
+
+
         public int influence = 0;
-        public GameObject[] units;
-        public Room spawnRoom;
-        public string fractionName;
+        public UnitStats[] unitStats;
+        public Room FractionSpawn;
+        public Name FractionName;
         bool spawned = false;
-        Map gameMap;
+        MapManager gameMap;
+        public List<GameObject> Units { set; get; } = null;
+
+        public bool disableAI;
 
         void Start()
         {
-            foreach (var unit in units) unit.GetComponent<Unit>().fraction = this;
-            gameMap = GameObject.Find("Map").GetComponent<Map>();
-            
+            gameMap = GameObject.Find("Map").GetComponent<MapManager>();   
         }
 
         void Update() {
@@ -39,8 +42,8 @@ namespace Units.Settings
         }
 
         void FindSpawnRoom() {
-            spawnRoom = GameObject.Find(string.Concat("Spawn", fractionName)).GetComponent<Room>();
-            Spawn(units);
+            FractionSpawn = GameObject.Find(string.Concat("Spawn", FractionName)).GetComponent<Room>();
+            Spawn(unitStats);
         }
 
         public static void TryApplyAI(Fraction.Name FractionName, Type type, GameObject unitObject)

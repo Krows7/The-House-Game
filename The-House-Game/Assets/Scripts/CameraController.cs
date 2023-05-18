@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float frontBorder;
     [SerializeField] private float borderWidth;
 
-    private Map gameMap;
+    private MapManager gameMap;
     private bool bordersSeted = false;
 
     private Vector3 newPosition;
@@ -51,7 +51,7 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined; 
         cameraTransform = cameraObject.transform;
         canMoveCamera = false;
-        gameMap = GameObject.Find("Map").GetComponent<Map>();
+        gameMap = GameObject.Find("Map").GetComponent<MapManager>();
     }
 
 

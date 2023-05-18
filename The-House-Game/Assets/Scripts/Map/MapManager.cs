@@ -309,6 +309,40 @@ leftCell leftWall currentCell rightWall rightCell
         }
     }
 
+    // Return corner neighbors as well 
+    public List<Cell> GetNeighbors(Cell cell)
+    {
+        var directNeighbors = mapGraph[cell.GetId()];
+        List<Cell> c = new();
+
+        foreach (var x in directNeighbors)
+        {
+            foreach (var y in directNeighbors)
+            {
+                if (x == y) continue;
+                
+                foreach (var toAdd in GetIntersection(x, y))
+                {
+                    if (toAdd != cell) c.Add(toAdd);
+                }
+            }
+        }
+
+        c.AddRange(directNeighbors);
+
+        return c;
+    }
+
+    public bool AreNeighbors(Cell a, Cell b)
+    {
+        return GetNeighbors(a).IndexOf(b) > - 1;
+    }
+
+    public IEnumerable<Cell> GetIntersection(Cell x, Cell y)
+    {
+        return mapGraph[x.GetId()].Intersect(mapGraph[y.GetId()]);
+    }
+
     void DisplayGraph() 
     {
         for (int i = 0; i < mapGraph.Count; ++i) {
